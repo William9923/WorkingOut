@@ -4,7 +4,7 @@
     <item
             android:id="@+id/navigation_news"
             android:icon="@drawable/outline_search_24"
-            android:title="@string/title_notifications"/>
+            android:title="@string/title_news"/>
 
     <item
             android:id="@+id/navigation_home"

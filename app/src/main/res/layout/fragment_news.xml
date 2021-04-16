@@ -13,4 +13,5 @@
         tools:context=".ui.news.NewsList"
         tools:listitem="@layout/fragment_news_list"
         android:background="#FFFFFF"
-        tools:actionBarNavMode="standard"/>
+        tools:actionBarNavMode="standard"
+        />

@@ -1,5 +1,6 @@
 package com.softhouse.workingout.ui.news
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,20 +22,35 @@ import retrofit2.Response
 /**
  * A fragment representing a list of Items.
  */
-class NewsList : Fragment() {
+class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
 
-    private var columnCount = 1
-
-    private val itemClickListener: (String) -> Unit = { url: String ->
-        val action = NewsListDirections.actionNavigationNewsToWebFragment(url)
-        NavHostFragment.findNavController(this).navigate(action)
-    }
+//    private val itemClickListener: (String) -> Unit = { url: String ->
+//        val action = NewsListDirections.actionNavigationNewsToWebFragment(url)
+//        NavHostFragment.findNavController(this).navigate(action)
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
+
+        }
+    }
+
+    private val columnCount : () -> Int = {
+        val orientation = activity?.resources?.configuration?.orientation
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 2
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        // Based on orientation
+        Log.d("Check", "Orientation change")
+
+
+        if (view is RecyclerView) {
+            initRecyclerViewAdapter(view as RecyclerView)
         }
     }
 
@@ -75,7 +91,7 @@ class NewsList : Fragment() {
                                         index,
                                         title,
                                         description,
-                                        element.url!!,
+                                        element.url,
                                         element.urlToImage!!
                                     )
                                 )
@@ -98,28 +114,17 @@ class NewsList : Fragment() {
     private fun initRecyclerViewAdapter(view: View) {
         // Set the adapter
         if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = NewsRecyclerViewAdapter(NewsContent.ITEMS, itemClickListener)
+            view.layoutManager = when {
+                columnCount() <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount())
             }
+            view.adapter = NewsRecyclerViewAdapter(NewsContent.ITEMS, this)
         }
     }
 
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            NewsList().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
+    override fun onNewsClick(position: Int) {
+        val url: String = NewsContent.ITEMS[position].url
+        val action = NewsListDirections.actionNavigationNewsToWebFragment(url)
+        NavHostFragment.findNavController(this).navigate(action)
     }
 }
