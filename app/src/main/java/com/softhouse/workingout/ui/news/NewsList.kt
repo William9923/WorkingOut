@@ -1,5 +1,6 @@
 package com.softhouse.workingout.ui.news
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,7 +24,7 @@ import retrofit2.Response
  */
 class NewsList : Fragment() {
 
-    private var columnCount = 1
+//    private var columnCount = 1
 
     private val itemClickListener: (String) -> Unit = { url: String ->
         val action = NewsListDirections.actionNavigationNewsToWebFragment(url)
@@ -34,7 +35,24 @@ class NewsList : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
+
+        }
+    }
+
+    private val columnCount : () -> Int = {
+        val orientation = activity?.resources?.configuration?.orientation
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 2
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        // Based on orientation
+        Log.d("Check", "Orientation change")
+
+
+        if (view is RecyclerView) {
+            initRecyclerViewAdapter(view as RecyclerView)
         }
     }
 
@@ -75,7 +93,7 @@ class NewsList : Fragment() {
                                         index,
                                         title,
                                         description,
-                                        element.url!!,
+                                        element.url,
                                         element.urlToImage!!
                                     )
                                 )
@@ -100,8 +118,8 @@ class NewsList : Fragment() {
         if (view is RecyclerView) {
             with(view) {
                 layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
+                    columnCount() <= 1 -> LinearLayoutManager(context)
+                    else -> GridLayoutManager(context, columnCount())
                 }
                 adapter = NewsRecyclerViewAdapter(NewsContent.ITEMS, itemClickListener)
             }
@@ -118,7 +136,6 @@ class NewsList : Fragment() {
         fun newInstance(columnCount: Int) =
             NewsList().apply {
                 arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
                 }
             }
     }
