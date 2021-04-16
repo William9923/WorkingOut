@@ -1,60 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+
+    <data>
+
+        <variable
+                type="com.softhouse.workingout.ui.news.item.NewsContent.NewsItem"
+                name="data" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-        <!-- Media -->
-        <ImageView
-                android:id="@+id/image_card"
-                android:layout_width="match_parent"
-                android:layout_height="194dp"
-                android:scaleType="centerCrop"
-                />
+            android:layout_margin="4dp">
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:orientation="vertical">
 
-            <!-- Title, secondary and supporting text -->
-            <TextView
-                    android:id="@+id/title_card"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
+            <!-- Media -->
+            <ImageView
+                    android:id="@+id/image_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="194dp"
+                    android:scaleType="centerCrop"
+                    app:loadImage='@{data.imageURL}'
                     />
 
-            <TextView
-                    android:id="@+id/subtitle_card"
-                    android:layout_width="wrap_content"
+            <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?android:attr/textColorSecondary"
-                    />
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            <TextView
-                    android:id="@+id/content_card"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?android:attr/textColorSecondary"
-                    />
+                <!-- Title, secondary and supporting text -->
+                <TextView
+                        android:id="@+id/title_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        android:text='@{data.title.substring(0,10) + "..."}'
+                        />
+
+                <TextView
+                        android:id="@+id/subtitle_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:text='@{data.title.substring(10) + "..."}'
+                        />
+
+                <TextView
+                        android:id="@+id/content_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:text='@{data.desc.substring(0, 20) + "..."}'
+                        />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-</com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
+</layout>
 
 
