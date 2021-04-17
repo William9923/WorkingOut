@@ -14,4 +14,5 @@
         tools:listitem="@layout/fragment_news_list"
         android:background="#FFFFFF"
         tools:actionBarNavMode="standard"
+        android:paddingTop="8dp"
         />

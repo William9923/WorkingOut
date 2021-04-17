@@ -24,11 +24,6 @@ import retrofit2.Response
  */
 class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
 
-//    private val itemClickListener: (String) -> Unit = { url: String ->
-//        val action = NewsListDirections.actionNavigationNewsToWebFragment(url)
-//        NavHostFragment.findNavController(this).navigate(action)
-//    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -48,7 +43,6 @@ class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
         // Based on orientation
         Log.d("Check", "Orientation change")
 
-
         if (view is RecyclerView) {
             initRecyclerViewAdapter(view as RecyclerView)
         }
@@ -60,7 +54,9 @@ class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_news, container, false)
         initRecyclerViewAdapter(view)
-        loadData(view)
+
+        if (NewsContent.ITEMS.size <= 0)
+            loadData(view)
         return view
     }
 
@@ -102,6 +98,8 @@ class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
                             view.adapter?.notifyDataSetChanged()
                             Log.d("Notify", "Data Changed")
                         }
+
+                        Log.d("SIZE:", NewsContent.ITEMS.size.toString())
 
                     } else {
                         Log.e("ERROR:", "Fetch data not successful")
