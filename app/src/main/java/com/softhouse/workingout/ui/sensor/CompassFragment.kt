@@ -5,13 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil.setContentView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentCompassBinding
@@ -21,14 +20,10 @@ import com.softhouse.workingout.service.CompassService
 
 class CompassFragment : Fragment() {
 
-    private var param1: String? = null
-    private var param2: String? = null
-
     lateinit var binding: FragmentCompassBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         arguments?.let {
 
         }
@@ -56,11 +51,8 @@ class CompassFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val root = inflater.inflate(R.layout.fragment_compass, container, false)
-
-        binding = FragmentCompassBinding.inflate(layoutInflater)
-        return root
+        binding = FragmentCompassBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     companion object {

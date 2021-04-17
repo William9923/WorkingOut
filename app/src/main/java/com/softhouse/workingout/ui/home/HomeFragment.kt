@@ -14,13 +14,14 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.softhouse.workingout.R
+import com.softhouse.workingout.databinding.FragmentHomeBinding
 import com.softhouse.workingout.ui.sensor.CompassFragment
 
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
 
-    private lateinit var mViewPager: ViewPager
+    private lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,24 +30,26 @@ class HomeFragment : Fragment() {
     ): View? {
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         // Observer
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
         })
 
-        val tabLayout = root.findViewById<TabLayout>(R.id.home_tab_layout)
+        binding.homeTabLayout.setupWithViewPager(binding.tabViewpager)
+        setupViewPager(binding.tabViewpager)
 
-        val tabViewPager = root.findViewById<ViewPager>(R.id.tab_viewpager)
+        return binding.root
+    }
 
-        tabLayout?.setupWithViewPager(tabViewPager)
-        setupViewPager(tabViewPager!!)
-
-        return root
+    override fun onResume() {
+        super.onResume()
+        binding.homeTabLayout.setupWithViewPager(binding.tabViewpager)
+        setupViewPager(binding.tabViewpager)
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
-        val adapter = PageAdapter(activity!!.supportFragmentManager)
+        val adapter = PageAdapter(getChildFragmentManager())
 
         Log.i("PAGER", "Setup tab")
 
