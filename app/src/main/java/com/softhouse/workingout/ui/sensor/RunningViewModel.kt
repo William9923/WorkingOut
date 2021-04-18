@@ -1,4 +1,4 @@
-package com.softhouse.workingout.ui.home
+package com.softhouse.workingout.ui.sensor
 
 import androidx.lifecycle.ViewModel
 

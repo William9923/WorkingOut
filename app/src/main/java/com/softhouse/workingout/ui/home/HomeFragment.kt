@@ -1,21 +1,16 @@
 package com.softhouse.workingout.ui.home
 
-import android.graphics.pdf.PdfDocument
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.tabs.TabLayout
-import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentHomeBinding
 import com.softhouse.workingout.ui.sensor.CompassFragment
+import com.softhouse.workingout.ui.sensor.RunningFragment
 
 class HomeFragment : Fragment() {
 
@@ -49,12 +44,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
-        val adapter = PageAdapter(getChildFragmentManager())
+        val adapter = PageAdapter(childFragmentManager)
 
         Log.i("PAGER", "Setup tab")
 
         adapter.addFragment(RunningFragment(), "\uD83D\uDC5F Running")
-        adapter.addFragment(CompassFragment(), "\uD83D\uDEB4 Cycling")
+//        adapter.addFragment(CompassFragment(), "\uD83D\uDEB4 Cycling")
 
         viewPager.adapter = adapter
     }

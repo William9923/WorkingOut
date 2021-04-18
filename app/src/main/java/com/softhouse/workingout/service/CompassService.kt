@@ -68,7 +68,6 @@ class CompassService : Service(), SensorEventListener {
 
         val notification = createNotification(0.0)
         startForeground(notificationId, notification)
-
     }
 
     override fun onBind(intent: Intent?): IBinder? {
