@@ -16,19 +16,19 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentRunningBinding
 import com.softhouse.workingout.service.StepDetectorService
-import com.softhouse.workingout.shared.addChildFragment
 
 class RunningFragment : Fragment() {
 
     private lateinit var viewModel: RunningViewModel
     lateinit var binding: FragmentRunningBinding
 
+    private var started: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
 
         }
-
         // Get the broadcast manager, and then register for receiving intent from the CompassService
         LocalBroadcastManager.getInstance(requireActivity())
             .registerReceiver(broadcastReceiver, IntentFilter(StepDetectorService.KEY_ON_SENSOR_CHANGED_ACTION))
@@ -39,14 +39,41 @@ class RunningFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentRunningBinding.inflate(inflater, container, false)
+
+        viewModel =
+            ViewModelProviders.of(this).get(RunningViewModel::class.java)
+        viewModel.started.observe(viewLifecycleOwner, {
+            started = it
+        })
+
+
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         // Add the child fragment here...
-        val fieldFragment = CompassFragment()
-        addChildFragment(fieldFragment, R.id.parent_fragment_container)
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.replace(R.id.parent_fragment_container, CompassFragment()).commit()
+
+        binding.actionBtn.setOnClickListener {
+            Log.d("Clicked", "Click Listener working")
+            if (!started) {
+                startForegroundServiceForSensors(false)
+                started = true
+
+                Log.d("BUTTON", "Change Start Action")
+
+                binding.actionBtn.text = "STOP"
+                // TODO("Change Button Color")
+            } else {
+                binding.actionBtn.text = "START"
+                started = false
+            }
+
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -56,12 +83,16 @@ class RunningFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        startForegroundServiceForSensors(false)
+
+        if (started)
+            startForegroundServiceForSensors(false)
     }
 
     override fun onPause() {
         super.onPause()
-        startForegroundServiceForSensors(true)
+
+        if (started)
+            startForegroundServiceForSensors(true)
     }
 
     override fun onDestroy() {
@@ -71,7 +102,7 @@ class RunningFragment : Fragment() {
 
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val steps = intent.getFloatExtra(StepDetectorService.KEY_STEP, 0f)
+            val steps = intent.getIntExtra(StepDetectorService.KEY_STEP, 0)
             Log.d("Steps:", steps.toString())
             if (binding != null)
                 binding.textSteps.text = steps.toString()
@@ -83,6 +114,25 @@ class RunningFragment : Fragment() {
         requiredIntent.putExtra(StepDetectorService.KEY_BACKGROUND, background)
         ContextCompat.startForegroundService(requireActivity(), requiredIntent)
     }
+
+    fun switchOn() {
+        if (started) {
+            startForegroundServiceForSensors(false)
+            started = true
+
+            Log.d("BUTTON", "Change Start Action")
+
+            binding.actionBtn.text = "STOP"
+            TODO("Change Button Color")
+        } else {
+            binding.actionBtn.text = "START"
+            started = false
+        }
+    }
+
+//    private fun stopForegroundServiceForSensors() {
+//        val requiredIntent = Intent(requireActivity(), StepDetectorService::class.java)
+//    }
 
     companion object
 

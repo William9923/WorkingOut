@@ -22,7 +22,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintVertical_bias="0.299"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:text="0"/>
 
         <FrameLayout
                 android:id="@+id/parent_fragment_container"
@@ -60,7 +61,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-                android:id="@+id/containedButton"
+                android:id="@+id/action_btn"
                 android:layout_width="126dp"
                 android:layout_height="70dp"
                 android:text="Start"
@@ -70,7 +71,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintVertical_bias="0.868"
-                android:textSize="24sp"/>
+                android:textSize="24sp"
+                />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

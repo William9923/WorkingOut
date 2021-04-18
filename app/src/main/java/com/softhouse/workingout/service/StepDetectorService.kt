@@ -3,6 +3,7 @@ package com.softhouse.workingout.service
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -35,29 +36,47 @@ class StepDetectorService : Service(), SensorEventListener {
     private val notificationId = 91
     private val notificationStopRequestCode = 92
 
-    private var currentStep = 0f
+    private var currentStep = 0
+    private var isSensorAvailable = true
 
     override fun onCreate() {
         super.onCreate()
 
         sensorManager = getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager
 
-        // register listener
-        Log.d("Sensor", "Step Sensor")
+        val hasSensor: Boolean = packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_DETECTOR)
 
-        sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR)?.also { stepDetector ->
-            sensorManager.registerListener(
-                this,
-                stepDetector,
-                SensorManager.SENSOR_DELAY_NORMAL,
-                SensorManager.SENSOR_DELAY_UI
-            )
+        if (hasSensor) {
+            Log.d("Package:", "Have Step Detector")
+        } else {
+            Log.d("Package:", "Not Have Step Detector")
         }
 
-        Log.d("Sensor", "Finish Setup")
+        if (hasSensor) {
+            sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR)?.also { stepDetector ->
+                sensorManager.registerListener(
+                    this,
+                    stepDetector,
+                    SensorManager.SENSOR_DELAY_NORMAL,
+                    SensorManager.SENSOR_DELAY_UI
+                )
+            }
+            isSensorAvailable = true
+        } else {
+            // Default sensor using accelerometer
+            sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also { accelerometer ->
+                sensorManager.registerListener(
+                    this,
+                    accelerometer,
+                    SensorManager.SENSOR_DELAY_NORMAL,
+                    SensorManager.SENSOR_DELAY_UI
+                )
+            }
+            isSensorAvailable = false
+        }
 
         // Start binding notification
-        val notification = createNotification(0f)
+        val notification = createNotification(0)
         startForeground(notificationId, notification)
     }
 
@@ -66,13 +85,24 @@ class StepDetectorService : Service(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        Log.d("Sensor changed?", "Yes!!")
-        updateStep()
+
+        if (isSensorAvailable) {
+            updateStep()
+        } else {
+            // Accelerometer
+            if (event != null && event.values[0] > 5) {
+                Log.d("Event:", event.values[0].toString())
+
+                Log.i("Sensor Changed?", "")
+                updateStep()
+
+            }
+        }
     }
 
     private fun updateStep() {
-        currentStep++
-        Log.d("CurrState", currentStep.toString())
+        currentStep += 1
+        Log.i("Current Step", currentStep.toString())
 
         val intent = Intent("com.service.StepDetectorService")
         intent.putExtra(KEY_STEP, currentStep)
@@ -97,7 +127,7 @@ class StepDetectorService : Service(), SensorEventListener {
         return START_STICKY
     }
 
-    private fun createNotification(step: Float): Notification {
+    private fun createNotification(step: Int): Notification {
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -163,7 +193,8 @@ class StepDetectorService : Service(), SensorEventListener {
         const val KEY_STEP = "step"
         const val KEY_BACKGROUND = "background"
         const val KEY_NOTIFICATION_ID = "notificationId"
-        const val KEY_ON_SENSOR_CHANGED_ACTION = "com.softhouse.workingout.service.StepDetectorService.ON_SENSOR_CHANGED"
+        const val KEY_ON_SENSOR_CHANGED_ACTION =
+            "com.softhouse.workingout.service.StepDetectorService.ON_SENSOR_CHANGED"
         const val KEY_NOTIFICATION_STOP_ACTION = "com.softhouse.workingout.service.NOTIFICATION_STOP"
     }
 }

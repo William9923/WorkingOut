@@ -2,18 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.softhouse.workingout">
 
-<!--    Permission for internet-->
+    <!--    Permission for internet-->
     <uses-permission android:name="android.permission.INTERNET"/>
 
-<!--    Permission for sensor driver usage in the application-->
+    <!--    Permission for sensor driver usage in the application-->
     <uses-permission android:name="com.google.android.things.permission.MANAGE_SENSOR_DRIVERS"/>
 
-<!--    Permission for foreground service permission (for notification, etc)-->
+    <!--    Permission for foreground service permission (for notification, etc)-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
-<!--    Permission for step counter-->
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
-    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+    <!--    Permission for step counter-->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
 
     <application
             android:allowBackup="true"
@@ -31,8 +30,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <service android:name=".service.CompassService"/>
         <service android:name=".service.StepDetectorService"/>
+
         <receiver android:name=".service.StopNotificationListener"/>
         <meta-data
                 android:name="preloaded_fonts"
