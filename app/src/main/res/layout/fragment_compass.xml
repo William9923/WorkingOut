@@ -3,39 +3,25 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".ui.sensor.CompassFragment">
 
-        <TextView
-                android:id="@+id/title_card"
-                android:layout_width="139dp"
-                android:layout_height="30dp"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:text="COMPASS"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintVertical_bias="0.248"
-                android:textAlignment="center"/>
-
         <ImageView
                 android:id="@+id/compass_image_view"
-                android:layout_width="116dp"
-                android:layout_height="126dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/compass2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintVertical_bias="0.405"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentRight="false"
+                android:layout_alignParentTop="false"
+                android:layout_alignParentBottom="false"
                 android:scaleX="1"
                 android:scaleY="1"
-                app:layout_constraintHorizontal_bias="0.498"/>
+                />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>

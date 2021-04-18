@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.softhouse.workingout.R
+import com.softhouse.workingout.shared.addChildFragment
+import com.softhouse.workingout.ui.sensor.CompassFragment
 
 class RunningFragment : Fragment() {
 
@@ -21,6 +23,14 @@ class RunningFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_running, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Add the child fragment here...
+        val fieldFragment = CompassFragment()
+        addChildFragment(fieldFragment, R.id.parent_fragment_container)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

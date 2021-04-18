@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         // Observer
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
+        homeViewModel.text.observe(viewLifecycleOwner, {
         })
 
         binding.homeTabLayout.setupWithViewPager(binding.tabViewpager)

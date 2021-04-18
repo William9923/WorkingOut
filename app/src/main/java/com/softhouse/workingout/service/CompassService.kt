@@ -2,14 +2,12 @@ package com.softhouse.workingout.service
 
 import android.app.*
 import android.util.Log
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.net.wifi.p2p.WifiP2pManager
 import android.os.Build
 import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
@@ -49,9 +47,6 @@ class CompassService : Service(), SensorEventListener {
 
     override fun onCreate() {
         super.onCreate()
-
-        Log.d("SENSOR", "Setup Sensor")
-
         sensorManager = getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager
 
         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also { accelerometer ->
@@ -71,16 +66,12 @@ class CompassService : Service(), SensorEventListener {
             )
         }
 
-        Log.d("SENSOR", "Finish Setup Sensor")
-
         val notification = createNotification(0.0)
         startForeground(notificationId, notification)
 
-        Log.d("NOTIFICATION", "Finish Setup Start Notification")
     }
 
     override fun onBind(intent: Intent?): IBinder? {
-        Log.d("BIND", "ERROR?")
         return null
     }
 
@@ -102,6 +93,7 @@ class CompassService : Service(), SensorEventListener {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
         intent?.let {
             background = it.getBooleanExtra(KEY_BACKGROUND, false)
         }
@@ -113,10 +105,10 @@ class CompassService : Service(), SensorEventListener {
         SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerReading, magnetometerReading)
 
         val orientation = SensorManager.getOrientation(rotationMatrix, orientationAngles)
-        val degrees = (Math.toDegrees(orientation.get(0).toDouble()) + 360.0) % 360.0
+        val degrees = (Math.toDegrees(orientation[0].toDouble()) + 360.0) % 360.0
         val angle = round(degrees * 100) / 100
 
-        val intent = Intent()
+        val intent = Intent("com.service.CompassService")
         intent.putExtra(KEY_ANGLE, angle)
         intent.action = KEY_ON_SENSOR_CHANGED_ACTION
 
@@ -158,7 +150,7 @@ class CompassService : Service(), SensorEventListener {
             Intent(this, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT
         )
         // Stop notification intent
-        val stopNotificationIntent = Intent(this, WifiP2pManager.ActionListener::class.java)
+        val stopNotificationIntent = Intent(this, StopNotificationListener::class.java)
         stopNotificationIntent.action = KEY_NOTIFICATION_STOP_ACTION
         stopNotificationIntent.putExtra(KEY_NOTIFICATION_ID, notificationId)
         val pendingStopNotificationIntent =
@@ -185,28 +177,7 @@ class CompassService : Service(), SensorEventListener {
                 pendingStopNotificationIntent
             )
 
-
         return notificationBuilder.build()
-    }
-
-    class ActionListener : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-
-            if (intent != null && intent.action != null) {
-                if (intent.action.equals(KEY_NOTIFICATION_STOP_ACTION)) {
-                    context?.let {
-                        val notificationManager =
-                            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                        val locateIntent = Intent(context, CompassService::class.java)
-                        context.stopService(locateIntent)
-                        val notificationId = intent.getIntExtra(KEY_NOTIFICATION_ID, -1)
-                        if (notificationId != -1) {
-                            notificationManager.cancel(notificationId)
-                        }
-                    }
-                }
-            }
-        }
     }
 
     companion object {

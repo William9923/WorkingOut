@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +29,7 @@ class CompassFragment : Fragment() {
 
         }
 
+        // Get the broadcast manager, and then register for receiving intent from the CompassService
         LocalBroadcastManager.getInstance(requireActivity())
             .registerReceiver(broadcastReceiver, IntentFilter(CompassService.KEY_ON_SENSOR_CHANGED_ACTION))
     }
@@ -42,6 +44,7 @@ class CompassFragment : Fragment() {
         startForegroundServiceForSensors(true)
     }
 
+
     override fun onDestroy() {
         LocalBroadcastManager.getInstance(requireActivity()).unregisterReceiver(broadcastReceiver)
         super.onDestroy()
@@ -55,20 +58,11 @@ class CompassFragment : Fragment() {
         return binding.root
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CompassFragment().apply {
-                arguments = Bundle().apply {
-
-                }
-            }
-    }
+    companion object;
 
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val angle = intent.getDoubleExtra(CompassService.KEY_ANGLE, 0.0)
-
             if (binding != null)
                 binding.compassImageView.rotation = angle.toFloat() * -1
         }
