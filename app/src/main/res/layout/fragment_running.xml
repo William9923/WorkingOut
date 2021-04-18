@@ -10,8 +10,8 @@
 
         <TextView
                 android:id="@+id/text_steps"
-                android:layout_width="394dp"
-                android:layout_height="73dp"
+                android:layout_width="253dp"
+                android:layout_height="65dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
@@ -21,8 +21,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintVertical_bias="0.293"/>
+                app:layout_constraintVertical_bias="0.299"
+                android:textStyle="bold"/>
 
         <FrameLayout
                 android:id="@+id/parent_fragment_container"

@@ -36,12 +36,12 @@ class CompassFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        startForegroundServiceForSensors(false)
+        startServiceForSensors()
     }
 
     override fun onPause() {
         super.onPause()
-        startForegroundServiceForSensors(true)
+        stopServiceForSensors()
     }
 
 
@@ -67,10 +67,14 @@ class CompassFragment : Fragment() {
         }
     }
 
-    private fun startForegroundServiceForSensors(background: Boolean) {
+    private fun startServiceForSensors() {
         val requiredIntent = Intent(requireActivity(), CompassService::class.java)
-        requiredIntent.putExtra(CompassService.KEY_BACKGROUND, background)
-        ContextCompat.startForegroundService(requireActivity(), requiredIntent)
+        requireActivity().startService(requiredIntent)
+    }
+
+    private fun stopServiceForSensors() {
+        val requiredIntent = Intent(requireActivity(), CompassService::class.java)
+        requireActivity().stopService(requiredIntent)
     }
 
     companion object

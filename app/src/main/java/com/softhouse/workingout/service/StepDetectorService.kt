@@ -16,7 +16,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.softhouse.workingout.MainActivity
 import com.softhouse.workingout.R
 
-class StepCounterService : Service(), SensorEventListener {
+class StepDetectorService : Service(), SensorEventListener {
 
     /**
      * Binding related variable
@@ -31,9 +31,9 @@ class StepCounterService : Service(), SensorEventListener {
     /**
      * Notification Related Variable
      */
-    private val notificationActivityRequestCode = 0
-    private val notificationId = 1
-    private val notificationStopRequestCode = 2
+    private val notificationActivityRequestCode = 90
+    private val notificationId = 91
+    private val notificationStopRequestCode = 92
 
     private var currentStep = 0f
 
@@ -45,15 +45,15 @@ class StepCounterService : Service(), SensorEventListener {
         // register listener
         Log.d("Sensor", "Step Sensor")
 
-        sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)?.also { stepCounter ->
+        sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR)?.also { stepDetector ->
             sensorManager.registerListener(
                 this,
-                stepCounter,
+                stepDetector,
                 SensorManager.SENSOR_DELAY_NORMAL,
                 SensorManager.SENSOR_DELAY_UI
             )
         }
-        
+
         Log.d("Sensor", "Finish Setup")
 
         // Start binding notification
@@ -66,16 +66,15 @@ class StepCounterService : Service(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        event?.values?.firstOrNull()?.let {
-            Log.d("Step", "Step count: $it ")
-            currentStep = it
-            updateStep()
-        }
+        Log.d("Sensor changed?", "Yes!!")
+        updateStep()
     }
 
     private fun updateStep() {
+        currentStep++
+        Log.d("CurrState", currentStep.toString())
 
-        val intent = Intent("com.service.StepCounterService")
+        val intent = Intent("com.service.StepDetectorService")
         intent.putExtra(KEY_STEP, currentStep)
         intent.action = KEY_ON_SENSOR_CHANGED_ACTION
 
@@ -164,7 +163,7 @@ class StepCounterService : Service(), SensorEventListener {
         const val KEY_STEP = "step"
         const val KEY_BACKGROUND = "background"
         const val KEY_NOTIFICATION_ID = "notificationId"
-        const val KEY_ON_SENSOR_CHANGED_ACTION = "com.softhouse.workingout.service.ON_SENSOR_CHANGED"
+        const val KEY_ON_SENSOR_CHANGED_ACTION = "com.softhouse.workingout.service.StepDetectorService.ON_SENSOR_CHANGED"
         const val KEY_NOTIFICATION_STOP_ACTION = "com.softhouse.workingout.service.NOTIFICATION_STOP"
     }
 }

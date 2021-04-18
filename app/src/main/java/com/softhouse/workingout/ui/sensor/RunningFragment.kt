@@ -14,10 +14,8 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.softhouse.workingout.R
-import com.softhouse.workingout.databinding.FragmentCompassBinding
 import com.softhouse.workingout.databinding.FragmentRunningBinding
-import com.softhouse.workingout.service.CompassService
-import com.softhouse.workingout.service.StepCounterService
+import com.softhouse.workingout.service.StepDetectorService
 import com.softhouse.workingout.shared.addChildFragment
 
 class RunningFragment : Fragment() {
@@ -33,7 +31,7 @@ class RunningFragment : Fragment() {
 
         // Get the broadcast manager, and then register for receiving intent from the CompassService
         LocalBroadcastManager.getInstance(requireActivity())
-            .registerReceiver(broadcastReceiver, IntentFilter(CompassService.KEY_ON_SENSOR_CHANGED_ACTION))
+            .registerReceiver(broadcastReceiver, IntentFilter(StepDetectorService.KEY_ON_SENSOR_CHANGED_ACTION))
     }
 
     override fun onCreateView(
@@ -73,7 +71,7 @@ class RunningFragment : Fragment() {
 
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val steps = intent.getFloatExtra(StepCounterService.KEY_STEP, 0f)
+            val steps = intent.getFloatExtra(StepDetectorService.KEY_STEP, 0f)
             Log.d("Steps:", steps.toString())
             if (binding != null)
                 binding.textSteps.text = steps.toString()
@@ -81,8 +79,8 @@ class RunningFragment : Fragment() {
     }
 
     private fun startForegroundServiceForSensors(background: Boolean) {
-        val requiredIntent = Intent(requireActivity(), StepCounterService::class.java)
-        requiredIntent.putExtra(StepCounterService.KEY_BACKGROUND, background)
+        val requiredIntent = Intent(requireActivity(), StepDetectorService::class.java)
+        requiredIntent.putExtra(StepDetectorService.KEY_BACKGROUND, background)
         ContextCompat.startForegroundService(requireActivity(), requiredIntent)
     }
 

@@ -8,28 +8,14 @@ import android.content.Intent
 class StopNotificationListener : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent != null && intent.action != null) {
-            // For compass notification
-//            if (intent.action.equals(CompassService.KEY_NOTIFICATION_STOP_ACTION)) {
-//                context?.let {
-//                    val notificationManager =
-//                        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//                    val locateIntent = Intent(context, CompassService::class.java)
-//                    context.stopService(locateIntent)
-//                    val notificationId = intent.getIntExtra(CompassService.KEY_NOTIFICATION_ID, -1)
-//                    if (notificationId != -1) {
-//                        notificationManager.cancel(notificationId)
-//                    }
-//                }
-//            }
-
             // For step counter notification
-            if (intent.action.equals(StepCounterService.KEY_NOTIFICATION_STOP_ACTION)) {
+            if (intent.action.equals(StepDetectorService.KEY_NOTIFICATION_STOP_ACTION)) {
                 context?.let {
                     val notificationManager =
                         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    val locateIntent = Intent(context, StepCounterService::class.java)
+                    val locateIntent = Intent(context, StepDetectorService::class.java)
                     context.stopService(locateIntent)
-                    val notificationId = intent.getIntExtra(StepCounterService.KEY_NOTIFICATION_ID, -1)
+                    val notificationId = intent.getIntExtra(StepDetectorService.KEY_NOTIFICATION_ID, -1)
                     if (notificationId != -1) {
                         notificationManager.cancel(notificationId)
                     }
