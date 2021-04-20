@@ -6,7 +6,7 @@
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.sensor.CompassFragment">
+            tools:context=".ui.sensor.compass.CompassFragment">
 
         <ImageView
                 android:id="@+id/compass_image_view"

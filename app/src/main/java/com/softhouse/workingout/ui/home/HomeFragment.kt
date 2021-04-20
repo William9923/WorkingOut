@@ -9,8 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.softhouse.workingout.databinding.FragmentHomeBinding
-import com.softhouse.workingout.ui.sensor.CompassFragment
-import com.softhouse.workingout.ui.sensor.RunningFragment
 
 class HomeFragment : Fragment() {
 
@@ -47,9 +45,6 @@ class HomeFragment : Fragment() {
         val adapter = PageAdapter(childFragmentManager)
 
         Log.i("PAGER", "Setup tab")
-
-        adapter.addFragment(RunningFragment(), "\uD83D\uDC5F Running")
-//        adapter.addFragment(CompassFragment(), "\uD83D\uDEB4 Cycling")
 
         viewPager.adapter = adapter
     }

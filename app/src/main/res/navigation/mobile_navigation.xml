@@ -3,7 +3,8 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/mobile_navigation"
-            app:startDestination="@+id/navigation_home">
+            app:startDestination="@id/navigation_news"
+        >
 
     <fragment
             android:id="@+id/navigation_news"
@@ -17,6 +18,8 @@
                 app:exitAnim="@anim/fragment_fade_exit"
                 app:popEnterAnim="@anim/nav_default_pop_enter_anim"
                 app:popExitAnim="@animator/nav_default_pop_exit_anim"
+                app:popUpTo="@+id/navigation_news"
+                app:popUpToInclusive="true"
                 >
             <argument
                     android:name="url"
@@ -25,10 +28,10 @@
     </fragment>
 
     <fragment
-            android:id="@+id/navigation_home"
-            android:name="com.softhouse.workingout.ui.home.HomeFragment"
-            android:label="@string/title_home"
-            tools:layout="@layout/fragment_home"/>
+            android:id="@+id/navigation_tracking"
+            android:name="com.softhouse.workingout.ui.sensor.tracker.TrackingFragment"
+            android:label="Track"
+            tools:layout="@layout/fragment_tracking"/>
 
     <fragment
             android:id="@+id/navigation_dashboard"

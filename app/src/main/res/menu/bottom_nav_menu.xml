@@ -7,9 +7,9 @@
             android:title="@string/title_news"/>
 
     <item
-            android:id="@+id/navigation_home"
+            android:id="@+id/navigation_tracking"
             android:icon="@drawable/outline_flutter_dash_20"
-            android:title="@string/title_home"/>
+            android:title="Track"/>
 
     <item
             android:id="@+id/navigation_dashboard"

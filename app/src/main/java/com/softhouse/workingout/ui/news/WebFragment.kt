@@ -31,16 +31,16 @@ class WebFragment : Fragment() {
         url = args.url
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            // Overriding back button -> return to previous stack
-            android.R.id.home -> {
-                activity?.onBackPressed()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId) {
+//            // Overriding back button -> return to previous stack
+//            android.R.id.home -> {
+//                activity?.onBackPressed()
+//                return true
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
 
     override fun onCreateView(
@@ -64,13 +64,5 @@ class WebFragment : Fragment() {
 
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String) =
-            WebFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                }
-            }
-    }
+    companion object
 }
