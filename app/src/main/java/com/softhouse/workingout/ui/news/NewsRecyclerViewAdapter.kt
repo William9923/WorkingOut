@@ -1,19 +1,15 @@
 package com.softhouse.workingout.ui.news
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.softhouse.workingout.R
-import com.softhouse.workingout.databinding.FragmentNewsListBinding
-import com.softhouse.workingout.shared.ImageLoader
+import com.softhouse.workingout.databinding.FragmentNewsItemBinding
 import com.softhouse.workingout.ui.news.item.NewsContent
-import org.jetbrains.annotations.NotNull
 
 class NewsRecyclerViewAdapter(
     private val values: List<NewsContent.NewsItem>, private val listener: OnNewsItemClickListener
@@ -21,7 +17,7 @@ class NewsRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = FragmentNewsListBinding.inflate(layoutInflater)
+        val binding = FragmentNewsItemBinding.inflate(layoutInflater)
 
         return ViewHolder(binding)
     }
@@ -36,7 +32,7 @@ class NewsRecyclerViewAdapter(
 
     override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(val binding: FragmentNewsListBinding) : RecyclerView.ViewHolder(binding.root),
+    inner class ViewHolder(val binding: FragmentNewsItemBinding) : RecyclerView.ViewHolder(binding.root),
         View.OnClickListener {
 
         override fun toString(): String {
@@ -60,9 +56,7 @@ class NewsRecyclerViewAdapter(
     }
 
     companion object {
-
         // Bind adapter to load image
-
         @JvmStatic
         @BindingAdapter("loadImage")
         fun loadImage(imageView: ImageView, imageUrl: String) {
