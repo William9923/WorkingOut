@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,12 +26,7 @@ import retrofit2.Response
  */
 class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-        }
-    }
+    private lateinit var viewModel: NewsListViewModel
 
     private val columnCount: () -> Int = {
         val orientation = activity?.resources?.configuration?.orientation
@@ -38,10 +35,6 @@ class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-
-        // Based on orientation
-        Log.d("Check", "Orientation change")
-
         if (view is RecyclerView) {
             initRecyclerViewAdapter(view as RecyclerView)
         }
@@ -52,62 +45,66 @@ class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_news, container, false)
+
+        Log.d("NewsListViewModel", "Provider called")
+        viewModel = ViewModelProvider(requireActivity()).get(NewsListViewModel::class.java)
         initRecyclerViewAdapter(view)
 
-        if (NewsContent.ITEMS.size <= 0)
-            loadData(view)
+//        // TODO : Refactoring how to get data
+//        if (NewsContent.ITEMS.size <= 0)
+//            loadData(view)
         return view
     }
 
     // TODO : Make loadData in
-    private fun loadData(view: View) {
-        val api = NewsApiConfig()
-
-        api.getService().getNews(api.country, api.category, api.key)
-            .enqueue(object : Callback<NewsResponse> {
-                override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
-                    Log.e("ERROR", t.message!!)
-                }
-
-                override fun onResponse(call: Call<NewsResponse>, response: Response<NewsResponse>) {
-                    if (response.isSuccessful) {
-                        val data = response.body()!!
-                        val articles = data.articles!!
-                        articles.forEachIndexed { index, element ->
-
-                            // TODO : Make a sample image for null reference image and null reference site
-
-                            if (element!!.urlToImage != null && element.url != null) {
-
-                                val title: String = element.title ?: "No Title"
-                                val description: String =
-                                    element.description ?: "No Desc"
-                                NewsContent.addItem(
-                                    NewsContent.NewsItem(
-                                        index,
-                                        title,
-                                        description,
-                                        element.url,
-                                        element.urlToImage!!
-                                    )
-                                )
-                            }
-                        }
-
-                        if (view is RecyclerView) {
-                            view.adapter?.notifyDataSetChanged()
-                            Log.d("Notify", "Data Changed")
-                        }
-
-                        Log.d("SIZE:", NewsContent.ITEMS.size.toString())
-
-                    } else {
-                        Log.e("ERROR:", "Fetch data not successful")
-                    }
-
-                }
-            })
-    }
+//    private fun loadData(view: View) {
+//        val api = NewsApiConfig()
+//
+//        api.getService().getNews(api.country, api.category, api.key)
+//            .enqueue(object : Callback<NewsResponse> {
+//                override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
+//                    Log.e("ERROR", t.message!!)
+//                }
+//
+//                override fun onResponse(call: Call<NewsResponse>, response: Response<NewsResponse>) {
+//                    if (response.isSuccessful) {
+//                        val data = response.body()!!
+//                        val articles = data.articles!!
+//                        articles.forEachIndexed { index, element ->
+//
+//                            // TODO : Make a sample image for null reference image and null reference site
+//
+//                            if (element!!.urlToImage != null && element.url != null) {
+//
+//                                val title: String = element.title ?: "No Title"
+//                                val description: String =
+//                                    element.description ?: "No Desc"
+//                                NewsContent.addItem(
+//                                    NewsContent.NewsItem(
+//                                        index,
+//                                        title,
+//                                        description,
+//                                        element.url,
+//                                        element.urlToImage!!
+//                                    )
+//                                )
+//                            }
+//                        }
+//
+//                        if (view is RecyclerView) {
+//                            view.adapter?.notifyDataSetChanged()
+//                            Log.d("Notify", "Data Changed")
+//                        }
+//
+//                        Log.d("SIZE:", NewsContent.ITEMS.size.toString())
+//
+//                    } else {
+//                        Log.e("ERROR:", "Fetch data not successful")
+//                    }
+//
+//                }
+//            })
+//    }
 
     private fun initRecyclerViewAdapter(view: View) {
         // Set the adapter
@@ -116,12 +113,23 @@ class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
                 columnCount() <= 1 -> LinearLayoutManager(context)
                 else -> GridLayoutManager(context, columnCount())
             }
-            view.adapter = NewsRecyclerViewAdapter(NewsContent.ITEMS, this)
+            view.adapter = viewModel.items.value?.let { NewsRecyclerViewAdapter(it, this) }
         }
+
+        // Observe data change
+        viewModel.items.observe(requireActivity(), {
+            Log.d("Observable", "Data changed")
+            if (view is RecyclerView) {
+                if (view?.adapter != null)
+                    view.adapter = viewModel.items.value?.let { NewsRecyclerViewAdapter(it, this) }
+                view?.adapter?.notifyDataSetChanged()
+                Log.d("Notify", "Data Changed")
+            }
+        })
     }
 
     override fun onNewsClick(position: Int) {
-        val url: String = NewsContent.ITEMS[position].url
+        val url: String = viewModel.items.value!![position].url ?: ""
         val action = NewsListDirections.actionNavigationNewsToWebFragment(url)
         NavHostFragment.findNavController(this).navigate(action)
     }

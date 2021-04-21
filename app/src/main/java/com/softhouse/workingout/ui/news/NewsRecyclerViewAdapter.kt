@@ -51,6 +51,10 @@ class NewsRecyclerViewAdapter(
         }
     }
 
+    fun setData(values: List<NewsContent.NewsItem>) {
+
+    }
+
     interface OnNewsItemClickListener {
         fun onNewsClick(position: Int)
     }
