@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.softhouse.workingout.MainActivity
 import com.softhouse.workingout.R
+import kotlin.math.abs
 
 class StepDetectorService : Service(), SensorEventListener {
 
@@ -74,10 +75,6 @@ class StepDetectorService : Service(), SensorEventListener {
             }
             isSensorAvailable = false
         }
-
-        // Start binding notification
-        val notification = createNotification(0)
-        startForeground(notificationId, notification)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -87,15 +84,12 @@ class StepDetectorService : Service(), SensorEventListener {
     override fun onSensorChanged(event: SensorEvent?) {
 
         if (isSensorAvailable) {
+            // Step Detector
             updateStep()
         } else {
             // Accelerometer
-            if (event != null && event.values[0] > 5) {
-                Log.d("Event:", event.values[0].toString())
-
-                Log.i("Sensor Changed?", "")
+            if (event != null && event.values[0] > abs(2)) {
                 updateStep()
-
             }
         }
     }
@@ -120,11 +114,25 @@ class StepDetectorService : Service(), SensorEventListener {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        intent?.let {
+        var action: String = intent?.action!!
+
+        intent.let {
             background = it.getBooleanExtra(KEY_BACKGROUND, false)
         }
 
-        return START_STICKY
+        when (action) {
+            ACTION_START -> {
+                Log.d("Action", "Start step detector service!")
+                startForeground()
+            }
+            ACTION_STOP -> {
+                Log.d("Action", "Stop step detector service!")
+                stopForeground(true)
+                stopSelf()
+            }
+        }
+
+        return super.onStartCommand(intent, flags, startId)
     }
 
     private fun createNotification(step: Int): Notification {
@@ -184,12 +192,20 @@ class StepDetectorService : Service(), SensorEventListener {
         return notificationBuilder.build()
     }
 
+    private fun startForeground() {
+        // Start binding notification
+        val notification = createNotification(0)
+        startForeground(notificationId, notification)
+    }
+
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         // Do Nothing
     }
 
     companion object {
+        const val ACTION_START = "StepDetectorService::START"
+        const val ACTION_STOP = "StepDetectorService::STOP"
         const val KEY_STEP = "step"
         const val KEY_BACKGROUND = "background"
         const val KEY_NOTIFICATION_ID = "notificationId"

@@ -1,9 +1,11 @@
 package com.softhouse.workingout.ui.sensor.tracker
 
+import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -17,9 +19,13 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentTrackingBinding
 import com.softhouse.workingout.service.StepDetectorService
+import com.softhouse.workingout.shared.Constants.REQUEST_CODE_LOCATION_PERMISSION
+import com.softhouse.workingout.shared.TrackingUtility
 import com.softhouse.workingout.ui.sensor.compass.CompassFragment
+import pub.devrel.easypermissions.AppSettingsDialog
+import pub.devrel.easypermissions.EasyPermissions
 
-class TrackingFragment : Fragment() {
+class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     private lateinit var viewModel: TrackingViewModel
     lateinit var binding: FragmentTrackingBinding
@@ -28,9 +34,6 @@ class TrackingFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
         // Get the broadcast manager, and then register for receiving intent from the CompassService
         LocalBroadcastManager.getInstance(requireActivity())
             .registerReceiver(broadcastReceiver, IntentFilter(StepDetectorService.KEY_ON_SENSOR_CHANGED_ACTION))
@@ -55,6 +58,8 @@ class TrackingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        requestPermissions()
 
         // Add the child fragment here...
         val transaction = childFragmentManager.beginTransaction()
@@ -97,15 +102,19 @@ class TrackingFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        if (started) {}
-//            startForegroundServiceForSensors(false)
+        if (started) {
+            startForegroundServiceForSensors(false)
+        }
+//
     }
 
     override fun onPause() {
         super.onPause()
 
-        if (started) {}
-//            startForegroundServiceForSensors(true)
+        if (started) {
+            startForegroundServiceForSensors(true)
+        }
+//
     }
 
     override fun onDestroy() {
@@ -125,19 +134,22 @@ class TrackingFragment : Fragment() {
     private fun startForegroundServiceForSensors(background: Boolean) {
         val requiredIntent = Intent(requireActivity(), StepDetectorService::class.java)
         requiredIntent.putExtra(StepDetectorService.KEY_BACKGROUND, background)
-        ContextCompat.startForegroundService(requireActivity(), requiredIntent)
+        requiredIntent.action = StepDetectorService.ACTION_START
+        requireActivity().startService(requiredIntent)
+//        ContextCompat.startForegroundService(requireActivity(), requiredIntent)
     }
 
     private fun stopForegroundServiceForSensors() {
-
+        val requiredIntent = Intent(requireActivity(), StepDetectorService::class.java)
+        requiredIntent.action = StepDetectorService.ACTION_STOP
+        requireActivity().stopService(requiredIntent)
+//        ContextCompat.startForegroundService(requireActivity(), requiredIntent)
     }
 
     private fun switchOnSensor() {
-//        startForegroundServiceForSensors(false)
         started = true
-
         Log.d("BUTTON", "Start Action")
-
+        startForegroundServiceForSensors(false)
         binding.actionBtn.text = "STOP"
         // TODO("Change Button Color")
     }
@@ -145,14 +157,53 @@ class TrackingFragment : Fragment() {
     private fun switchOffSensor() {
         binding.actionBtn.text = "START"
         started = false
-
         Log.d("BUTTON", "Stop Action")
-        // TODO("Change Button Color")
+        stopForegroundServiceForSensors()
+        // TODO("Make Navigation to the next fragment)
     }
 
-//    private fun stopForegroundServiceForSensors() {
-//        val requiredIntent = Intent(requireActivity(), StepDetectorService::class.java)
-//    }
+    private fun requestPermissions() {
+        if (TrackingUtility.hasLocationPermissions(requireContext())) {
+            return
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            EasyPermissions.requestPermissions(
+                this,
+                "You need to accept location permissions to use this app.",
+                REQUEST_CODE_LOCATION_PERMISSION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        } else {
+            EasyPermissions.requestPermissions(
+                this,
+                "You need to accept location permissions to use this app.",
+                REQUEST_CODE_LOCATION_PERMISSION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            )
+        }
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            AppSettingsDialog.Builder(this).build().show()
+        } else {
+            requestPermissions()
+        }
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {}
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
 
     companion object
 
