@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.softhouse.workingout.R
-import com.softhouse.workingout.ui.news.item.NewsApiConfig
-import com.softhouse.workingout.ui.news.item.NewsContent
-import com.softhouse.workingout.ui.news.item.NewsResponse
+import com.softhouse.workingout.data.remote.NewsApiConfig
+import com.softhouse.workingout.data.NewsContent
+import com.softhouse.workingout.data.remote.NewsResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,11 +28,10 @@ class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-
         }
     }
 
-    private val columnCount : () -> Int = {
+    private val columnCount: () -> Int = {
         val orientation = activity?.resources?.configuration?.orientation
         if (orientation == Configuration.ORIENTATION_PORTRAIT) 1 else 2
     }
@@ -60,6 +59,7 @@ class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
         return view
     }
 
+    // TODO : Make loadData in
     private fun loadData(view: View) {
         val api = NewsApiConfig()
 

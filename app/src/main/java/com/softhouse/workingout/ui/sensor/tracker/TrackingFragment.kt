@@ -43,7 +43,9 @@ class TrackingFragment : Fragment() {
         binding = FragmentTrackingBinding.inflate(inflater, container, false)
 
         viewModel =
-            ViewModelProviders.of(this).get(TrackingViewModel::class.java)
+            ViewModelProviders.of(requireActivity()).get(TrackingViewModel::class.java)
+
+        // TODO : Pindahin business logic ke view model, terus semua UI listen ke view model
         viewModel.started.observe(viewLifecycleOwner, {
             started = it
         })
@@ -89,7 +91,7 @@ class TrackingFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(TrackingViewModel::class.java)
+        viewModel = ViewModelProviders.of(requireActivity()).get(TrackingViewModel::class.java)
     }
 
     override fun onResume() {

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentNewsItemBinding
-import com.softhouse.workingout.ui.news.item.NewsContent
+import com.softhouse.workingout.data.NewsContent
 
 class NewsRecyclerViewAdapter(
     private val values: List<NewsContent.NewsItem>, private val listener: OnNewsItemClickListener

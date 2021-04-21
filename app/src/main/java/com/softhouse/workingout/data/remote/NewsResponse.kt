@@ -1,4 +1,4 @@
-package com.softhouse.workingout.ui.news.item
+package com.softhouse.workingout.data.remote
 
 import com.google.gson.annotations.SerializedName
 

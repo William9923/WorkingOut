@@ -36,6 +36,7 @@ class WebFragment : Fragment() {
 //            // Overriding back button -> return to previous stack
 //            android.R.id.home -> {
 //                activity?.onBackPressed()
+//                requireActivity().
 //                return true
 //            }
 //        }

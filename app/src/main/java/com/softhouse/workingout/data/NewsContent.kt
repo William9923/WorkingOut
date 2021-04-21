@@ -1,4 +1,4 @@
-package com.softhouse.workingout.ui.news.item
+package com.softhouse.workingout.data
 
 import java.util.*
 
