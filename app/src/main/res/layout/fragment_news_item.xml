@@ -6,7 +6,7 @@
     <data>
 
         <variable
-                type="com.softhouse.workingout.data.NewsContent.NewsItem"
+                type="com.softhouse.workingout.data.NewsItem"
                 name="data" />
     </data>
 

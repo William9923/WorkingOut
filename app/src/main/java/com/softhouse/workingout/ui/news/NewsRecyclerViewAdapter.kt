@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentNewsItemBinding
-import com.softhouse.workingout.data.NewsContent
+import com.softhouse.workingout.data.NewsItem
 
 class NewsRecyclerViewAdapter(
-    private val values: List<NewsContent.NewsItem>, private val listener: OnNewsItemClickListener
+    private val values: List<NewsItem>, private val listener: OnNewsItemClickListener
 ) : RecyclerView.Adapter<NewsRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,14 +45,10 @@ class NewsRecyclerViewAdapter(
             }
         }
 
-        fun bind(data: NewsContent.NewsItem) {
+        fun bind(data: NewsItem) {
             binding.data = data
             binding.executePendingBindings()
         }
-    }
-
-    fun setData(values: List<NewsContent.NewsItem>) {
-
     }
 
     interface OnNewsItemClickListener {

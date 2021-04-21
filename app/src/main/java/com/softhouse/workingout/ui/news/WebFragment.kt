@@ -2,7 +2,6 @@ package com.softhouse.workingout.ui.news
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
@@ -30,19 +29,6 @@ class WebFragment : Fragment() {
         // Setup url for webview
         url = args.url
     }
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            // Overriding back button -> return to previous stack
-//            android.R.id.home -> {
-//                activity?.onBackPressed()
-//                requireActivity().
-//                return true
-//            }
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
