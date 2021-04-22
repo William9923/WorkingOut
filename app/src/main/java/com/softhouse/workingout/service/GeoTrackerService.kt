@@ -23,36 +23,66 @@ import com.softhouse.workingout.shared.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.softhouse.workingout.shared.Constants.NOTIFICATION_CHANNEL_ID
 import com.softhouse.workingout.shared.Constants.NOTIFICATION_CHANNEL_NAME
 import com.softhouse.workingout.shared.Constants.NOTIFICATION_ID
+import com.softhouse.workingout.shared.Constants.TIMER_UPDATE_INTERVAL
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
+import com.softhouse.workingout.listener.StopNotificationListener
+import com.softhouse.workingout.shared.Constants
 import com.softhouse.workingout.shared.Constants.FASTEST_LOCATION_INTERVAL
 import com.softhouse.workingout.shared.Constants.LOCATION_UPDATE_INTERVAL
 import com.softhouse.workingout.shared.TrackingUtility
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 typealias Polyline = MutableList<LatLng>
-typealias Polylines = MutableList<Polyline>
 
+@AndroidEntryPoint
 class GeoTrackerService : LifecycleService() {
 
+    /**
+     * Service - related variable
+     */
     var isFirstRun = true
+    private val timeRunInSeconds = MutableLiveData<Long>()
 
+    /**
+     * Service specific handler / provider client / sensor
+     */
+    @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    /**
+     * Notification handler
+     */
+    @Inject
+    lateinit var baseNotificationBuilder: NotificationCompat.Builder
+    lateinit var curNotificationBuilder: NotificationCompat.Builder
 
     private fun postInitialValues() {
         isTracking.postValue(false)
         pathPoints.postValue(mutableListOf())
+        timeRunInSeconds.postValue(0L)
+        timeRunInMillis.postValue(0L)
     }
 
     override fun onCreate() {
         super.onCreate()
+
+        curNotificationBuilder = baseNotificationBuilder
+
         postInitialValues()
         fusedLocationProviderClient = FusedLocationProviderClient(this)
 
         isTracking.observe(this, {
             updateLocationTracking(it)
+            updateNotificationTrackingState(it)
         })
     }
 
@@ -66,14 +96,10 @@ class GeoTrackerService : LifecycleService() {
                         Log.d("GeoService", "Starting service...")
                     } else {
                         Log.d("GeoService", "Resuming service...")
-                        resumeService()
+                        startTimer()
                     }
                 }
-                ACTION_PAUSE_SERVICE_COMPASS_GEO -> {
-                    Log.d("GeoService", "Paused service...")
-                    pauseService()
-                }
-                ACTION_STOP_SERVICE_COMPASS_GEO -> {
+                ACTION_STOP_SERVICE_GEO -> {
                     Log.d("GeoService", "Stopping service...")
                 }
                 else -> Log.d("GeoService", "Unrecognized action")
@@ -81,6 +107,32 @@ class GeoTrackerService : LifecycleService() {
         }
         return super.onStartCommand(intent, flags, startId)
     }
+
+    private var lapTime = 0L
+    private var timeRun = 0L
+    private var timeStarted = 0L
+    private var lastSecondTimestamp = 0L
+
+    private fun startTimer() {
+        addEmptyPolylineIfEmpty()
+        isTracking.postValue(true)
+        timeStarted = System.currentTimeMillis()
+        CoroutineScope(Dispatchers.Main).launch {
+            while (isTracking.value!!) {
+                // time difference between now and timeStarted
+                lapTime = System.currentTimeMillis() - timeStarted
+                // post the new lapTime
+                timeRunInMillis.postValue(timeRun + lapTime)
+                if (timeRunInMillis.value!! >= lastSecondTimestamp + 1000L) {
+                    timeRunInSeconds.postValue(timeRunInSeconds.value!! + 1)
+                    lastSecondTimestamp += 1000L
+                }
+                delay(TIMER_UPDATE_INTERVAL)
+            }
+            timeRun += lapTime
+        }
+    }
+
 
     private fun getMainActivityPendingIntent() = PendingIntent.getActivity(
         this,
@@ -102,11 +154,49 @@ class GeoTrackerService : LifecycleService() {
     }
 
     /**
+     * Notification related method
+     */
+
+    private fun updateNotificationTrackingState(isTracking: Boolean) {
+        if (isTracking) {
+            val stopIntent = Intent(this, GeoTrackerService::class.java).apply {
+                action = ACTION_STOP_SERVICE_GEO
+            }
+            val pendingIntent = PendingIntent.getService(this, 1, stopIntent, FLAG_UPDATE_CURRENT)
+
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            val stopNotificationPendingIntent = PendingIntent.getBroadcast(
+                this,
+                Constants.NOTIFICATION_STOP_CODE,
+                Intent(this, StopNotificationListener::class.java).also {
+                    it.action = Constants.ACTION_STOP_NOTIFICATION
+                },
+                FLAG_UPDATE_CURRENT
+            )
+
+            curNotificationBuilder.javaClass.getDeclaredField("mActions").apply {
+                isAccessible = true
+                set(curNotificationBuilder, ArrayList<NotificationCompat.Action>())
+            }
+            curNotificationBuilder = baseNotificationBuilder
+                .addAction(R.drawable.ic_notifications_black_24dp, "STOP", pendingIntent)
+                .addAction(
+                    R.drawable.ic_notifications_black_24dp,
+                    getString(R.string.stop_notifications),
+                    stopNotificationPendingIntent
+                )
+            notificationManager.notify(NOTIFICATION_ID, curNotificationBuilder.build())
+        }
+
+    }
+
+    /**
      * Background service method
      */
 
     private fun startForegroundService() {
-        addEmptyPolyline()
+        startTimer()
         isTracking.postValue(true)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE)
@@ -116,24 +206,13 @@ class GeoTrackerService : LifecycleService() {
             createNotificationChannel(notificationManager)
         }
 
-        val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-            .setAutoCancel(false)
-            .setOngoing(true)
-            .setSmallIcon(R.drawable.bike)
-            .setContentTitle("Running App")
-            .setContentText("00:00:00")
-            .setContentIntent(getMainActivityPendingIntent())
-        // TODO : add intent for stopping the notification -> can copy from stepdetector
+        startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
 
-        startForeground(NOTIFICATION_ID, notificationBuilder.build())
-    }
-
-    private fun pauseService() {
-        isTracking.postValue(false)
-    }
-
-    private fun resumeService() {
-        isTracking.postValue(true)
+        timeRunInSeconds.observe(this, {
+            val notification = curNotificationBuilder
+                .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
+            notificationManager.notify(NOTIFICATION_ID, notification.build())
+        })
     }
 
     /**
@@ -178,22 +257,24 @@ class GeoTrackerService : LifecycleService() {
         location?.let {
             val pos = LatLng(location.latitude, location.longitude)
             pathPoints.value?.apply {
-                last().add(pos)
+                add(pos)
                 pathPoints.postValue(this)
             }
         }
     }
 
-    private fun addEmptyPolyline() = pathPoints.value?.apply {
-        add(mutableListOf())
+    private fun addEmptyPolylineIfEmpty() = pathPoints.value.apply {
         pathPoints.postValue(this)
-    } ?: pathPoints.postValue(mutableListOf(mutableListOf()))
+    } ?: pathPoints.postValue(mutableListOf())
 
     companion object {
         val isTracking = MutableLiveData<Boolean>()
-        val pathPoints = MutableLiveData<Polylines>()
+        val pathPoints = MutableLiveData<Polyline>()
+        val timeRunInMillis = MutableLiveData<Long>()
+        val timeStarted = MutableLiveData<Long>()
+        val lastSecondTimestamp = MutableLiveData<Long>()
         const val ACTION_START_OR_RESUME_SERVICE_GEO = "ACTION_START_OR_RESUME_SERVICE_GEO"
-        const val ACTION_PAUSE_SERVICE_COMPASS_GEO = "ACTION_PAUSE_SERVICE_COMPASS_GEO"
-        const val ACTION_STOP_SERVICE_COMPASS_GEO = "ACTION_STOP_SERVICE_COMPASS_GEO"
+        const val ACTION_PAUSE_SERVICE_GEO = "ACTION_PAUSE_SERVICE_GEO"
+        const val ACTION_STOP_SERVICE_GEO = "ACTION_STOP_SERVICE_GEO"
     }
 }

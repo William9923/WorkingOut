@@ -45,7 +45,7 @@
         <service android:name=".service.GeoTrackerService"
                  android:foregroundServiceType="location" />
 
-        <receiver android:name=".service.StopNotificationListener"/>
+        <receiver android:name=".listener.StopNotificationListener"/>
         <meta-data
                 android:name="preloaded_fonts"
                 android:resource="@array/preloaded_fonts"/>

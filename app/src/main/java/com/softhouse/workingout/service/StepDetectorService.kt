@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.softhouse.workingout.ui.MainActivity
 import com.softhouse.workingout.R
+import com.softhouse.workingout.listener.StopNotificationListener
 import kotlin.math.abs
 
 class StepDetectorService : Service(), SensorEventListener {

@@ -1,24 +1,16 @@
 package com.softhouse.workingout.ui.sensor.tracker
 
 import android.Manifest
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.os.Build
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentTrackingBinding
 import com.softhouse.workingout.service.GeoTrackerService
@@ -47,16 +39,7 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
         binding = FragmentTrackingBinding.inflate(inflater, container, false)
 
-//        viewModel =
-//            ViewModelProviders.of(requireActivity()).get(TrackingViewModel::class.java)
-
-        // Get the broadcast manager, and then register for receiving intent from the CompassService
-//        LocalBroadcastManager.getInstance(requireActivity())
-//            .registerReceiver(
-//                viewModel.broadcastStepReceiver,
-//                IntentFilter(StepDetectorService.KEY_ON_SENSOR_CHANGED_ACTION)
-//            )
-
+        // Make screen orientation always portrait
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         return binding.root
@@ -89,7 +72,7 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 sendLocationCommandToService(GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO)
             } else {
                 viewModel.stop()
-                sendLocationCommandToService(GeoTrackerService.ACTION_STOP_SERVICE_COMPASS_GEO)
+                sendLocationCommandToService(GeoTrackerService.ACTION_STOP_SERVICE_GEO)
             }
         }
 
@@ -102,7 +85,6 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             }
         }
 
-        // TODO : Register geo location broadcast manager
         viewModel.started.observe(viewLifecycleOwner, {
             started = it
             binding.actionBtn.text = if (it) "STOP" else "START"
@@ -114,14 +96,26 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             binding.textTrackerMetric.text = if (it == Mode.STEPS) "steps" else "km"
         })
 
-
-
+        subscribeToObservers()
     }
 
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProviders.of(requireActivity()).get(TrackingViewModel::class.java)
-//    }
+    /**
+     * Subscribe to LifeCycle Service
+     */
+    private fun subscribeToObservers() {
+        GeoTrackerService.isTracking.observe(viewLifecycleOwner, {
+            viewModel.updateTracking(it)
+        })
+
+        GeoTrackerService.pathPoints.observe(viewLifecycleOwner, {
+            viewModel.updateCoordinates(it)
+        })
+
+        GeoTrackerService.timeRunInMillis.observe(viewLifecycleOwner, {
+            viewModel.updateDuration(it)
+        })
+    }
+
 
     private fun sendStepCommandToService(action: String) =
         Intent(requireContext(), StepDetectorService::class.java).also {
@@ -134,51 +128,6 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             it.action = action
             requireContext().startService(it)
         }
-
-    override fun onDestroy() {
-        LocalBroadcastManager.getInstance(requireActivity()).unregisterReceiver(viewModel.broadcastStepReceiver)
-        super.onDestroy()
-    }
-
-//    private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-//        override fun onReceive(context: Context, intent: Intent) {
-//            val steps = intent.getIntExtra(StepDetectorService.KEY_STEP, 0)
-//            Log.d("Steps:", steps.toString())
-//            if (binding != null)
-//                binding.textTracker.text = steps.toString()
-//        }
-//    }
-
-    private fun startForegroundServiceForSensors(background: Boolean) {
-        val requiredIntent = Intent(requireActivity(), StepDetectorService::class.java)
-        requiredIntent.putExtra(StepDetectorService.KEY_BACKGROUND, background)
-        requiredIntent.action = StepDetectorService.ACTION_START
-        requireActivity().startService(requiredIntent)
-//        ContextCompat.startForegroundService(requireActivity(), requiredIntent)
-    }
-
-    private fun stopForegroundServiceForSensors() {
-        val requiredIntent = Intent(requireActivity(), StepDetectorService::class.java)
-        requiredIntent.action = StepDetectorService.ACTION_STOP
-        requireActivity().stopService(requiredIntent)
-//        ContextCompat.startForegroundService(requireActivity(), requiredIntent)
-    }
-
-    private fun switchOnSensor() {
-        started = true
-        Log.d("BUTTON", "Start Action")
-        startForegroundServiceForSensors(false)
-        binding.actionBtn.text = "STOP"
-        // TODO("Change Button Color")
-    }
-
-    private fun switchOffSensor() {
-        binding.actionBtn.text = "START"
-        started = false
-        Log.d("BUTTON", "Stop Action")
-        stopForegroundServiceForSensors()
-        // TODO("Make Navigation to the next fragment)
-    }
 
     /**
      * Permission Request Function
