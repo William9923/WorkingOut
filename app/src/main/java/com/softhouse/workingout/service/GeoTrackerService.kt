@@ -16,9 +16,8 @@ import androidx.core.app.NotificationManagerCompat.IMPORTANCE_LOW
 import androidx.lifecycle.LifecycleService
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.google.android.gms.maps.model.LatLng
-import com.softhouse.workingout.MainActivity
+import com.softhouse.workingout.ui.MainActivity
 import com.softhouse.workingout.R
 import com.softhouse.workingout.shared.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.softhouse.workingout.shared.Constants.NOTIFICATION_CHANNEL_ID

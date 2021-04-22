@@ -1,13 +1,15 @@
 package com.softhouse.workingout.data.db
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.softhouse.workingout.ui.sensor.tracker.Mode
 
 @Entity(tableName = "record_table")
 data class Record(
-    @PrimaryKey var recordId: Int = 0,
-    @PrimaryKey var mode: String = Mode.STEPS.toString(),
+    var recordId: Int,
+    var mode: String,
+    @ColumnInfo(name = "start_workout") var startWorkout: Long,
+    @ColumnInfo(name = "end_workout") var endWorkout: Long,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null

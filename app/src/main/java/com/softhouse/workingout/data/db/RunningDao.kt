@@ -12,11 +12,11 @@ interface RunningDao {
     @Delete
     suspend fun deleteRunning(running: Running)
 
-    @Query("SELECT * FROM running_table ORDER BY timestamp DESC")
-    fun getAllRunningSortedByDate(): LiveData<List<Running>>
-
     @Query("SELECT * FROM running_table ORDER BY steps DESC")
     fun getAllRunningSortedBySteps(): LiveData<List<Running>>
+
+    @Query("SELECT * FROM running_table WHERE id = :id LIMIT 1")
+    fun getSpecificRunningById(id: Int): LiveData<Running>
 
     @Query("SELECT SUM(steps) FROM running_table")
     fun getTotalSteps(): LiveData<Int>

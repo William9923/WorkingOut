@@ -5,8 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "running_table")
 data class Running(
-    var timestamp: Long = 0L,
-    var steps: Int = 0,
+    var steps: Int,
 )  {
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null

@@ -14,7 +14,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.softhouse.workingout.MainActivity
+import com.softhouse.workingout.ui.MainActivity
 import com.softhouse.workingout.R
 import kotlin.math.abs
 

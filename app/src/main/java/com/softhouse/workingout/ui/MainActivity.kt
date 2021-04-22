@@ -1,10 +1,7 @@
-package com.softhouse.workingout
+package com.softhouse.workingout.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.Window
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.findNavController
@@ -13,9 +10,25 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.softhouse.workingout.R
+import com.softhouse.workingout.data.db.CyclingDao
+import com.softhouse.workingout.data.db.RecordDao
+import com.softhouse.workingout.data.db.RunningDao
 import com.softhouse.workingout.shared.Constants.ACTION_SHOW_TRACKING_FRAGMENT
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var recordDao: RecordDao
+
+    @Inject
+    lateinit var runningDao: RunningDao
+
+    @Inject
+    lateinit var cyclingDao: CyclingDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

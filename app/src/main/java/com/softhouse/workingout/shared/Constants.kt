@@ -2,7 +2,7 @@ package com.softhouse.workingout.shared
 
 object Constants {
 
-    const val RUNNING_DATABASE_NAME = "running_db"
+    const val APP_DATABASE_NAME = "workout_database"
 
     const val REQUEST_CODE_LOCATION_PERMISSION = 0
 

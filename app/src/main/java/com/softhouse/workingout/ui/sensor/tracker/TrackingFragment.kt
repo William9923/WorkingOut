@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentTrackingBinding
@@ -25,12 +26,16 @@ import com.softhouse.workingout.service.StepDetectorService
 import com.softhouse.workingout.shared.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.softhouse.workingout.shared.TrackingUtility
 import com.softhouse.workingout.ui.sensor.compass.CompassFragment
+import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
+@AndroidEntryPoint
 class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
-    private lateinit var viewModel: TrackingViewModel
+    private val viewModel: TrackingViewModel by viewModels(
+        ownerProducer = { requireActivity() }
+    )
     lateinit var binding: FragmentTrackingBinding
 
     private var started: Boolean = false
@@ -42,8 +47,8 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
         binding = FragmentTrackingBinding.inflate(inflater, container, false)
 
-        viewModel =
-            ViewModelProviders.of(requireActivity()).get(TrackingViewModel::class.java)
+//        viewModel =
+//            ViewModelProviders.of(requireActivity()).get(TrackingViewModel::class.java)
 
         // Get the broadcast manager, and then register for receiving intent from the CompassService
 //        LocalBroadcastManager.getInstance(requireActivity())
@@ -65,6 +70,14 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         // Add the child fragment here...
         val transaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.parent_fragment_container, CompassFragment()).commit()
+
+        /**
+         * Handling Initialization value
+         */
+        binding.textTrackerMetric.text = if (viewModel.mode.value == Mode.STEPS) "steps" else "km"
+        binding.actionBtn.text = if (viewModel.started.value!!) "STOP" else "START"
+        binding.switchMode.isChecked = viewModel.mode.value == Mode.STEPS
+        binding.switchMode.text = if (viewModel.mode.value == Mode.STEPS) "Running" else "Cycling"
 
         /**
          * Binding Application Listener
@@ -101,15 +114,14 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             binding.textTrackerMetric.text = if (it == Mode.STEPS) "steps" else "km"
         })
 
-        viewModel.steps.observe(viewLifecycleOwner, {
 
-        })
+
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(requireActivity()).get(TrackingViewModel::class.java)
-    }
+//    override fun onActivityCreated(savedInstanceState: Bundle?) {
+//        super.onActivityCreated(savedInstanceState)
+//        viewModel = ViewModelProviders.of(requireActivity()).get(TrackingViewModel::class.java)
+//    }
 
     private fun sendStepCommandToService(action: String) =
         Intent(requireContext(), StepDetectorService::class.java).also {

@@ -6,13 +6,17 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.util.Log
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.softhouse.workingout.data.repository.MainRepository
 import com.softhouse.workingout.service.StepDetectorService
 
-class TrackingViewModel : ViewModel() {
+class TrackingViewModel @ViewModelInject constructor(
+    val mainRepository: MainRepository
+) : ViewModel() {
     /**
      * Application Logic State
      */
