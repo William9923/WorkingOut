@@ -30,19 +30,26 @@ class CompassFragment : Fragment() {
             .registerReceiver(broadcastReceiver, IntentFilter(CompassService.KEY_ON_SENSOR_CHANGED_ACTION))
     }
 
+    private fun sendCommandToService(action: String) =
+        Intent(requireContext(), CompassService::class.java).also {
+            it.action = action
+            requireContext().startService(it)
+        }
+
     override fun onResume() {
         super.onResume()
-        startServiceForSensors()
+        sendCommandToService(CompassService.ACTION_START_OR_RESUME_SERVICE_COMPASS)
     }
 
     override fun onPause() {
         super.onPause()
-        stopServiceForSensors()
+        sendCommandToService(CompassService.ACTION_PAUSE_SERVICE_COMPASS)
     }
 
 
     override fun onDestroy() {
         LocalBroadcastManager.getInstance(requireActivity()).unregisterReceiver(broadcastReceiver)
+        sendCommandToService(CompassService.ACTION_STOP_SERVICE_COMPASS)
         super.onDestroy()
     }
 

@@ -37,8 +37,10 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".service.CompassService"/>
-        <service android:name=".service.StepDetectorService"/>
+        <service android:name=".service.CompassService"
+                 android:foregroundServiceType="location" />
+        <service android:name=".service.StepDetectorService"
+                 android:foregroundServiceType="location" />
 
         <receiver android:name=".service.StopNotificationListener"/>
         <meta-data
