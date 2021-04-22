@@ -3,6 +3,7 @@ package com.softhouse.workingout.shared
 import android.Manifest
 import android.content.Context
 import android.os.Build
+import com.google.android.gms.maps.model.LatLng
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.concurrent.TimeUnit
 import kotlin.math.min

@@ -2,6 +2,7 @@ package com.softhouse.workingout.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.findNavController
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var cyclingDao: CyclingDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)

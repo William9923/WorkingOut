@@ -1,6 +1,7 @@
 package com.softhouse.workingout.shared
 
 import android.graphics.Color
+import com.google.android.gms.maps.model.LatLng
 
 object Constants {
 
@@ -27,3 +28,6 @@ object Constants {
     const val NOTIFICATION_CHANNEL_NAME = "Workout"
     const val NOTIFICATION_ID = 99
 }
+
+
+typealias Polyline = MutableList<LatLng>

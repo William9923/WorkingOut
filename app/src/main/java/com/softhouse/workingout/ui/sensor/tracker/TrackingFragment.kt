@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,8 +30,6 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         ownerProducer = { requireActivity() }
     )
     lateinit var binding: FragmentTrackingBinding
-
-    private var started: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,7 +57,9 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
          * Handling Initialization value
          */
         binding.textTrackerMetric.text = if (viewModel.mode.value == Mode.STEPS) "steps" else "km"
-        binding.actionBtn.text = if (viewModel.started.value!!) "STOP" else "START"
+        Log.d("ViewModelValue:", "Tracking : ${viewModel.isTracking.value!!}")
+        Log.d("ViewModelValue:", "Started: ${viewModel.started.value!!}")
+        binding.actionBtn.text = if (viewModel.isTracking.value!!) "STOP" else "START"
         binding.switchMode.isChecked = viewModel.mode.value == Mode.STEPS
         binding.switchMode.text = if (viewModel.mode.value == Mode.STEPS) "Running" else "Cycling"
 
@@ -67,7 +68,7 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
          */
 
         binding.actionBtn.setOnClickListener {
-            if (!started) {
+            if (!viewModel.isTracking.value!!) {
                 viewModel.start()
                 sendLocationCommandToService(GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO)
             } else {
@@ -77,19 +78,13 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         }
 
         binding.switchMode.setOnCheckedChangeListener { buttonView, _ ->
-            if (!started) {
+            if (!viewModel.started.value!!) {
                 viewModel.toggleMode()
             } else {
                 Toast.makeText(requireActivity(), "Tracker have been started", Toast.LENGTH_SHORT).show()
                 buttonView.toggle()
             }
         }
-
-        viewModel.started.observe(viewLifecycleOwner, {
-            started = it
-            binding.actionBtn.text = if (it) "STOP" else "START"
-            // TODO : Change action button color
-        })
 
         viewModel.mode.observe(viewLifecycleOwner, {
             binding.switchMode.text = if (it == Mode.STEPS) "Running" else "Cycling"
@@ -105,6 +100,9 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     private fun subscribeToObservers() {
         GeoTrackerService.isTracking.observe(viewLifecycleOwner, {
             viewModel.updateTracking(it)
+            Log.d("Subscribe:", "IsTrackingValue: $it")
+            Log.d("Subscribe:", "IsTrackingValueViewModel: ${viewModel.isTracking.value}")
+            binding.actionBtn.text = if (it) "STOP" else "START"
         })
 
         GeoTrackerService.pathPoints.observe(viewLifecycleOwner, {

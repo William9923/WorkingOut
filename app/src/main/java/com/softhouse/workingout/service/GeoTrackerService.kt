@@ -33,6 +33,7 @@ import com.softhouse.workingout.listener.StopNotificationListener
 import com.softhouse.workingout.shared.Constants
 import com.softhouse.workingout.shared.Constants.FASTEST_LOCATION_INTERVAL
 import com.softhouse.workingout.shared.Constants.LOCATION_UPDATE_INTERVAL
+import com.softhouse.workingout.shared.Polyline
 import com.softhouse.workingout.shared.TrackingUtility
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -41,8 +42,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-typealias Polyline = MutableList<LatLng>
-
 @AndroidEntryPoint
 class GeoTrackerService : LifecycleService() {
 
@@ -50,6 +49,7 @@ class GeoTrackerService : LifecycleService() {
      * Service - related variable
      */
     var isFirstRun = true
+    var serviceKilled = false
     private val timeRunInSeconds = MutableLiveData<Long>()
 
     /**
@@ -101,6 +101,7 @@ class GeoTrackerService : LifecycleService() {
                 }
                 ACTION_STOP_SERVICE_GEO -> {
                     Log.d("GeoService", "Stopping service...")
+                    killService()
                 }
                 else -> Log.d("GeoService", "Unrecognized action")
             }
@@ -108,6 +109,18 @@ class GeoTrackerService : LifecycleService() {
         return super.onStartCommand(intent, flags, startId)
     }
 
+    private fun killService() {
+        serviceKilled = true
+        isFirstRun = true
+        isTracking.postValue(false)
+        postInitialValues()
+        stopForeground(true)
+        stopSelf()
+    }
+
+    /**
+     * Timer Related
+     */
     private var lapTime = 0L
     private var timeRun = 0L
     private var timeStarted = 0L
@@ -133,16 +146,6 @@ class GeoTrackerService : LifecycleService() {
         }
     }
 
-
-    private fun getMainActivityPendingIntent() = PendingIntent.getActivity(
-        this,
-        0,
-        Intent(this, MainActivity::class.java).also {
-            it.action = ACTION_SHOW_TRACKING_FRAGMENT
-        },
-        FLAG_UPDATE_CURRENT
-    )
-
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(notificationManager: NotificationManager) {
         val channel = NotificationChannel(
@@ -166,27 +169,16 @@ class GeoTrackerService : LifecycleService() {
 
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-            val stopNotificationPendingIntent = PendingIntent.getBroadcast(
-                this,
-                Constants.NOTIFICATION_STOP_CODE,
-                Intent(this, StopNotificationListener::class.java).also {
-                    it.action = Constants.ACTION_STOP_NOTIFICATION
-                },
-                FLAG_UPDATE_CURRENT
-            )
-
             curNotificationBuilder.javaClass.getDeclaredField("mActions").apply {
                 isAccessible = true
                 set(curNotificationBuilder, ArrayList<NotificationCompat.Action>())
             }
-            curNotificationBuilder = baseNotificationBuilder
-                .addAction(R.drawable.ic_notifications_black_24dp, "STOP", pendingIntent)
-                .addAction(
-                    R.drawable.ic_notifications_black_24dp,
-                    getString(R.string.stop_notifications),
-                    stopNotificationPendingIntent
-                )
-            notificationManager.notify(NOTIFICATION_ID, curNotificationBuilder.build())
+            if (!serviceKilled) {
+                curNotificationBuilder = baseNotificationBuilder
+                    .addAction(R.drawable.ic_notifications_black_24dp, "STOP", pendingIntent)
+                notificationManager.notify(NOTIFICATION_ID, curNotificationBuilder.build())
+            }
+
         }
 
     }
@@ -209,9 +201,12 @@ class GeoTrackerService : LifecycleService() {
         startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
 
         timeRunInSeconds.observe(this, {
-            val notification = curNotificationBuilder
-                .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
-            notificationManager.notify(NOTIFICATION_ID, notification.build())
+
+            if (!serviceKilled) {
+                val notification = curNotificationBuilder
+                    .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
+                notificationManager.notify(NOTIFICATION_ID, notification.build())
+            }
         })
     }
 
@@ -239,7 +234,7 @@ class GeoTrackerService : LifecycleService() {
         }
     }
 
-    val locationCallback = object : LocationCallback() {
+    private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult?) {
             super.onLocationResult(result)
             if (isTracking.value!!) {
@@ -271,10 +266,8 @@ class GeoTrackerService : LifecycleService() {
         val isTracking = MutableLiveData<Boolean>()
         val pathPoints = MutableLiveData<Polyline>()
         val timeRunInMillis = MutableLiveData<Long>()
-        val timeStarted = MutableLiveData<Long>()
-        val lastSecondTimestamp = MutableLiveData<Long>()
         const val ACTION_START_OR_RESUME_SERVICE_GEO = "ACTION_START_OR_RESUME_SERVICE_GEO"
-        const val ACTION_PAUSE_SERVICE_GEO = "ACTION_PAUSE_SERVICE_GEO"
         const val ACTION_STOP_SERVICE_GEO = "ACTION_STOP_SERVICE_GEO"
     }
 }
+
