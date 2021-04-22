@@ -57,9 +57,7 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
          * Handling Initialization value
          */
         binding.textTrackerMetric.text = if (viewModel.mode.value == Mode.STEPS) "steps" else "km"
-        Log.d("ViewModelValue:", "Tracking : ${viewModel.isTracking.value!!}")
-        Log.d("ViewModelValue:", "Started: ${viewModel.started.value!!}")
-        binding.actionBtn.text = if (viewModel.isTracking.value!!) "STOP" else "START"
+        binding.actionBtn.text = if (viewModel.started.value!!) "STOP" else "START"
         binding.switchMode.isChecked = viewModel.mode.value == Mode.STEPS
         binding.switchMode.text = if (viewModel.mode.value == Mode.STEPS) "Running" else "Cycling"
 
@@ -68,7 +66,7 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
          */
 
         binding.actionBtn.setOnClickListener {
-            if (!viewModel.isTracking.value!!) {
+            if (!viewModel.started.value!!) {
                 viewModel.start()
                 sendLocationCommandToService(GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO)
             } else {
@@ -99,9 +97,10 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
      */
     private fun subscribeToObservers() {
         GeoTrackerService.isTracking.observe(viewLifecycleOwner, {
-            viewModel.updateTracking(it)
-            Log.d("Subscribe:", "IsTrackingValue: $it")
-            Log.d("Subscribe:", "IsTrackingValueViewModel: ${viewModel.isTracking.value}")
+            if (viewModel.started.value!! && !it) {
+                viewModel.stop()
+            }
+
             binding.actionBtn.text = if (it) "STOP" else "START"
         })
 

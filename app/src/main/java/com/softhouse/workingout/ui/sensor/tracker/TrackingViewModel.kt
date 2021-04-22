@@ -1,5 +1,6 @@
 package com.softhouse.workingout.ui.sensor.tracker
 
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,10 +15,6 @@ class TrackingViewModel @ViewModelInject constructor(
      * Application Logic State
      */
     private val _started = MutableLiveData<Boolean>().apply {
-        value = false
-    }
-
-    private val _isTracking = MutableLiveData<Boolean>().apply {
         value = false
     }
 
@@ -48,11 +45,7 @@ class TrackingViewModel @ViewModelInject constructor(
      * Binding public variable
      */
     var started: LiveData<Boolean> = _started
-    var isTracking: LiveData<Boolean> = _isTracking
-    var steps: LiveData<Int> = _steps
-    var coordinates: LiveData<Polyline> = _coordinates
     var mode: LiveData<Mode> = _mode
-    var duration: LiveData<Long> = _duration
 
     /**
      * Tracking Application Logic
@@ -63,25 +56,43 @@ class TrackingViewModel @ViewModelInject constructor(
 
     fun stop() {
         _started.postValue(false)
+        endWorkoutAndSave()
     }
 
     fun toggleMode() {
         _mode.postValue(if (mode.value == Mode.CYCLING) Mode.STEPS else Mode.CYCLING)
     }
 
-    fun updateTracking(newIsTraking: Boolean) {
-        _isTracking.postValue(newIsTraking)
+    fun updateDuration(newDuration: Long) {
+        _duration.postValue(newDuration)
     }
 
+    // Steps detector related
     fun updateSteps(newSteps: Int) {
         _steps.postValue(newSteps)
     }
 
+    // Location - cycling detector related
     fun updateCoordinates(newCoordinates: Polyline) {
         _coordinates.postValue(newCoordinates)
     }
 
-    fun updateDuration(newDuration: Long) {
-        _duration.postValue(newDuration)
+    /**
+     * Persistence - state related function
+     */
+
+    private fun endWorkoutAndSave() {
+        when (_mode.value) {
+            Mode.STEPS -> endRunningWorkoutAndSave()
+            Mode.CYCLING -> endCyclingWorkoutAndSave()
+        }
+    }
+
+    private fun endRunningWorkoutAndSave() {
+        Log.d("ViewModel", "Ending Running Workout")
+    }
+
+    private fun endCyclingWorkoutAndSave() {
+        Log.d("ViewModel", "Ending Cycling Workout")
     }
 }

@@ -175,7 +175,7 @@ class GeoTrackerService : LifecycleService() {
             }
             if (!serviceKilled) {
                 curNotificationBuilder = baseNotificationBuilder
-                    .addAction(R.drawable.ic_notifications_black_24dp, "STOP", pendingIntent)
+                    .addAction(R.drawable.ic_notifications_black_24dp, "STOP WORKOUT", pendingIntent)
                 notificationManager.notify(NOTIFICATION_ID, curNotificationBuilder.build())
             }
 
