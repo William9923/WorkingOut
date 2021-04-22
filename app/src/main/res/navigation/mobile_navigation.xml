@@ -6,6 +6,10 @@
             app:startDestination="@id/navigation_news"
         >
 
+    <action android:id="@+id/action_global_trackingFragment"
+            app:destination="@id/navigation_tracking"
+            app:launchSingleTop="true" />
+
     <fragment
             android:id="@+id/navigation_news"
             android:name="com.softhouse.workingout.ui.news.NewsList"

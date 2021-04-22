@@ -88,7 +88,7 @@ class StepDetectorService : Service(), SensorEventListener {
             updateStep()
         } else {
             // Accelerometer
-            if (event != null && event.values[0] > abs(2)) {
+            if (event != null && abs(event.values[0]) > 5) {
                 updateStep()
             }
         }

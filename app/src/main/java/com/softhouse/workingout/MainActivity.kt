@@ -1,5 +1,6 @@
 package com.softhouse.workingout
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
@@ -12,6 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.softhouse.workingout.shared.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +24,9 @@ class MainActivity : AppCompatActivity() {
 
         // Set layout
         setContentView(R.layout.activity_main)
+
+        // Check if needed to navigate to main fragment
+        navigateToTrackingFragmentIfNeeded(intent)
 
         // Setup Bottom navigation bar
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
@@ -43,4 +48,21 @@ class MainActivity : AppCompatActivity() {
 
     // To Support Navigate Back Button
     override fun onSupportNavigateUp() = findNavController(R.id.nav_host_fragment).navigateUp()
+
+    // Check if needed to navigate to main fragment
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navigateToTrackingFragmentIfNeeded(intent)
+    }
+
+    // To navigate back to tracking menu
+    private fun navigateToTrackingFragmentIfNeeded(intent: Intent?) {
+        if (intent?.action == ACTION_SHOW_TRACKING_FRAGMENT) {
+            // Setup navigation controller
+            val navFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navFragment.navController
+            navController.navigate(R.id.action_global_trackingFragment)
+        }
+    }
+
 }

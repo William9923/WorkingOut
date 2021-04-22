@@ -18,7 +18,7 @@ class DashboardFragment : Fragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
     lateinit var binding: FragmentDashboardBinding
-
+    private var map: GoogleMap? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,7 +30,6 @@ class DashboardFragment : Fragment() {
         return binding.root
     }
 
-    private var map: GoogleMap? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,6 +39,39 @@ class DashboardFragment : Fragment() {
             map = it
         }
     }
+
+//    private fun subscribeToObservers() {
+//        GeoTrackerService.pathPoints.observe(viewLifecycleOwner, Observer {
+//            pathPoints = it
+//            addLatestPolyline()
+//            moveCameraToUser()
+//        })
+//    }
+//
+//    private fun moveCameraToUser() {
+//        if(pathPoints.isNotEmpty() && pathPoints.last().isNotEmpty()) {
+//            map?.animateCamera(
+//                CameraUpdateFactory.newLatLngZoom(
+//                    pathPoints.last().last(),
+//                    MAP_ZOOM
+//                )
+//            )
+//        }
+//    }
+//
+//    private fun addAllPolylines() {
+//        for(polyline in pathPoints) {
+//            val polylineOptions = PolylineOptions()
+//                .color(POLYLINE_COLOR)
+//                .width(POLYLINE_WIDTH)
+//                .addAll(polyline)
+//            map?.addPolyline(polylineOptions)
+//        }
+//    }
+
+    /**
+     * Map instance on application callbacks
+     */
 
     override fun onResume() {
         super.onResume()

@@ -41,6 +41,8 @@
                  android:foregroundServiceType="location" />
         <service android:name=".service.StepDetectorService"
                  android:foregroundServiceType="location" />
+        <service android:name=".service.GeoTrackerService"
+                 android:foregroundServiceType="location" />
 
         <receiver android:name=".service.StopNotificationListener"/>
         <meta-data

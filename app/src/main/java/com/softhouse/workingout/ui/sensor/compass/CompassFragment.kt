@@ -5,11 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.softhouse.workingout.databinding.FragmentCompassBinding
 import com.softhouse.workingout.service.CompassService
@@ -65,20 +64,9 @@ class CompassFragment : Fragment() {
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val angle = intent.getDoubleExtra(CompassService.KEY_ANGLE, 0.0)
-            Log.d("Change Angle", angle.toString())
             if (binding != null)
                 binding.compassImageView.rotation = angle.toFloat() * -1
         }
-    }
-
-    private fun startServiceForSensors() {
-        val requiredIntent = Intent(requireActivity(), CompassService::class.java)
-        requireActivity().startService(requiredIntent)
-    }
-
-    private fun stopServiceForSensors() {
-        val requiredIntent = Intent(requireActivity(), CompassService::class.java)
-        requireActivity().stopService(requiredIntent)
     }
 
     companion object

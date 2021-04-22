@@ -1,5 +1,6 @@
 package com.softhouse.workingout.ui.news
 
+import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -41,6 +42,8 @@ class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
 
         viewModel = ViewModelProvider(requireActivity()).get(NewsListViewModel::class.java)
         initRecyclerViewAdapter(view)
+
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         return view
     }
 

@@ -1,5 +1,6 @@
 package com.softhouse.workingout.ui.news
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -48,6 +49,8 @@ class WebFragment : Fragment() {
         with(webView.settings) {
             javaScriptEnabled = true
         }
+
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
     }
 
