@@ -11,6 +11,7 @@ class MainRepository @Inject constructor(
     val recordDao: RecordDao,
     val cyclingDao: CyclingDao
 ) {
+
     // Insert
     suspend fun insertCycling(cycling: Cycling) = cyclingDao.insertCycling(cycling)
     suspend fun insertRunning(running: Running) = runningDao.insertRunning(running)
@@ -26,6 +27,8 @@ class MainRepository @Inject constructor(
     fun getAllRecordBasedOnDate(start: Date, end: Date) = recordDao.getAllRecordBasedOnDate(start.time, end.time)
     fun getAllCyclingSortedByDistanceInMeter() = cyclingDao.getAllCyclingSortedByDistanceInMeter()
     fun getAllRunningSortedBySteps() = runningDao.getAllRunningSortedBySteps()
+
+    // Query Non Observer Data =
 
     // Query One Specific Result
     fun getSpecificRecordById(id: Int) = recordDao.getSpecificRecordById(id)

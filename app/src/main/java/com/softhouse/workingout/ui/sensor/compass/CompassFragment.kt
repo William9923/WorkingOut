@@ -64,8 +64,7 @@ class CompassFragment : Fragment() {
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val angle = intent.getDoubleExtra(CompassService.KEY_ANGLE, 0.0)
-            if (binding != null)
-                binding.compassImageView.rotation = angle.toFloat() * -1
+            binding.compassImageView.rotation = angle.toFloat() * -1
         }
     }
 

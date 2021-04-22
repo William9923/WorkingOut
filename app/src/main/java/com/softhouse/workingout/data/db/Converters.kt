@@ -28,16 +28,16 @@ class Converters {
     }
 
     @TypeConverter
-    fun toLocation(locationString: String?): List<LatLng>? {
+    fun toLocation(locationString: String?): Polyline? {
         return try {
-            Gson().fromJson(locationString, Array<LatLng>::class.java).toList()
+            Gson().fromJson(locationString, Array<LatLng>::class.java).toMutableList()
         } catch (e: Exception) {
             null
         }
     }
 
     @TypeConverter
-    fun toLocationString(location: List<LatLng>?): String? {
+    fun toLocationString(location: Polyline?): String? {
         return Gson().toJson(location)
     }
 }
