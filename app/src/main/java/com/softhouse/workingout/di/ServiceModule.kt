@@ -30,7 +30,7 @@ object ServiceModule {
     @Provides
     fun provideMainActivityPendingIntent(
         @ApplicationContext app: Context
-    ) = PendingIntent.getActivity(
+    ): PendingIntent = PendingIntent.getActivity(
         app,
         Constants.NOTIFICATION_MAIN_ACTIVITY_CODE,
         Intent(app, MainActivity::class.java).also {
@@ -44,7 +44,7 @@ object ServiceModule {
     fun provideBaseNotificationBuilder(
         @ApplicationContext app: Context,
         pendingIntent: PendingIntent
-    ) = NotificationCompat.Builder(app, Constants.NOTIFICATION_CHANNEL_ID)
+    ): NotificationCompat.Builder = NotificationCompat.Builder(app, Constants.NOTIFICATION_CHANNEL_ID)
         .setAutoCancel(false)
         .setOngoing(true)
         .setSmallIcon(R.drawable.ic_launcher_foreground)
