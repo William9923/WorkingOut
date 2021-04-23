@@ -19,10 +19,12 @@ import com.softhouse.workingout.service.StepDetectorService
 import com.softhouse.workingout.service.StepTrackerService
 import com.softhouse.workingout.shared.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.softhouse.workingout.shared.TrackingUtility
+import com.softhouse.workingout.shared.roundTo
 import com.softhouse.workingout.ui.sensor.compass.CompassFragment
 import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import kotlin.math.round
 
 @AndroidEntryPoint
 class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
@@ -124,10 +126,14 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 viewModel.updateDuration(it)
             }
         })
+        GeoTrackerService.distance.observe(viewLifecycleOwner, {
+            if (viewModel.mode.value == Mode.CYCLING) {
+                binding.textTracker.text = ((it * 0.001) * 1.0).roundTo(2).toString()
+            }
+        })
     }
 
     private fun subscribeToObserverStepsTracker() {
-        // TODO : Fill the observer
         StepTrackerService.isTracking.observe(viewLifecycleOwner, {
             if (viewModel.mode.value == Mode.STEPS) {
                 if (viewModel.started.value!! && !it) {
@@ -139,11 +145,18 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         StepTrackerService.steps.observe(viewLifecycleOwner, {
             if (viewModel.mode.value == Mode.STEPS) {
                 viewModel.updateSteps(it)
+                binding.textTracker.text = it.toString()
             }
         })
         StepTrackerService.timeRunInMillis.observe(viewLifecycleOwner, {
             if (viewModel.mode.value == Mode.STEPS) {
                 viewModel.updateDuration(it)
+            }
+        })
+        StepTrackerService.isSensorAvailable.observe(viewLifecycleOwner, {
+            if (!it) {
+                Toast.makeText(requireActivity(), "No Step sensor detected! Using accelerometer", Toast.LENGTH_SHORT)
+                    .show()
             }
         })
     }
