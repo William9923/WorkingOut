@@ -31,6 +31,7 @@ import com.softhouse.workingout.shared.Constants.NOTIFICATION_ID
 import com.softhouse.workingout.shared.Constants.TIMER_UPDATE_INTERVAL
 import com.softhouse.workingout.shared.Polyline
 import com.softhouse.workingout.shared.TrackingUtility
+import com.softhouse.workingout.shared.roundTo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -66,6 +67,7 @@ class GeoTrackerService : LifecycleService() {
         pathPoints.postValue(mutableListOf())
         timeRunInSeconds.postValue(0L)
         timeRunInMillis.postValue(0L)
+        distance.postValue(0F)
     }
 
     override fun onCreate() {
@@ -137,11 +139,11 @@ class GeoTrackerService : LifecycleService() {
                     lastSecondTimestamp += 1000L
                 }
                 delay(TIMER_UPDATE_INTERVAL)
+                distance.postValue(TrackingUtility.calculatePolylineLength(pathPoints.value!!))
             }
             timeRun += lapTime
         }
     }
-
 
 
     /**
@@ -202,7 +204,7 @@ class GeoTrackerService : LifecycleService() {
 
             if (!serviceKilled) {
                 val notification = curNotificationBuilder
-                    .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
+                    .setContentText("You have traveled : ${((distance.value ?: 0F) * 0.001).roundTo(2)} km")
                 notificationManager.notify(NOTIFICATION_ID, notification.build())
             }
         })
@@ -263,6 +265,7 @@ class GeoTrackerService : LifecycleService() {
     companion object {
         val isTracking = MutableLiveData<Boolean>()
         val pathPoints = MutableLiveData<Polyline>()
+        val distance = MutableLiveData<Float>()
         val timeRunInMillis = MutableLiveData<Long>()
         const val ACTION_START_OR_RESUME_SERVICE_GEO = "ACTION_START_OR_RESUME_SERVICE_GEO"
         const val ACTION_STOP_SERVICE_GEO = "ACTION_STOP_SERVICE_GEO"
