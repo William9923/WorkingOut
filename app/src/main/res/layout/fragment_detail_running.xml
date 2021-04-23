@@ -28,7 +28,7 @@
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/activity_vertical_margin"
-                    android:layout_weight="0.15">
+                    android:layout_weight="0.1">
 
                 <TextView
                         android:id="@+id/text_start_time"
@@ -71,7 +71,7 @@
                     android:text="X"
                     android:layout_margin="@dimen/text_margin"
                     android:textSize="80sp"
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.25"
                     android:textStyle="bold"
                     android:textAllCaps="true"
                     app:autoSizeMinTextSize="28sp"
@@ -82,7 +82,8 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text="steps"
-                    android:layout_weight="0.1"/>
+                    android:textSize="24sp"
+                    android:layout_weight="0.25"/>
         </LinearLayout>
 
     </FrameLayout>

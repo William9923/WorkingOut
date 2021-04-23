@@ -54,6 +54,13 @@
             android:name="com.softhouse.workingout.ui.notifications.NotificationsFragment"
             android:label="@string/title_notifications"
             tools:layout="@layout/fragment_notifications"/>
+
+    <fragment
+            android:id="@+id/navigation_running_detail"
+            android:name="com.softhouse.workingout.ui.log.DetailRunningFragment"
+            android:label="Run Result Details"
+            tools:layout="@layout/fragment_detail_running"/>
+
     <fragment
             android:id="@+id/webFragment"
             android:name="com.softhouse.workingout.ui.news.WebFragment"
