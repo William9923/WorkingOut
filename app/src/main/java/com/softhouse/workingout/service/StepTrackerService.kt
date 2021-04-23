@@ -54,8 +54,6 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
     lateinit var baseNotificationBuilder: NotificationCompat.Builder
     lateinit var curNotificationBuilder: NotificationCompat.Builder
 
-    private var isSensorAvailable = true
-
     private fun postInitialValues() {
         isTracking.postValue(false)
         steps.postValue(0)
@@ -89,7 +87,7 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
                     SensorManager.SENSOR_DELAY_UI
                 )
             }
-            isSensorAvailable = true
+            isSensorAvailable.postValue(true)
             Log.d("Sensor", "Sensor available")
         } else {
             // Default sensor using accelerometer
@@ -101,7 +99,7 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
                     SensorManager.SENSOR_DELAY_UI
                 )
             }
-            isSensorAvailable = false
+            isSensorAvailable.postValue(false)
             Log.d("Sensor", "Sensor not available")
         }
 
@@ -112,16 +110,10 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        if (isSensorAvailable) {
-            // Step Detector
-            Log.d("Update", "Step detected")
-            updateStepsTracking(isTracking.value!!)
-        } else {
-            // Accelerometer
-            if (event != null && abs(event.values[0]) > 2) {
-                Log.d("Update", "Step detected")
-                updateStepsTracking(isTracking.value!!)
-            }
+        if (isSensorAvailable.value!!) {
+            updateStepsTracking(isTracking.value ?: true)
+        } else if (event != null && abs(event.values[0]) > 2) {
+            updateStepsTracking(isTracking.value ?: true)
         }
     }
 
@@ -147,7 +139,7 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
                 // post the new lapTime
                 timeRunInMillis.postValue(timeRun + lapTime)
                 if (timeRunInMillis.value!! >= lastSecondTimestamp + 1000L) {
-                    timeRunInSeconds.postValue(timeRunInSeconds.value!! + 1)
+                    timeRunInSeconds.postValue((timeRunInSeconds.value ?: 0) + 1)
                     lastSecondTimestamp += 1000L
                 }
                 delay(Constants.TIMER_UPDATE_INTERVAL)
@@ -245,7 +237,7 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
 
             if (!serviceKilled) {
                 val notification = curNotificationBuilder
-                    .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
+                    .setContentText("You have walked : ${steps.value ?: 0} steps")
                 notificationManager.notify(Constants.NOTIFICATION_ID, notification.build())
             }
         })
@@ -266,6 +258,7 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
         val isTracking = MutableLiveData<Boolean>()
         val steps = MutableLiveData<Int>()
         val timeRunInMillis = MutableLiveData<Long>()
+        val isSensorAvailable = MutableLiveData<Boolean>()
         const val ACTION_START_OR_RESUME_SERVICE_STEP = "ACTION_START_OR_RESUME_SERVICE_STEP"
         const val ACTION_STOP_SERVICE_STEP = "ACTION_STOP_SERVICE_STEP"
     }
