@@ -142,6 +142,12 @@ class GeoTrackerService : LifecycleService() {
         }
     }
 
+
+
+    /**
+     * Notification related method
+     */
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(notificationManager: NotificationManager) {
         val channel = NotificationChannel(
@@ -151,10 +157,6 @@ class GeoTrackerService : LifecycleService() {
         )
         notificationManager.createNotificationChannel(channel)
     }
-
-    /**
-     * Notification related method
-     */
 
     private fun updateNotificationTrackingState(isTracking: Boolean) {
         if (isTracking) {

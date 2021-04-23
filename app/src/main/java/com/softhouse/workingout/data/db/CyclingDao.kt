@@ -7,7 +7,7 @@ import androidx.room.*
 interface CyclingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCycling(cycling: Cycling)
+    suspend fun insertCycling(cycling: Cycling) : Long
 
     @Delete
     suspend fun deleteCycling(cycling: Cycling)

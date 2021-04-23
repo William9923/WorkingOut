@@ -9,7 +9,7 @@ import com.softhouse.workingout.ui.sensor.tracker.Mode
 interface RecordDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRecord(record: Record)
+    suspend fun insertRecord(record: Record) : Long
 
     @Delete
     suspend fun deleteRecord(record: Record)

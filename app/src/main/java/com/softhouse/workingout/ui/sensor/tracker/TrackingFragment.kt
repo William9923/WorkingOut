@@ -16,6 +16,7 @@ import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentTrackingBinding
 import com.softhouse.workingout.service.GeoTrackerService
 import com.softhouse.workingout.service.StepDetectorService
+import com.softhouse.workingout.service.StepTrackerService
 import com.softhouse.workingout.shared.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.softhouse.workingout.shared.TrackingUtility
 import com.softhouse.workingout.ui.sensor.compass.CompassFragment
@@ -35,18 +36,16 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentTrackingBinding.inflate(inflater, container, false)
-
         // Make screen orientation always portrait
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // For first time user, request needed permission...
         requestPermissions()
 
         // Add the child fragment here...
@@ -68,10 +67,16 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         binding.actionBtn.setOnClickListener {
             if (!viewModel.started.value!!) {
                 viewModel.start()
-                sendLocationCommandToService(GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO)
+                when (viewModel.mode.value!!) {
+                    Mode.CYCLING -> sendLocationCommandToService(GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO)
+                    Mode.STEPS -> sendStepCommandToService(StepTrackerService.ACTION_START_OR_RESUME_SERVICE_STEP)
+                }
             } else {
                 viewModel.stop()
-                sendLocationCommandToService(GeoTrackerService.ACTION_STOP_SERVICE_GEO)
+                when (viewModel.mode.value!!) {
+                    Mode.CYCLING -> sendLocationCommandToService(GeoTrackerService.ACTION_STOP_SERVICE_GEO)
+                    Mode.STEPS -> sendStepCommandToService(StepTrackerService.ACTION_STOP_SERVICE_STEP)
+                }
             }
         }
 
@@ -96,26 +101,55 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
      * Subscribe to LifeCycle Service
      */
     private fun subscribeToObservers() {
+        subscribeToObserverGeoTracker()
+        subscribeToObserverStepsTracker()
+    }
+
+    private fun subscribeToObserverGeoTracker() {
         GeoTrackerService.isTracking.observe(viewLifecycleOwner, {
-            if (viewModel.started.value!! && !it) {
-                viewModel.stop()
+            if (viewModel.mode.value == Mode.CYCLING) {
+                if (viewModel.started.value!! && !it) {
+                    viewModel.stop()
+                }
+                binding.actionBtn.text = if (it) "STOP" else "START"
             }
-
-            binding.actionBtn.text = if (it) "STOP" else "START"
         })
-
         GeoTrackerService.pathPoints.observe(viewLifecycleOwner, {
-            viewModel.updateCoordinates(it)
+            if (viewModel.mode.value == Mode.CYCLING) {
+                viewModel.updateCoordinates(it)
+            }
         })
-
         GeoTrackerService.timeRunInMillis.observe(viewLifecycleOwner, {
-            viewModel.updateDuration(it)
+            if (viewModel.mode.value == Mode.CYCLING) {
+                viewModel.updateDuration(it)
+            }
         })
     }
 
+    private fun subscribeToObserverStepsTracker() {
+        // TODO : Fill the observer
+        StepTrackerService.isTracking.observe(viewLifecycleOwner, {
+            if (viewModel.mode.value == Mode.STEPS) {
+                if (viewModel.started.value!! && !it) {
+                    viewModel.stop()
+                }
+                binding.actionBtn.text = if (it) "STOP" else "START"
+            }
+        })
+        StepTrackerService.steps.observe(viewLifecycleOwner, {
+            if (viewModel.mode.value == Mode.STEPS) {
+                viewModel.updateSteps(it)
+            }
+        })
+        StepTrackerService.timeRunInMillis.observe(viewLifecycleOwner, {
+            if (viewModel.mode.value == Mode.STEPS) {
+                viewModel.updateDuration(it)
+            }
+        })
+    }
 
     private fun sendStepCommandToService(action: String) =
-        Intent(requireContext(), StepDetectorService::class.java).also {
+        Intent(requireContext(), StepTrackerService::class.java).also {
             it.action = action
             requireContext().startService(it)
         }

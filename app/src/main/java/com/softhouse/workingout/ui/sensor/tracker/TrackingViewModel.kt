@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.softhouse.workingout.data.db.Cycling
+import com.softhouse.workingout.data.db.Running
 import com.softhouse.workingout.data.repository.MainRepository
 import com.softhouse.workingout.shared.Polyline
 import com.softhouse.workingout.shared.TrackingUtility
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class TrackingViewModel @ViewModelInject constructor(
-    val mainRepository: MainRepository
+    private val mainRepository: MainRepository
 ) : ViewModel() {
     /**
      * Application Logic State
@@ -97,18 +98,22 @@ class TrackingViewModel @ViewModelInject constructor(
 
     private fun endRunningWorkoutAndSave() {
         Log.d("ViewModel", "Ending Running Workout")
+        val running = Running(_steps.value!!)
+        Log.d("Running", running.toString())
+        // Show save result
+        viewModelScope.launch {
+            mainRepository.insertRunning(running)
+        }
     }
 
     private fun endCyclingWorkoutAndSave() {
         Log.d("ViewModel", "Ending Cycling Workout")
-
-        val distanceInMeters = TrackingUtility.calculatePolylineLength(_coordinates.value?: mutableListOf()).toInt()
+        val distanceInMeters = TrackingUtility.calculatePolylineLength(_coordinates.value ?: mutableListOf()).toInt()
         val cycling = Cycling(distanceInMeters, _coordinates.value!!)
         Log.d("Cycling", cycling.toString())
         // Show save result
         viewModelScope.launch {
             mainRepository.insertCycling(cycling)
         }
-
     }
 }

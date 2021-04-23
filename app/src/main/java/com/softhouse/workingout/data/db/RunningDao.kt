@@ -7,7 +7,7 @@ import androidx.room.*
 interface RunningDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRunning(running: Running)
+    suspend fun insertRunning(running: Running) : Long
 
     @Delete
     suspend fun deleteRunning(running: Running)

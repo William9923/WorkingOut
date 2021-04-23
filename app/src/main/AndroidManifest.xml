@@ -40,8 +40,7 @@
 
         <service android:name=".service.CompassService"
                  android:foregroundServiceType="location" />
-        <service android:name=".service.StepDetectorService"
-                 android:foregroundServiceType="location" />
+        <service android:name=".service.StepTrackerService"/>
         <service android:name=".service.GeoTrackerService"
                  android:foregroundServiceType="location" />
 
