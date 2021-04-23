@@ -1,4 +1,4 @@
-package com.softhouse.workingout.ui.news.item
+package com.softhouse.workingout.data.remote
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,10 +18,9 @@ class NewsApiConfig {
     private fun getInterceptor(): OkHttpClient {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
-        val okHttpClient = OkHttpClient.Builder()
+        return OkHttpClient.Builder()
             .addInterceptor(logging)
             .build()
-        return okHttpClient
     }
 
     private fun getRetrofit(): Retrofit {
@@ -32,7 +31,7 @@ class NewsApiConfig {
             .build()
     }
 
-    fun getService() = getRetrofit().create(News::class.java)
+    fun getService(): News = getRetrofit().create(News::class.java)
 
 }
 

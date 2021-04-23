@@ -1,8 +1,8 @@
 package com.softhouse.workingout.ui.news
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
@@ -31,18 +31,6 @@ class WebFragment : Fragment() {
         url = args.url
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            // Overriding back button -> return to previous stack
-            android.R.id.home -> {
-                activity?.onBackPressed()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,15 +50,9 @@ class WebFragment : Fragment() {
             javaScriptEnabled = true
         }
 
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String) =
-            WebFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                }
-            }
-    }
+    companion object
 }

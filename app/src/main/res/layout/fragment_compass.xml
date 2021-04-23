@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.sensor.compass.CompassFragment">
+
+        <ImageView
+                android:id="@+id/compass_image_view"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/compass2"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentRight="false"
+                android:layout_alignParentTop="false"
+                android:layout_alignParentBottom="false"
+                android:scaleX="1"
+                android:scaleY="1"
+                />
+
+
+    </RelativeLayout>
+</layout>

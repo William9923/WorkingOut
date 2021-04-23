@@ -6,20 +6,20 @@
     <data>
 
         <variable
-                type="com.softhouse.workingout.ui.news.item.NewsContent.NewsItem"
+                type="com.softhouse.workingout.data.NewsItem"
                 name="data" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
             android:id="@+id/card"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp">
+            android:layout_height="wrap_content">
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_margin="12dp">
 
             <!-- Media -->
             <ImageView
