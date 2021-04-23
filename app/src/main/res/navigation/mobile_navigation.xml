@@ -38,6 +38,12 @@
             tools:layout="@layout/fragment_tracking"/>
 
     <fragment
+            android:id="@+id/navigation_calender"
+            android:name="com.softhouse.workingout.ui.log.CalenderFragment"
+            android:label="Log Calender"
+            tools:layout="@layout/fragment_calender"/>
+
+    <fragment
             android:id="@+id/navigation_dashboard"
             android:name="com.softhouse.workingout.ui.dashboard.DashboardFragment"
             android:label="@string/title_dashboard"
