@@ -62,6 +62,12 @@
             tools:layout="@layout/fragment_detail_running"/>
 
     <fragment
+            android:id="@+id/navigation_cycling_detail"
+            android:name="com.softhouse.workingout.ui.log.DetailCyclingFragment"
+            android:label="Cycling Result Details"
+            tools:layout="@layout/fragment_detail_cycling"/>
+
+    <fragment
             android:id="@+id/webFragment"
             android:name="com.softhouse.workingout.ui.news.WebFragment"
             android:label="@string/web_news"
