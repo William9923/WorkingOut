@@ -15,9 +15,13 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentDetailCyclingBinding
 import com.softhouse.workingout.databinding.FragmentTrackingBinding
+import com.softhouse.workingout.shared.Constants.POLYLINE_COLOR
+import com.softhouse.workingout.shared.Constants.POLYLINE_WIDTH
+import com.softhouse.workingout.shared.Polyline
 
 class DetailCyclingFragment : Fragment() {
 
@@ -26,6 +30,8 @@ class DetailCyclingFragment : Fragment() {
     lateinit var binding: FragmentDetailCyclingBinding
 
     private var map: GoogleMap? = null
+
+    private var pathPoints:Polyline? = null
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -40,6 +46,8 @@ class DetailCyclingFragment : Fragment() {
         val sydney = LatLng(-34.0, 151.0)
         googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
+        // TODO : Draw the line for polylines uwu :>
     }
 
     override fun onCreateView(
@@ -61,4 +69,10 @@ class DetailCyclingFragment : Fragment() {
             callback
         }
     }
+//    private fun drawPol
+//    private fun drawPolyline() {
+//        val polyOptions = PolylineOptions()
+//            .color(POLYLINE_COLOR)
+//            .width(POLYLINE_WIDTH)
+//    }
 }

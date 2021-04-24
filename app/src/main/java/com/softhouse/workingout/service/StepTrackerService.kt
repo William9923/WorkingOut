@@ -55,10 +55,10 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
     lateinit var curNotificationBuilder: NotificationCompat.Builder
 
     private fun postInitialValues() {
-        isTracking.postValue(false)
-        steps.postValue(0)
-        timeRunInSeconds.postValue(0L)
-        timeRunInMillis.postValue(0L)
+        isTracking.value = false
+        steps.value = 0
+        timeRunInSeconds.value = 0L
+        timeRunInMillis.value = 0L
     }
 
     override fun onCreate() {
@@ -79,15 +79,22 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
         }
 
         if (hasSensor) {
+
+            val stepDetector = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR)
+
+            if (stepDetector == null) {
+                Log.d("Detector", "Sensor is null")
+            }
+
             sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR)?.also { stepDetector ->
                 sensorManager.registerListener(
                     this,
                     stepDetector,
-                    SensorManager.SENSOR_DELAY_NORMAL,
+                    SensorManager.SENSOR_DELAY_FASTEST,
                     SensorManager.SENSOR_DELAY_UI
                 )
             }
-            isSensorAvailable.postValue(true)
+            isSensorAvailable.value = true
             Log.d("Sensor", "Sensor available")
         } else {
             // Default sensor using accelerometer
@@ -99,7 +106,7 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
                     SensorManager.SENSOR_DELAY_UI
                 )
             }
-            isSensorAvailable.postValue(false)
+            isSensorAvailable.value = false
             Log.d("Sensor", "Sensor not available")
         }
 
@@ -110,7 +117,9 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
+        Log.d("Sensor:", "Sensor detect!")
         if (isSensorAvailable.value!!) {
+            Log.d("Sensor:", "Steps counted!")
             updateStepsTracking(isTracking.value ?: true)
         } else if (event != null && abs(event.values[0]) > 2) {
             updateStepsTracking(isTracking.value ?: true)
@@ -249,7 +258,7 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
     private fun updateStepsTracking(isTracking: Boolean) {
         if (isTracking) {
             val oldStep = steps.value ?: 0
-            steps.postValue(oldStep + 1)
+            steps.value = oldStep + 1
             Log.d("Steps", steps.value.toString())
         }
     }
