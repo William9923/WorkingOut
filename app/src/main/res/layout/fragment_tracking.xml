@@ -3,6 +3,19 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <import type="com.softhouse.workingout.ui.sensor.tracker.Mode"/>
+
+        <variable
+                name="started"
+                type="Boolean"/>
+
+        <variable
+                name="mode"
+                type="Mode"/>
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -17,37 +30,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintVertical_bias="0.205"
-                android:checked="true"
                 android:id="@+id/switch_mode"
-                android:text="Running"/>
-
-<!--        <com.google.android.material.button.MaterialButtonToggleGroup-->
-<!--                android:id="@+id/toggleBtn"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.497"-->
-<!--                app:layout_constraintVertical_bias="0.205">-->
-
-<!--            <Button-->
-<!--                    android:id="@+id/btn_run"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:icon="@drawable/shoe_sneaker"-->
-<!--                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"-->
-<!--                    />-->
-
-<!--            <Button-->
-<!--                    android:id="@+id/btn_cycle"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:icon="@drawable/bike"-->
-<!--                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"-->
-<!--                    />-->
-<!--        </com.google.android.material.button.MaterialButtonToggleGroup>-->
+                android:text='@{mode == Mode.STEPS ? "Running" : "Cycling"}'/>
 
         <TextView
                 android:id="@+id/text_tracker"
@@ -64,7 +48,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintVertical_bias="0.353"
                 android:textStyle="bold"
-                android:text="0"/>
+                android:text='0'/>
 
         <TextView
                 android:id="@+id/text_tracker_metric"
@@ -81,7 +65,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintVertical_bias="0.446"
                 android:textStyle="bold"
-                android:text="steps"
+                android:text='@{(mode == Mode.STEPS) ? "steps" : "km"}'
                 app:layout_constraintHorizontal_bias="0.498"/>
 
         <FrameLayout
@@ -98,13 +82,13 @@
                 android:id="@+id/action_btn"
                 android:layout_width="183dp"
                 android:layout_height="93dp"
-                android:text="Start"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintVertical_bias="0.857"
                 android:textSize="24sp"
+                android:text='@{started ? "STOP" : "START"}'
                 />
 
 
