@@ -15,7 +15,6 @@ import androidx.fragment.app.viewModels
 import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentTrackingBinding
 import com.softhouse.workingout.service.GeoTrackerService
-import com.softhouse.workingout.service.StepDetectorService
 import com.softhouse.workingout.service.StepTrackerService
 import com.softhouse.workingout.shared.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.softhouse.workingout.shared.TrackingUtility
