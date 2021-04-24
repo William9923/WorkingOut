@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+                name="dto"
+                type="com.softhouse.workingout.ui.log.dto.RunningDTO"/>
+
     </data>
 
     <FrameLayout
@@ -34,7 +38,7 @@
                         android:id="@+id/text_start_time"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:text="Start Time"
+                        android:text='@{dto.startWorkout}'
                         android:layout_margin="@dimen/text_margin"
                         android:textSize="18sp"
                         android:textAlignment="center"/>
@@ -49,7 +53,7 @@
                         android:id="@+id/text_end_time"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:text="End Time"
+                        android:text='@{dto.endWorkout}'
                         android:layout_margin="@dimen/text_margin"
                         android:textSize="18sp"/>
             </LinearLayout>
@@ -58,7 +62,7 @@
                     android:id="@+id/text_duration"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="X Minutes"
+                    android:text='@{`` + dto.duration}'
                     android:textSize="24sp"
                     android:layout_marginTop="@dimen/text_margin"
                     android:layout_marginBottom="@dimen/text_margin"
@@ -68,7 +72,7 @@
                     android:id="@+id/text_val_steps"
                     android:layout_height="wrap_content"
                     android:layout_width="98dp"
-                    android:text="X"
+                    android:text='@{`` + dto.steps}'
                     android:layout_margin="@dimen/text_margin"
                     android:textSize="80sp"
                     android:layout_weight="0.25"

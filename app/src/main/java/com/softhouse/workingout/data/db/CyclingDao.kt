@@ -13,7 +13,7 @@ interface CyclingDao {
     suspend fun deleteCycling(cycling: Cycling)
 
     @Query("SELECT * FROM cycling_table WHERE id = :id LIMIT 1")
-    fun getSpecificCyclingById(id: Int): LiveData<Cycling>
+    fun getSpecificCyclingById(id: Long): LiveData<Cycling>
 
     @Query("SELECT * FROM cycling_table")
     fun getAllCyclingRecord(): LiveData<List<Cycling>>

@@ -32,8 +32,8 @@ class MainRepository @Inject constructor(
     }
 
     // Query One Specific Result
-    fun getSpecificCyclingById(id: Int) = cyclingDao.getSpecificCyclingById(id)
-    fun getSpecificRunningById(id: Int) = runningDao.getSpecificRunningById(id)
+    fun getSpecificCyclingById(id: Long) = cyclingDao.getSpecificCyclingById(id)
+    fun getSpecificRunningById(id: Long) = runningDao.getSpecificRunningById(id)
 
     // Query Aggregated Result
     fun getTotalDistance() = cyclingDao.getTotalDistance()

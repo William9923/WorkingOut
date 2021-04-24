@@ -11,17 +11,18 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.softhouse.workingout.R
 
-private const val ARG_PARAM1 = "param1"
+
 
 class WebFragment : Fragment() {
-    private var url: String? = null
 
+    private val param1 = "param1"
+    private var url: String? = null
     private val args: WebFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            url = it.getString(ARG_PARAM1)
+            url = it.getString(param1)
         }
 
         // Invoke trigger for appbar menu
@@ -41,17 +42,13 @@ class WebFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val webView: WebView = view.findViewById(R.id.webview)
-
         webView.loadUrl(url)
         webView.webViewClient = WebViewClient()
         with(webView.settings) {
             javaScriptEnabled = true
         }
-
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
     }
 
     companion object

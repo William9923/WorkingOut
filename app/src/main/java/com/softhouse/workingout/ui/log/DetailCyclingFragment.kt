@@ -45,6 +45,12 @@ class DetailCyclingFragment : Fragment() {
         // TODO : Add Marker for first track and last track
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Invoke trigger for appbar menu
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

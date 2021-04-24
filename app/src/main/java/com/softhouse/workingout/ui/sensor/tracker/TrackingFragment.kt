@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.snackbar.Snackbar
 import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentTrackingBinding
@@ -131,7 +132,8 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         GeoTrackerService.newDataID.observe(viewLifecycleOwner, {
             if (viewModel.mode.value == Mode.CYCLING && it != Constants.INVALID_ID_DB) {
                 Log.d("Receive Data", "ID : $it")
-                TrackingFragmentDirections.actionNavigationTrackingToNavigationCyclingDetail(it)
+                val action = TrackingFragmentDirections.actionNavigationTrackingToNavigationCyclingDetail(it)
+                NavHostFragment.findNavController(this).navigate(action)
             }
         })
     }
@@ -151,7 +153,8 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         StepTrackerService.newDataID.observe(viewLifecycleOwner, {
             if (viewModel.mode.value == Mode.STEPS && it != Constants.INVALID_ID_DB) {
                 Log.d("Receive Data", "ID : $it")
-                TrackingFragmentDirections.actionNavigationTrackingToNavigationRunningDetail(it)
+                val action = TrackingFragmentDirections.actionNavigationTrackingToNavigationRunningDetail(it)
+                NavHostFragment.findNavController(this).navigate(action)
             }
         })
         StepTrackerService.isSensorAvailable.observe(viewLifecycleOwner, {

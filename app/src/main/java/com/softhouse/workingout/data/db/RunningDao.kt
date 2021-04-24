@@ -22,7 +22,7 @@ interface RunningDao {
     fun getAllRunningBasedOnDate(dayStart: Long, dayEnd: Long): LiveData<List<Running>>
 
     @Query("SELECT * FROM running_table WHERE id = :id LIMIT 1")
-    fun getSpecificRunningById(id: Int): LiveData<Running>
+    fun getSpecificRunningById(id: Long): LiveData<Running>
 
     @Query("SELECT SUM(steps) FROM running_table")
     fun getTotalSteps(): LiveData<Int>
