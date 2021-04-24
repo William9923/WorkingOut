@@ -131,6 +131,7 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         GeoTrackerService.newDataID.observe(viewLifecycleOwner, {
             if (viewModel.mode.value == Mode.CYCLING && it != Constants.INVALID_ID_DB) {
                 Log.d("Receive Data", "ID : $it")
+                TrackingFragmentDirections.actionNavigationTrackingToNavigationCyclingDetail(it)
             }
         })
     }
@@ -150,6 +151,7 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         StepTrackerService.newDataID.observe(viewLifecycleOwner, {
             if (viewModel.mode.value == Mode.STEPS && it != Constants.INVALID_ID_DB) {
                 Log.d("Receive Data", "ID : $it")
+                TrackingFragmentDirections.actionNavigationTrackingToNavigationRunningDetail(it)
             }
         })
         StepTrackerService.isSensorAvailable.observe(viewLifecycleOwner, {

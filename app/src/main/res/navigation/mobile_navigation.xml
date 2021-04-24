@@ -36,7 +36,26 @@
             android:id="@+id/navigation_tracking"
             android:name="com.softhouse.workingout.ui.sensor.tracker.TrackingFragment"
             android:label="Track"
-            tools:layout="@layout/fragment_tracking"/>
+            tools:layout="@layout/fragment_tracking">
+        <action
+                android:id="@+id/action_navigation_tracking_to_navigation_cycling_detail"
+                app:destination="@id/navigation_cycling_detail"
+                app:popUpTo="@+id/navigation_tracking"
+                app:popUpToInclusive="true">
+            <argument
+                    android:name="record_id"
+                    android:defaultValue="-1L"/>
+        </action>
+        <action
+                android:id="@+id/action_navigation_tracking_to_navigation_running_detail"
+                app:destination="@id/navigation_running_detail"
+                app:popUpTo="@+id/navigation_tracking"
+                app:popUpToInclusive="true">
+            <argument
+                    android:name="record_id"
+                    android:defaultValue="-1L"/>
+        </action>
+    </fragment>
 
     <fragment
             android:id="@+id/navigation_calender"
@@ -60,13 +79,23 @@
             android:id="@+id/navigation_running_detail"
             android:name="com.softhouse.workingout.ui.log.DetailRunningFragment"
             android:label="Run Result Details"
-            tools:layout="@layout/fragment_detail_running"/>
+            tools:layout="@layout/fragment_detail_running">
+        <argument
+                android:name="record_id"
+                app:argType="long"
+                android:defaultValue="-1L"/>
+    </fragment>
 
     <fragment
             android:id="@+id/navigation_cycling_detail"
             android:name="com.softhouse.workingout.ui.log.DetailCyclingFragment"
             android:label="Cycling Result Details"
-            tools:layout="@layout/fragment_detail_cycling"/>
+            tools:layout="@layout/fragment_detail_cycling">
+        <argument
+                android:name="record_id"
+                app:argType="long"
+                android:defaultValue="-1L"/>
+    </fragment>
 
     <fragment
             android:id="@+id/webFragment"
