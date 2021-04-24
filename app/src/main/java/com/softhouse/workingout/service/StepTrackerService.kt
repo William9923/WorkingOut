@@ -193,6 +193,7 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
         postInitialValues()
         stopForeground(true)
         stopSelf()
+        Log.d("Service:", "Service is killed")
     }
 
     /**
@@ -269,7 +270,7 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
     }
 
     private fun endTrackingAndSaveToDB() {
-        val running = Running(steps.value ?: 0, timeStarted, lastSecondTimestamp)
+        val running = Running(steps.value ?: 0, timeStarted, System.currentTimeMillis())
         Log.d("Running", running.toString())
         val appScope = CoroutineScope(SupervisorJob())
         // Coroutine : IO Dispatchers because saving to db can wait ...

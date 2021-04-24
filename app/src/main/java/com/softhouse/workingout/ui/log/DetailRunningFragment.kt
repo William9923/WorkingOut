@@ -16,11 +16,13 @@ import com.softhouse.workingout.databinding.FragmentTrackingBinding
 import com.softhouse.workingout.service.GeoTrackerService
 import com.softhouse.workingout.service.StepTrackerService
 import com.softhouse.workingout.shared.Constants
+import com.softhouse.workingout.shared.DateUtility
 import com.softhouse.workingout.shared.TrackingUtility
 import com.softhouse.workingout.ui.log.dto.RunningDTO
 import com.softhouse.workingout.ui.news.WebFragmentArgs
 import com.softhouse.workingout.ui.sensor.tracker.Mode
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -52,23 +54,39 @@ class DetailRunningFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (viewModel.running.value != null) {
+            val startCalendar = DateUtility.getCalenderFromMillis(viewModel.running.value!!.startWorkout)
+            val endCalender = DateUtility.getCalenderFromMillis(viewModel.running.value!!.endWorkout)
             binding.dto = RunningDTO(
                 args.recordId,
                 viewModel.running.value!!.steps,
-                TrackingUtility.getFormattedStopWatchTime(viewModel.running.value!!.startWorkout),
-                TrackingUtility.getFormattedStopWatchTime(viewModel.running.value!!.endWorkout),
-                TimeUnit.MILLISECONDS.toMinutes(viewModel.running.value!!.endWorkout - viewModel.running.value!!.startWorkout)
+                "${startCalendar.get(Calendar.HOUR_OF_DAY)}:${startCalendar.get(Calendar.MINUTE)}:${
+                    startCalendar.get(
+                        Calendar.SECOND
+                    )
+                }",
+                "${endCalender.get(Calendar.HOUR_OF_DAY)}:${endCalender.get(Calendar.MINUTE)}:${endCalender.get(Calendar.SECOND)}",
+                TimeUnit.MILLISECONDS.toSeconds(viewModel.running.value!!.endWorkout - viewModel.running.value!!.startWorkout)
             )
         }
 
         viewModel.running.observe(viewLifecycleOwner, {
             if (it != null) {
+                val startCalendar = DateUtility.getCalenderFromMillis(it.startWorkout)
+                val endCalender = DateUtility.getCalenderFromMillis(it.endWorkout)
                 binding.dto = RunningDTO(
                     args.recordId,
                     it.steps,
-                    TrackingUtility.getFormattedStopWatchTime(it.startWorkout),
-                    TrackingUtility.getFormattedStopWatchTime(it.endWorkout),
-                    TimeUnit.MILLISECONDS.toMinutes(it.endWorkout - it.startWorkout)
+                    "${startCalendar.get(Calendar.HOUR_OF_DAY)}:${startCalendar.get(Calendar.MINUTE)}:${
+                        startCalendar.get(
+                            Calendar.SECOND
+                        )
+                    }",
+                    "${endCalender.get(Calendar.HOUR_OF_DAY)}:${endCalender.get(Calendar.MINUTE)}:${
+                        endCalender.get(
+                            Calendar.SECOND
+                        )
+                    }",
+                    TimeUnit.MILLISECONDS.toSeconds(it.endWorkout - it.startWorkout)
                 )
             }
         })

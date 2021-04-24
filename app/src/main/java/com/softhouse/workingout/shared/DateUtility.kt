@@ -9,4 +9,10 @@ object DateUtility {
         calender.set(year, month, day)
         return calender
     }
+
+    fun getCalenderFromMillis(millis: Long) : Calendar {
+        val calender = Calendar.getInstance()
+        calender.timeInMillis = millis
+        return calender
+    }
 }

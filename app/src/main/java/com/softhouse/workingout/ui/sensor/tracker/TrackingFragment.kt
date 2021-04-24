@@ -18,6 +18,7 @@ import com.softhouse.workingout.databinding.FragmentTrackingBinding
 import com.softhouse.workingout.service.GeoTrackerService
 import com.softhouse.workingout.service.StepTrackerService
 import com.softhouse.workingout.shared.Constants
+import com.softhouse.workingout.shared.Constants.INVALID_ID_DB
 import com.softhouse.workingout.shared.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.softhouse.workingout.shared.TrackingUtility
 import com.softhouse.workingout.shared.roundTo
@@ -84,6 +85,7 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 viewModel.toggleMode()
                 binding.mode = viewModel.mode.value!!
             } else {
+                Log.d("Switch", "Hid Checked Change Listener")
                 Snackbar.make(requireView(), "Tracker have been started!", Snackbar.LENGTH_SHORT)
                     .show()
                 buttonView.toggle()
@@ -130,10 +132,11 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             }
         })
         GeoTrackerService.newDataID.observe(viewLifecycleOwner, {
-            if (viewModel.mode.value == Mode.CYCLING && it != Constants.INVALID_ID_DB) {
-                Log.d("Receive Data", "ID : $it")
+            Log.d("Receive Data", "ID : $it")
+            if (viewModel.mode.value == Mode.CYCLING && it != INVALID_ID_DB && !isTrackingStarted()) {
                 val action = TrackingFragmentDirections.actionNavigationTrackingToNavigationCyclingDetail(it)
                 NavHostFragment.findNavController(this).navigate(action)
+                GeoTrackerService.newDataID.value = INVALID_ID_DB
             }
         })
     }
@@ -151,15 +154,16 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             }
         })
         StepTrackerService.newDataID.observe(viewLifecycleOwner, {
-            if (viewModel.mode.value == Mode.STEPS && it != Constants.INVALID_ID_DB) {
-                Log.d("Receive Data", "ID : $it")
+            Log.d("Receive Data", "ID : $it")
+            if (viewModel.mode.value == Mode.STEPS && it != INVALID_ID_DB && !isTrackingStarted()) {
                 val action = TrackingFragmentDirections.actionNavigationTrackingToNavigationRunningDetail(it)
                 NavHostFragment.findNavController(this).navigate(action)
+                StepTrackerService.newDataID.value = INVALID_ID_DB
             }
         })
         StepTrackerService.isSensorAvailable.observe(viewLifecycleOwner, {
             if (!it) {
-                Snackbar.make(requireView(), "No Step sensor detected! Using accelerometer", Snackbar.LENGTH_LONG)
+                Snackbar.make(requireView(), "No Step sensor detected! Using accelerometer", Snackbar.LENGTH_SHORT)
                     .setAction("Dismiss") {
                         // Do Nothing
                     }
