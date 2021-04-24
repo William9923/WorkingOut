@@ -5,12 +5,13 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.snackbar.Snackbar
 import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentTrackingBinding
 import com.softhouse.workingout.service.GeoTrackerService
@@ -29,6 +30,7 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     private val viewModel: TrackingViewModel by viewModels(
         ownerProducer = { requireActivity() }
     )
+
     lateinit var binding: FragmentTrackingBinding
 
     override fun onCreateView(
@@ -48,30 +50,26 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         requestPermissions()
 
         // Add the child fragment here...
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.parent_fragment_container, CompassFragment()).commit()
+        populateChildFragment()
 
-        /**
-         * Handling Initialization value
-         */
-        binding.textTrackerMetric.text = if (viewModel.mode.value == Mode.STEPS) "steps" else "km"
-        binding.actionBtn.text = if (viewModel.started.value!!) "STOP" else "START"
-        binding.switchMode.isChecked = viewModel.mode.value == Mode.STEPS
-        binding.switchMode.text = if (viewModel.mode.value == Mode.STEPS) "Running" else "Cycling"
+        // Subscribe to service
+        subscribeToObservers()
 
-        /**
-         * Binding Application Listener
-         */
+        // Initializing application state
+        viewModel.initMode(checkModeIfStarted())
 
+        // Initializing First time binding value
+        binding.mode = viewModel.mode.value!!
+        binding.started = isTrackingStarted()
+
+        // Initializing listener for UI Event
         binding.actionBtn.setOnClickListener {
-            if (!viewModel.started.value!!) {
-                viewModel.start()
+            if (!isTrackingStarted()) {
                 when (viewModel.mode.value!!) {
                     Mode.CYCLING -> sendLocationCommandToService(GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO)
                     Mode.STEPS -> sendStepCommandToService(StepTrackerService.ACTION_START_OR_RESUME_SERVICE_STEP)
                 }
             } else {
-                viewModel.stop()
                 when (viewModel.mode.value!!) {
                     Mode.CYCLING -> sendLocationCommandToService(GeoTrackerService.ACTION_STOP_SERVICE_GEO)
                     Mode.STEPS -> sendStepCommandToService(StepTrackerService.ACTION_STOP_SERVICE_STEP)
@@ -80,20 +78,15 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         }
 
         binding.switchMode.setOnCheckedChangeListener { buttonView, _ ->
-            if (!viewModel.started.value!!) {
+            if (!isTrackingStarted()) {
                 viewModel.toggleMode()
+                binding.mode = viewModel.mode.value!!
             } else {
-                Toast.makeText(requireActivity(), "Tracker have been started", Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), "Tracker have been started!", Snackbar.LENGTH_SHORT)
+                    .show()
                 buttonView.toggle()
             }
         }
-
-        viewModel.mode.observe(viewLifecycleOwner, {
-            binding.switchMode.text = if (it == Mode.STEPS) "Running" else "Cycling"
-            binding.textTrackerMetric.text = if (it == Mode.STEPS) "steps" else "km"
-        })
-
-        subscribeToObservers()
     }
 
     /**
@@ -104,23 +97,30 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         subscribeToObserverStepsTracker()
     }
 
+    private fun isTrackingStarted(): Boolean {
+        val isGeoTracking = GeoTrackerService.isTracking.value ?: false
+        val isStepTracking = StepTrackerService.isTracking.value ?: false
+        return (isGeoTracking || isStepTracking)
+    }
+
+    private fun checkModeIfStarted(): Mode {
+        // Default Mode : Mode.STEPS
+        if (isTrackingStarted()) {
+            return when {
+                (GeoTrackerService.isTracking.value ?: false) -> Mode.CYCLING
+                (StepTrackerService.isTracking.value ?: false) -> Mode.STEPS
+                else -> Mode.STEPS
+            }
+        }
+        Log.d("Init", "Not Started")
+        return Mode.STEPS
+    }
+
     private fun subscribeToObserverGeoTracker() {
         GeoTrackerService.isTracking.observe(viewLifecycleOwner, {
+            Log.d("Init", "Observing GeoTracker : $it")
             if (viewModel.mode.value == Mode.CYCLING) {
-                if (viewModel.started.value!! && !it) {
-                    viewModel.stop()
-                }
-                binding.actionBtn.text = if (it) "STOP" else "START"
-            }
-        })
-        GeoTrackerService.pathPoints.observe(viewLifecycleOwner, {
-            if (viewModel.mode.value == Mode.CYCLING) {
-                viewModel.updateCoordinates(it)
-            }
-        })
-        GeoTrackerService.timeRunInMillis.observe(viewLifecycleOwner, {
-            if (viewModel.mode.value == Mode.CYCLING) {
-                viewModel.updateDuration(it)
+                binding.started = isTrackingStarted()
             }
         })
         GeoTrackerService.distance.observe(viewLifecycleOwner, {
@@ -132,31 +132,31 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     private fun subscribeToObserverStepsTracker() {
         StepTrackerService.isTracking.observe(viewLifecycleOwner, {
+            Log.d("Init", "Observing StepTracker : $it")
             if (viewModel.mode.value == Mode.STEPS) {
-                if (viewModel.started.value!! && !it) {
-                    viewModel.stop()
-                }
-                binding.actionBtn.text = if (it) "STOP" else "START"
+                binding.started = isTrackingStarted()
             }
         })
         StepTrackerService.steps.observe(viewLifecycleOwner, {
             if (viewModel.mode.value == Mode.STEPS) {
-                viewModel.updateSteps(it)
                 binding.textTracker.text = it.toString()
             }
         })
-        StepTrackerService.timeRunInMillis.observe(viewLifecycleOwner, {
-            if (viewModel.mode.value == Mode.STEPS) {
-                viewModel.updateDuration(it)
-            }
-        })
+
         StepTrackerService.isSensorAvailable.observe(viewLifecycleOwner, {
             if (!it) {
-                Toast.makeText(requireActivity(), "No Step sensor detected! Using accelerometer", Toast.LENGTH_SHORT)
+                Snackbar.make(requireView(), "No Step sensor detected! Using accelerometer", Snackbar.LENGTH_LONG)
+                    .setAction("Dismiss") {
+                        // Do Nothing
+                    }
                     .show()
             }
         })
     }
+
+    /**
+     * Intent Command
+     */
 
     private fun sendStepCommandToService(action: String) =
         Intent(requireContext(), StepTrackerService::class.java).also {
@@ -216,6 +216,15 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    /**
+     * Child Fragment
+     */
+    private fun populateChildFragment() {
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.replace(R.id.parent_fragment_container, CompassFragment()).commit()
+
     }
 
     companion object

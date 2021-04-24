@@ -22,13 +22,13 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.softhouse.workingout.R
+import com.softhouse.workingout.data.db.Cycling
+import com.softhouse.workingout.data.db.Running
+import com.softhouse.workingout.data.repository.MainRepository
 import com.softhouse.workingout.shared.Constants
 import com.softhouse.workingout.shared.TrackingUtility
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -46,6 +46,9 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
      * Service specific handler / provider client / sensor
      */
     private lateinit var sensorManager: SensorManager
+
+    @Inject
+    lateinit var mainRepository: MainRepository
 
     /**
      * Notification handler
@@ -117,7 +120,6 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        Log.d("Sensor:", "Sensor detect!")
         if (isSensorAvailable.value!!) {
             Log.d("Sensor:", "Steps counted!")
             updateStepsTracking(isTracking.value ?: true)
@@ -139,16 +141,16 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
     private var lastSecondTimestamp = 0L
 
     private fun startTimer() {
-        isTracking.postValue(true)
+        isTracking.value = true
         timeStarted = System.currentTimeMillis()
         CoroutineScope(Dispatchers.Main).launch {
             while (isTracking.value!!) {
                 // time difference between now and timeStarted
                 lapTime = System.currentTimeMillis() - timeStarted
                 // post the new lapTime
-                timeRunInMillis.postValue(timeRun + lapTime)
+                timeRunInMillis.value = timeRun + lapTime
                 if (timeRunInMillis.value!! >= lastSecondTimestamp + 1000L) {
-                    timeRunInSeconds.postValue((timeRunInSeconds.value ?: 0) + 1)
+                    timeRunInSeconds.value = (timeRunInSeconds.value ?: 0) + 1
                     lastSecondTimestamp += 1000L
                 }
                 delay(Constants.TIMER_UPDATE_INTERVAL)
@@ -172,6 +174,7 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
                 }
                 ACTION_STOP_SERVICE_STEP -> {
                     Log.d("StepService", "Stopping service...")
+                    endTrackingAndSaveToDB()
                     killService()
                 }
                 else -> Log.d("StepService", "Unrecognized action")
@@ -183,7 +186,7 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
     private fun killService() {
         serviceKilled = true
         isFirstRun = true
-        isTracking.postValue(false)
+        isTracking.value = false
         postInitialValues()
         stopForeground(true)
         stopSelf()
@@ -230,7 +233,7 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
 
     private fun startForegroundService() {
         startTimer()
-        isTracking.postValue(true)
+        isTracking.value = true
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE)
                 as NotificationManager
@@ -259,6 +262,16 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
             val oldStep = steps.value ?: 0
             steps.value = oldStep + 1
             Log.d("Steps", steps.value.toString())
+        }
+    }
+
+    private fun endTrackingAndSaveToDB() {
+        val running = Running(steps.value ?: 0, timeStarted, lastSecondTimestamp)
+        Log.d("Running", running.toString())
+        val appScope = CoroutineScope(SupervisorJob())
+        // Coroutine : IO Dispatchers because saving to db can wait ...
+        appScope.launch(Dispatchers.IO) {
+            with(mainRepository) { insertRunning(running) }
         }
     }
 
