@@ -12,9 +12,9 @@
             android:title="Track"/>
 
     <item
-            android:id="@+id/navigation_dashboard"
+            android:id="@+id/navigation_calender"
             android:icon="@drawable/outline_event_24"
-            android:title="@string/title_dashboard"/>
+            android:title="History"/>
 
     <item
             android:id="@+id/navigation_notifications"

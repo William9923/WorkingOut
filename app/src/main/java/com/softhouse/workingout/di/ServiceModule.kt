@@ -4,8 +4,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import androidx.room.Room
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.softhouse.workingout.R
+import com.softhouse.workingout.data.db.AppDatabase
 import com.softhouse.workingout.listener.StopNotificationListener
 import com.softhouse.workingout.shared.Constants
 import com.softhouse.workingout.ui.MainActivity
@@ -15,10 +17,21 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ServiceComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ServiceScoped
+import javax.inject.Singleton
 
 @Module
 @InstallIn(ServiceComponent::class)
 object ServiceModule {
+
+    @Singleton
+    @Provides
+    fun provideRunningDatabase(
+        @ApplicationContext app: Context
+    ) = Room.databaseBuilder(
+        app,
+        AppDatabase::class.java,
+        Constants.APP_DATABASE_NAME
+    ).build()
 
     @ServiceScoped
     @Provides

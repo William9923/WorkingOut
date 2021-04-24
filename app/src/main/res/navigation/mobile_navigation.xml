@@ -3,12 +3,12 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/mobile_navigation"
-            app:startDestination="@id/navigation_news"
-        >
+            app:startDestination="@id/navigation_tracking">
 
-    <action android:id="@+id/action_global_trackingFragment"
+    <action
+            android:id="@+id/action_global_trackingFragment"
             app:destination="@id/navigation_tracking"
-            app:launchSingleTop="true" />
+            app:launchSingleTop="true"/>
 
     <fragment
             android:id="@+id/navigation_news"
@@ -35,19 +35,61 @@
             android:id="@+id/navigation_tracking"
             android:name="com.softhouse.workingout.ui.sensor.tracker.TrackingFragment"
             android:label="Track"
-            tools:layout="@layout/fragment_tracking"/>
+            tools:layout="@layout/fragment_tracking">
+        <action
+                android:id="@+id/action_navigation_tracking_to_navigation_cycling_detail"
+                app:destination="@id/navigation_cycling_detail"
+                app:popUpTo="@+id/navigation_tracking"
+                app:popUpToInclusive="true">
+            <argument
+                    android:name="record_id"
+                    android:defaultValue="-1L"/>
+        </action>
+        <action
+                android:id="@+id/action_navigation_tracking_to_navigation_running_detail"
+                app:destination="@id/navigation_running_detail"
+                app:popUpTo="@+id/navigation_tracking"
+                app:popUpToInclusive="true">
+            <argument
+                    android:name="record_id"
+                    android:defaultValue="-1L"/>
+        </action>
+    </fragment>
 
     <fragment
-            android:id="@+id/navigation_dashboard"
-            android:name="com.softhouse.workingout.ui.dashboard.DashboardFragment"
-            android:label="@string/title_dashboard"
-            tools:layout="@layout/fragment_dashboard"/>
+            android:id="@+id/navigation_calender"
+            android:name="com.softhouse.workingout.ui.log.CalenderFragment"
+            android:label="Log Calender"
+            tools:layout="@layout/fragment_calender"/>
 
     <fragment
             android:id="@+id/navigation_notifications"
             android:name="com.softhouse.workingout.ui.notifications.NotificationsFragment"
             android:label="@string/title_notifications"
             tools:layout="@layout/fragment_notifications"/>
+
+    <fragment
+            android:id="@+id/navigation_running_detail"
+            android:name="com.softhouse.workingout.ui.log.DetailRunningFragment"
+            android:label="Run Result Details"
+            tools:layout="@layout/fragment_detail_running">
+        <argument
+                android:name="record_id"
+                app:argType="long"
+                android:defaultValue="-1L"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/navigation_cycling_detail"
+            android:name="com.softhouse.workingout.ui.log.DetailCyclingFragment"
+            android:label="Cycling Result Details"
+            tools:layout="@layout/fragment_detail_cycling">
+        <argument
+                android:name="record_id"
+                app:argType="long"
+                android:defaultValue="-1L"/>
+    </fragment>
+
     <fragment
             android:id="@+id/webFragment"
             android:name="com.softhouse.workingout.ui.news.WebFragment"

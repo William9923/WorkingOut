@@ -23,7 +23,12 @@ import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import com.softhouse.workingout.R
+import com.softhouse.workingout.data.db.Cycling
+import com.softhouse.workingout.data.db.CyclingDao
+import com.softhouse.workingout.data.db.RunningDao
+import com.softhouse.workingout.data.repository.MainRepository
 import com.softhouse.workingout.shared.Constants.FASTEST_LOCATION_INTERVAL
+import com.softhouse.workingout.shared.Constants.INVALID_ID_DB
 import com.softhouse.workingout.shared.Constants.LOCATION_UPDATE_INTERVAL
 import com.softhouse.workingout.shared.Constants.NOTIFICATION_CHANNEL_ID
 import com.softhouse.workingout.shared.Constants.NOTIFICATION_CHANNEL_NAME
@@ -33,10 +38,7 @@ import com.softhouse.workingout.shared.Polyline
 import com.softhouse.workingout.shared.TrackingUtility
 import com.softhouse.workingout.shared.roundTo
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -45,8 +47,8 @@ class GeoTrackerService : LifecycleService() {
     /**
      * Service - related variable
      */
-    var isFirstRun = true
-    var serviceKilled = false
+    private var isFirstRun = true
+    private var serviceKilled = false
     private val timeRunInSeconds = MutableLiveData<Long>()
 
     /**
@@ -54,6 +56,9 @@ class GeoTrackerService : LifecycleService() {
      */
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    @Inject
+    lateinit var mainRepository: MainRepository
 
     /**
      * Notification handler
@@ -63,11 +68,13 @@ class GeoTrackerService : LifecycleService() {
     lateinit var curNotificationBuilder: NotificationCompat.Builder
 
     private fun postInitialValues() {
-        isTracking.postValue(false)
-        pathPoints.postValue(mutableListOf())
-        timeRunInSeconds.postValue(0L)
-        timeRunInMillis.postValue(0L)
-        distance.postValue(0F)
+        isTracking.value = false
+        pathPoints.value = mutableListOf()
+        timeRunInSeconds.value = 0L
+        timeRunInMillis.value = 0L
+        distance.value = 0F
+
+        newDataID.value = INVALID_ID_DB
     }
 
     override fun onCreate() {
@@ -99,6 +106,7 @@ class GeoTrackerService : LifecycleService() {
                 }
                 ACTION_STOP_SERVICE_GEO -> {
                     Log.d("GeoService", "Stopping service...")
+                    endTrackingAndSaveToDB()
                     killService()
                 }
                 else -> Log.d("GeoService", "Unrecognized action")
@@ -108,9 +116,9 @@ class GeoTrackerService : LifecycleService() {
     }
 
     private fun killService() {
-        serviceKilled = true
-        isFirstRun = true
-        isTracking.postValue(false)
+        this.serviceKilled = true
+        this.isFirstRun = true
+        isTracking.value = false
         postInitialValues()
         stopForeground(true)
         stopSelf()
@@ -125,21 +133,23 @@ class GeoTrackerService : LifecycleService() {
     private var lastSecondTimestamp = 0L
 
     private fun startTimer() {
+
         addEmptyPolylineIfEmpty()
-        isTracking.postValue(true)
+        isTracking.value = true
         timeStarted = System.currentTimeMillis()
+
         CoroutineScope(Dispatchers.Main).launch {
             while (isTracking.value!!) {
                 // time difference between now and timeStarted
                 lapTime = System.currentTimeMillis() - timeStarted
                 // post the new lapTime
-                timeRunInMillis.postValue(timeRun + lapTime)
+                timeRunInMillis.value = timeRun + lapTime
                 if (timeRunInMillis.value!! >= lastSecondTimestamp + 1000L) {
-                    timeRunInSeconds.postValue(timeRunInSeconds.value!! + 1)
+                    timeRunInSeconds.value = timeRunInSeconds.value!! + 1
                     lastSecondTimestamp += 1000L
                 }
                 delay(TIMER_UPDATE_INTERVAL)
-                distance.postValue(TrackingUtility.calculatePolylineLength(pathPoints.value!!))
+                distance.value = TrackingUtility.calculatePolylineLength(pathPoints.value!!)
             }
             timeRun += lapTime
         }
@@ -186,10 +196,9 @@ class GeoTrackerService : LifecycleService() {
     /**
      * Background service method
      */
-
     private fun startForegroundService() {
         startTimer()
-        isTracking.postValue(true)
+        isTracking.value = true
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE)
                 as NotificationManager
@@ -201,7 +210,6 @@ class GeoTrackerService : LifecycleService() {
         startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
 
         timeRunInSeconds.observe(this, {
-
             if (!serviceKilled) {
                 val notification = curNotificationBuilder
                     .setContentText("You have traveled : ${((distance.value ?: 0F) * 0.001).roundTo(2)} km")
@@ -262,11 +270,27 @@ class GeoTrackerService : LifecycleService() {
         pathPoints.postValue(this)
     } ?: pathPoints.postValue(mutableListOf())
 
+
+    private fun endTrackingAndSaveToDB() {
+        val cycling = Cycling((distance.value ?: 0F).toInt(), pathPoints.value!!, timeStarted, System.currentTimeMillis())
+        Log.d("Cycling", cycling.toString())
+        val appScope = CoroutineScope(SupervisorJob())
+        // Coroutine : IO Dispatchers because saving to db can wait ...
+        appScope.launch(Dispatchers.IO) {
+            with(mainRepository) {
+                val id = insertCycling(cycling)
+                Log.d("Database", "ID : $id")
+                newDataID.postValue(id)
+            }
+        }
+    }
+
     companion object {
         val isTracking = MutableLiveData<Boolean>()
         val pathPoints = MutableLiveData<Polyline>()
         val distance = MutableLiveData<Float>()
         val timeRunInMillis = MutableLiveData<Long>()
+        val newDataID = MutableLiveData<Long>()
         const val ACTION_START_OR_RESUME_SERVICE_GEO = "ACTION_START_OR_RESUME_SERVICE_GEO"
         const val ACTION_STOP_SERVICE_GEO = "ACTION_STOP_SERVICE_GEO"
     }

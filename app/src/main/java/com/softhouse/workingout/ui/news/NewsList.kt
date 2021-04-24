@@ -39,10 +39,8 @@ class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_news, container, false)
-
         viewModel = ViewModelProvider(requireActivity()).get(NewsListViewModel::class.java)
         initRecyclerViewAdapter(view)
-
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         return view
     }

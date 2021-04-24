@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+                name="dto"
+                type="com.softhouse.workingout.ui.log.dto.RunningDTO"/>
+
+    </data>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.log.DetailRunningFragment">
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                >
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/activity_vertical_margin"
+                    android:layout_weight="0.1">
+
+                <TextView
+                        android:id="@+id/text_start_time"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text='@{dto.startWorkout}'
+                        android:layout_margin="@dimen/text_margin"
+                        android:textSize="18sp"
+                        android:textAlignment="center"/>
+
+                <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="-"
+                        android:layout_margin="@dimen/text_margin"/>
+
+                <TextView
+                        android:id="@+id/text_end_time"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text='@{dto.endWorkout}'
+                        android:layout_margin="@dimen/text_margin"
+                        android:textSize="18sp"/>
+            </LinearLayout>
+
+            <TextView
+                    android:id="@+id/text_duration"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text='@{dto.duration}'
+                    android:textSize="24sp"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginBottom="@dimen/text_margin"
+                    />
+
+            <TextView
+                    android:id="@+id/text_val_steps"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text='@{`` + dto.steps}'
+                    android:layout_margin="@dimen/text_margin"
+                    android:textSize="40sp"
+                    android:layout_weight="0.25"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    app:autoSizeMinTextSize="28sp"
+                    app:autoSizeMaxTextSize="160sp"
+                    app:autoSizeTextType="uniform"
+                    android:textAlignment="center"/>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="steps"
+                    android:textSize="24sp"
+                    android:layout_weight="0.25"
+                    android:textAlignment="center"
+                    android:layout_margin="@dimen/activity_horizontal_margin"/>
+        </LinearLayout>
+
+    </FrameLayout>
+</layout>

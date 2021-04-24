@@ -2,41 +2,40 @@ package com.softhouse.workingout.data.repository
 
 import androidx.lifecycle.LiveData
 import com.softhouse.workingout.data.db.*
+import com.softhouse.workingout.shared.DateTimeUtility
 import com.softhouse.workingout.ui.sensor.tracker.Mode
 import java.util.*
 import javax.inject.Inject
 
 class MainRepository @Inject constructor(
     val runningDao: RunningDao,
-    val recordDao: RecordDao,
     val cyclingDao: CyclingDao
 ) {
 
     // Insert
     suspend fun insertCycling(cycling: Cycling) = cyclingDao.insertCycling(cycling)
     suspend fun insertRunning(running: Running) = runningDao.insertRunning(running)
-    suspend fun insertRecord(record: Record) = recordDao.insertRecord(record)
 
-    // Delete
-    suspend fun deleteCycling(cycling: Cycling) = cyclingDao.deleteCycling(cycling)
-    suspend fun deleteRunning(running: Running) = runningDao.deleteRunning(running)
-    suspend fun deleteRecord(record: Record) = recordDao.deleteRecord(record)
+    // Query based on date:
+    fun getAllCyclingRecordBasedOnDate(day: Int, month: Int, year: Int): LiveData<List<Cycling>> {
+        val calender = DateTimeUtility.getCalender(day, month, year)
+        val nextDay = DateTimeUtility.getCalender(day, month, year)
+        nextDay.add(Calendar.DAY_OF_MONTH, 1)
+        return cyclingDao.getAllCyclingBasedOnDate(calender.timeInMillis, nextDay.timeInMillis)
+    }
 
-    // Query Specific Result
-    fun getAllRecordBasedOnMode(mode: Mode) = recordDao.getAllRecordBasedOnMode(mode.toString())
-    fun getAllRecordBasedOnDate(start: Date, end: Date) = recordDao.getAllRecordBasedOnDate(start.time, end.time)
-    fun getAllCyclingSortedByDistanceInMeter() = cyclingDao.getAllCyclingSortedByDistanceInMeter()
-    fun getAllRunningSortedBySteps() = runningDao.getAllRunningSortedBySteps()
-
-    // Query Non Observer Data =
+    fun getAllRunningRecordBasedOnDate(day: Int, month: Int, year: Int): LiveData<List<Running>> {
+        val calender = DateTimeUtility.getCalender(day, month, year)
+        val nextDay = DateTimeUtility.getCalender(day, month, year)
+        nextDay.add(Calendar.DAY_OF_MONTH, 1)
+        return runningDao.getAllRunningBasedOnDate(calender.timeInMillis, nextDay.timeInMillis)
+    }
 
     // Query One Specific Result
-    fun getSpecificRecordById(id: Int) = recordDao.getSpecificRecordById(id)
-    fun getSpecificCyclingById(id: Int) = cyclingDao.getSpecificCyclingById(id)
-    fun getSpecificRunningById(id: Int) = runningDao.getSpecificRunningById(id)
+    fun getSpecificCyclingById(id: Long) = cyclingDao.getSpecificCyclingById(id)
+    fun getSpecificRunningById(id: Long) = runningDao.getSpecificRunningById(id)
 
     // Query Aggregated Result
     fun getTotalDistance() = cyclingDao.getTotalDistance()
     fun getTotalSteps() = runningDao.getTotalSteps()
-
 }

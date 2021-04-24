@@ -13,10 +13,16 @@ interface CyclingDao {
     suspend fun deleteCycling(cycling: Cycling)
 
     @Query("SELECT * FROM cycling_table WHERE id = :id LIMIT 1")
-    fun getSpecificCyclingById(id: Int): LiveData<Cycling>
+    fun getSpecificCyclingById(id: Long): LiveData<Cycling>
+
+    @Query("SELECT * FROM cycling_table")
+    fun getAllCyclingRecord(): LiveData<List<Cycling>>
 
     @Query("SELECT * FROM cycling_table ORDER BY distanceInMeters DESC")
     fun getAllCyclingSortedByDistanceInMeter(): LiveData<List<Cycling>>
+
+    @Query("SELECT * FROM cycling_table WHERE start_workout BETWEEN :dayStart AND :dayEnd")
+    fun getAllCyclingBasedOnDate(dayStart: Long, dayEnd: Long): LiveData<List<Cycling>>
 
     @Query("SELECT SUM(distanceInMeters) FROM cycling_table")
     fun getTotalDistance(): LiveData<Int>
