@@ -43,9 +43,7 @@ class HomeFragment : Fragment() {
 
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = PageAdapter(childFragmentManager)
-
         Log.i("PAGER", "Setup tab")
-
         viewPager.adapter = adapter
     }
 }

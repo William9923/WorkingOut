@@ -17,7 +17,7 @@
             android:title="History"/>
 
     <item
-            android:id="@+id/navigation_cycling_detail"
+            android:id="@+id/navigation_notifications"
             android:icon="@drawable/outline_analytics_24"
             android:title="@string/title_notifications"/>
 
