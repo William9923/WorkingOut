@@ -72,6 +72,8 @@ class GeoTrackerService : LifecycleService() {
         timeRunInSeconds.value = 0L
         timeRunInMillis.value = 0L
         distance.value = 0F
+
+        newDataID.value = -1L
     }
 
     override fun onCreate() {
@@ -146,7 +148,7 @@ class GeoTrackerService : LifecycleService() {
                     lastSecondTimestamp += 1000L
                 }
                 delay(TIMER_UPDATE_INTERVAL)
-                distance.postValue(TrackingUtility.calculatePolylineLength(pathPoints.value!!))
+                distance.value = TrackingUtility.calculatePolylineLength(pathPoints.value!!)
             }
             timeRun += lapTime
         }
@@ -274,7 +276,11 @@ class GeoTrackerService : LifecycleService() {
         val appScope = CoroutineScope(SupervisorJob())
         // Coroutine : IO Dispatchers because saving to db can wait ...
         appScope.launch(Dispatchers.IO) {
-            with(mainRepository) { insertCycling(cycling) }
+            with(mainRepository) {
+                val id = insertCycling(cycling)
+                Log.d("Database", "ID : $id")
+                newDataID.postValue(id)
+            }
         }
     }
 
@@ -283,6 +289,7 @@ class GeoTrackerService : LifecycleService() {
         val pathPoints = MutableLiveData<Polyline>()
         val distance = MutableLiveData<Float>()
         val timeRunInMillis = MutableLiveData<Long>()
+        val newDataID = MutableLiveData<Long>()
         const val ACTION_START_OR_RESUME_SERVICE_GEO = "ACTION_START_OR_RESUME_SERVICE_GEO"
         const val ACTION_STOP_SERVICE_GEO = "ACTION_STOP_SERVICE_GEO"
     }

@@ -128,6 +128,11 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 binding.textTracker.text = ((it * 0.001) * 1.0).roundTo(2).toString()
             }
         })
+        GeoTrackerService.newDataID.observe(viewLifecycleOwner, {
+            if (viewModel.mode.value == Mode.CYCLING && it != -1L) {
+                Log.d("Receive Data", "ID : $it")
+            }
+        })
     }
 
     private fun subscribeToObserverStepsTracker() {
@@ -224,7 +229,6 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     private fun populateChildFragment() {
         val transaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.parent_fragment_container, CompassFragment()).commit()
-
     }
 
     companion object

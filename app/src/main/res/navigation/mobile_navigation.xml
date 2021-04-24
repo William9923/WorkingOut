@@ -3,12 +3,13 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/mobile_navigation"
-            app:startDestination="@id/navigation_news"
+            app:startDestination="@id/navigation_tracking"
         >
 
-    <action android:id="@+id/action_global_trackingFragment"
+    <action
+            android:id="@+id/action_global_trackingFragment"
             app:destination="@id/navigation_tracking"
-            app:launchSingleTop="true" />
+            app:launchSingleTop="true"/>
 
     <fragment
             android:id="@+id/navigation_news"
