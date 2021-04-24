@@ -108,12 +108,5 @@ class TrackingViewModel @ViewModelInject constructor(
 
     private fun endCyclingWorkoutAndSave() {
         Log.d("ViewModel", "Ending Cycling Workout")
-//        val distanceInMeters = TrackingUtility.calculatePolylineLength(_coordinates.value ?: mutableListOf()).toInt()
-//        val cycling = Cycling(distanceInMeters, _coordinates.value!!)
-//        Log.d("Cycling", cycling.toString())
-//        // Show save result
-//        viewModelScope.launch {
-//            mainRepository.insertCycling(cycling)
-//        }
     }
 }

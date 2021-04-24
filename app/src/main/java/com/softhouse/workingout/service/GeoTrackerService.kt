@@ -23,6 +23,7 @@ import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import com.softhouse.workingout.R
+import com.softhouse.workingout.data.db.Cycling
 import com.softhouse.workingout.data.db.CyclingDao
 import com.softhouse.workingout.data.db.RunningDao
 import com.softhouse.workingout.data.repository.MainRepository
@@ -36,22 +37,17 @@ import com.softhouse.workingout.shared.Polyline
 import com.softhouse.workingout.shared.TrackingUtility
 import com.softhouse.workingout.shared.roundTo
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class GeoTrackerService @Inject constructor(
-    val mainRepository: MainRepository
-) : LifecycleService() {
+class GeoTrackerService : LifecycleService() {
 
     /**
      * Service - related variable
      */
-    var isFirstRun = true
-    var serviceKilled = false
+    private var isFirstRun = true
+    private var serviceKilled = false
     private val timeRunInSeconds = MutableLiveData<Long>()
 
     /**
@@ -59,6 +55,9 @@ class GeoTrackerService @Inject constructor(
      */
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    @Inject
+    lateinit var mainRepository: MainRepository
 
     /**
      * Notification handler
@@ -104,6 +103,7 @@ class GeoTrackerService @Inject constructor(
                 }
                 ACTION_STOP_SERVICE_GEO -> {
                     Log.d("GeoService", "Stopping service...")
+                    endTrackingAndSaveToDB()
                     killService()
                 }
                 else -> Log.d("GeoService", "Unrecognized action")
@@ -113,9 +113,9 @@ class GeoTrackerService @Inject constructor(
     }
 
     private fun killService() {
-        serviceKilled = true
-        isFirstRun = true
-        isTracking.postValue(false)
+        this.serviceKilled = true
+        this.isFirstRun = true
+        isTracking.value = false
         postInitialValues()
         stopForeground(true)
         stopSelf()
@@ -140,7 +140,7 @@ class GeoTrackerService @Inject constructor(
                 // time difference between now and timeStarted
                 lapTime = System.currentTimeMillis() - timeStarted
                 // post the new lapTime
-                timeRunInMillis.postValue(timeRun + lapTime)
+                timeRunInMillis.value = timeRun + lapTime
                 if (timeRunInMillis.value!! >= lastSecondTimestamp + 1000L) {
                     timeRunInSeconds.value = timeRunInSeconds.value!! + 1
                     lastSecondTimestamp += 1000L
@@ -193,10 +193,9 @@ class GeoTrackerService @Inject constructor(
     /**
      * Background service method
      */
-
     private fun startForegroundService() {
         startTimer()
-        isTracking.postValue(true)
+        isTracking.value = true
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE)
                 as NotificationManager
@@ -270,7 +269,13 @@ class GeoTrackerService @Inject constructor(
 
 
     private fun endTrackingAndSaveToDB() {
-        // TODO : Add to database
+        val cycling = Cycling((distance.value ?: 0F).toInt(), pathPoints.value!!, timeStarted, lastSecondTimestamp)
+        Log.d("Cycling", cycling.toString())
+        val appScope = CoroutineScope(SupervisorJob())
+        // Coroutine : IO Dispatchers because saving to db can wait ...
+        appScope.launch(Dispatchers.IO) {
+            with(mainRepository) { insertCycling(cycling) }
+        }
     }
 
     companion object {
