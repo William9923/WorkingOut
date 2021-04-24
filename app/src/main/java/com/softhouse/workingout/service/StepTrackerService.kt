@@ -26,6 +26,7 @@ import com.softhouse.workingout.data.db.Cycling
 import com.softhouse.workingout.data.db.Running
 import com.softhouse.workingout.data.repository.MainRepository
 import com.softhouse.workingout.shared.Constants
+import com.softhouse.workingout.shared.Constants.INVALID_ID_DB
 import com.softhouse.workingout.shared.TrackingUtility
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -62,6 +63,8 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
         steps.value = 0
         timeRunInSeconds.value = 0L
         timeRunInMillis.value = 0L
+
+        newDataID.value = INVALID_ID_DB
     }
 
     override fun onCreate() {
@@ -271,7 +274,11 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
         val appScope = CoroutineScope(SupervisorJob())
         // Coroutine : IO Dispatchers because saving to db can wait ...
         appScope.launch(Dispatchers.IO) {
-            with(mainRepository) { insertRunning(running) }
+            with(mainRepository) {
+                val id = insertRunning(running)
+                Log.d("Database", "ID : $id")
+                newDataID.postValue(id)
+            }
         }
     }
 
@@ -280,6 +287,7 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
         val steps = MutableLiveData<Int>()
         val timeRunInMillis = MutableLiveData<Long>()
         val isSensorAvailable = MutableLiveData<Boolean>()
+        val newDataID = MutableLiveData<Long>()
         const val ACTION_START_OR_RESUME_SERVICE_STEP = "ACTION_START_OR_RESUME_SERVICE_STEP"
         const val ACTION_STOP_SERVICE_STEP = "ACTION_STOP_SERVICE_STEP"
     }

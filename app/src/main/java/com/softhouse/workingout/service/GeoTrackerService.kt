@@ -28,6 +28,7 @@ import com.softhouse.workingout.data.db.CyclingDao
 import com.softhouse.workingout.data.db.RunningDao
 import com.softhouse.workingout.data.repository.MainRepository
 import com.softhouse.workingout.shared.Constants.FASTEST_LOCATION_INTERVAL
+import com.softhouse.workingout.shared.Constants.INVALID_ID_DB
 import com.softhouse.workingout.shared.Constants.LOCATION_UPDATE_INTERVAL
 import com.softhouse.workingout.shared.Constants.NOTIFICATION_CHANNEL_ID
 import com.softhouse.workingout.shared.Constants.NOTIFICATION_CHANNEL_NAME
@@ -73,7 +74,7 @@ class GeoTrackerService : LifecycleService() {
         timeRunInMillis.value = 0L
         distance.value = 0F
 
-        newDataID.value = -1L
+        newDataID.value = INVALID_ID_DB
     }
 
     override fun onCreate() {

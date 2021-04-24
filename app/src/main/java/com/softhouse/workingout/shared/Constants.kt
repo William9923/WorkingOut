@@ -27,6 +27,8 @@ object Constants {
     const val NOTIFICATION_CHANNEL_ID = "workout_channel"
     const val NOTIFICATION_CHANNEL_NAME = "Workout"
     const val NOTIFICATION_ID = 99
+
+    const val INVALID_ID_DB = -1L
 }
 
 

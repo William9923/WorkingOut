@@ -16,6 +16,7 @@ import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentTrackingBinding
 import com.softhouse.workingout.service.GeoTrackerService
 import com.softhouse.workingout.service.StepTrackerService
+import com.softhouse.workingout.shared.Constants
 import com.softhouse.workingout.shared.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.softhouse.workingout.shared.TrackingUtility
 import com.softhouse.workingout.shared.roundTo
@@ -112,7 +113,6 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 else -> Mode.STEPS
             }
         }
-        Log.d("Init", "Not Started")
         return Mode.STEPS
     }
 
@@ -129,7 +129,7 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             }
         })
         GeoTrackerService.newDataID.observe(viewLifecycleOwner, {
-            if (viewModel.mode.value == Mode.CYCLING && it != -1L) {
+            if (viewModel.mode.value == Mode.CYCLING && it != Constants.INVALID_ID_DB) {
                 Log.d("Receive Data", "ID : $it")
             }
         })
@@ -147,7 +147,11 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 binding.textTracker.text = it.toString()
             }
         })
-
+        StepTrackerService.newDataID.observe(viewLifecycleOwner, {
+            if (viewModel.mode.value == Mode.STEPS && it != Constants.INVALID_ID_DB) {
+                Log.d("Receive Data", "ID : $it")
+            }
+        })
         StepTrackerService.isSensorAvailable.observe(viewLifecycleOwner, {
             if (!it) {
                 Snackbar.make(requireView(), "No Step sensor detected! Using accelerometer", Snackbar.LENGTH_LONG)
