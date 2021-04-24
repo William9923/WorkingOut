@@ -221,7 +221,6 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
                     .addAction(R.drawable.ic_notifications_black_24dp, "STOP WORKOUT", pendingIntent)
                 notificationManager.notify(Constants.NOTIFICATION_ID, curNotificationBuilder.build())
             }
-
         }
     }
 

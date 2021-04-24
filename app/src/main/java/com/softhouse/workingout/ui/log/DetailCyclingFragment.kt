@@ -1,37 +1,35 @@
 package com.softhouse.workingout.ui.log
 
 import android.content.pm.ActivityInfo
-import androidx.fragment.app.Fragment
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
-import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentDetailCyclingBinding
-import com.softhouse.workingout.databinding.FragmentTrackingBinding
 import com.softhouse.workingout.shared.Constants.POLYLINE_COLOR
 import com.softhouse.workingout.shared.Constants.POLYLINE_WIDTH
 import com.softhouse.workingout.shared.Polyline
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailCyclingFragment : Fragment() {
 
     private val viewModel: DetailCyclingViewModel by viewModels()
 
     lateinit var binding: FragmentDetailCyclingBinding
 
-    private var map: GoogleMap? = null
+    private var pathPoints: Polyline = mutableListOf<LatLng>()
 
-    private var pathPoints:Polyline? = null
+    private var map: GoogleMap? = null
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -47,7 +45,11 @@ class DetailCyclingFragment : Fragment() {
         googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
-        // TODO : Draw the line for polylines uwu :>
+        drawPolylines()
+
+        zoomToSeeWholeTrack()
+
+        // TODO : Add Marker for first track and last track
     }
 
     override fun onCreateView(
@@ -55,6 +57,7 @@ class DetailCyclingFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         binding = FragmentDetailCyclingBinding.inflate(inflater, container, false)
         // Make screen orientation always portrait
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -69,10 +72,64 @@ class DetailCyclingFragment : Fragment() {
             callback
         }
     }
-//    private fun drawPol
-//    private fun drawPolyline() {
-//        val polyOptions = PolylineOptions()
-//            .color(POLYLINE_COLOR)
-//            .width(POLYLINE_WIDTH)
-//    }
+
+    /**
+     * Drawing Options
+     */
+    private fun drawPolylines() {
+        val polylineOptions = PolylineOptions()
+            .color(POLYLINE_COLOR)
+            .width(POLYLINE_WIDTH)
+            .addAll(pathPoints)
+        (binding.mapView as GoogleMap).addPolyline(polylineOptions)
+    }
+
+    private fun zoomToSeeWholeTrack() {
+        val bounds = LatLngBounds.Builder()
+        for (pos in pathPoints) {
+            bounds.include(pos)
+        }
+
+        map?.moveCamera(
+            CameraUpdateFactory.newLatLngBounds(
+                bounds.build(),
+                binding.mapView.width,
+                binding.mapView.height,
+                (binding.mapView.height * 0.05f).toInt()
+            )
+        )
+    }
+
+    /**
+     * MapView State
+     */
+    override fun onResume() {
+        super.onResume()
+        binding.mapView.onResume()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.mapView.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.mapView.onStop()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.mapView.onPause()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.mapView.onLowMemory()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        binding.mapView.onSaveInstanceState(outState)
+    }
 }
