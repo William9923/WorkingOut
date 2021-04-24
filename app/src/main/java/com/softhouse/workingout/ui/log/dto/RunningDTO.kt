@@ -5,5 +5,5 @@ data class RunningDTO(
     var steps: Int,
     var startWorkout: String,
     var endWorkout: String,
-    var duration: Long
+    var duration: String
 )

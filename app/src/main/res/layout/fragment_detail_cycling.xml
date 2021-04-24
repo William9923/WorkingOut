@@ -3,95 +3,89 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
-<data>
+    <data>
 
-</data>
+        <variable
+                name="dto"
+                type="com.softhouse.workingout.ui.log.dto.CyclingDTO"/>
+    </data>
 
-<FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.log.DetailRunningFragment">
-
-
-    <LinearLayout
+    <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_gravity="center_vertical"
-            >
+            tools:context=".ui.log.DetailRunningFragment">
+
 
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:gravity="center"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/activity_vertical_margin"
-                android:layout_weight="0.1">
+                android:layout_gravity="center_vertical"
+                >
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/activity_vertical_margin"
+                    android:layout_weight="0.1">
+
+                <TextView
+                        android:id="@+id/text_start_time"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text='@{dto.startWorkout}'
+                        android:layout_margin="@dimen/text_margin"
+                        android:textSize="18sp"
+                        android:textAlignment="center"/>
+
+                <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="-"
+                        android:layout_margin="@dimen/text_margin"/>
+
+                <TextView
+                        android:id="@+id/text_end_time"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text='@{dto.endWorkout}'
+                        android:layout_margin="@dimen/text_margin"
+                        android:textSize="18sp"/>
+            </LinearLayout>
 
             <TextView
-                    android:id="@+id/text_start_time"
+                    android:id="@+id/text_duration"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Start Time"
-                    android:layout_margin="@dimen/text_margin"
-                    android:textSize="18sp"
+                    android:text='@{dto.duration}'
+                    android:textSize="24sp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"/>
+
+            <com.google.android.gms.maps.MapView
+                    android:id="@+id/mapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_weight="0.25"
+                    android:layout_margin="@dimen/activity_horizontal_margin"/>
+
+            <TextView
+                    android:id="@+id/text_distance"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text='@{`` + dto.distance + "meter(s)"}'
+                    android:textSize="24sp"
+                    android:layout_weight="0.25"
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    android:textStyle="bold"
                     android:textAlignment="center"/>
-
-            <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="-"
-                    android:layout_margin="@dimen/text_margin"/>
-
-            <TextView
-                    android:id="@+id/text_end_time"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="End Time"
-                    android:layout_margin="@dimen/text_margin"
-                    android:textSize="18sp"/>
         </LinearLayout>
 
-        <TextView
-                android:id="@+id/text_duration"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="X Minutes"
-                android:textSize="24sp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                />
-
-<!--        <TextView-->
-<!--                android:id="@+id/text_val_steps"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_width="98dp"-->
-<!--                android:text="X"-->
-<!--                android:layout_margin="@dimen/text_margin"-->
-<!--                android:textSize="80sp"-->
-<!--                android:layout_weight="0.25"-->
-<!--                android:textStyle="bold"-->
-<!--                android:textAllCaps="true"-->
-<!--                app:autoSizeMinTextSize="28sp"-->
-<!--                app:autoSizeMaxTextSize="160sp"-->
-<!--                app:autoSizeTextType="uniform"/>-->
-
-        <com.google.android.gms.maps.MapView
-                android:id="@+id/mapView"
-                android:layout_width="match_parent"
-                android:layout_height="197dp"
-                android:layout_weight="0.25"/>
-
-        <TextView
-                android:id="@+id/text_distance"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="X km"
-                android:textSize="24sp"
-                android:layout_weight="0.25"/>
-    </LinearLayout>
-
-</FrameLayout>
+    </FrameLayout>
 </layout>

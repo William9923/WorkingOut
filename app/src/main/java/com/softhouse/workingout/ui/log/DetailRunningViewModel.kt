@@ -22,9 +22,8 @@ class DetailRunningViewModel @ViewModelInject constructor(
     fun initData(id: Long) {
 
         mainRepository.getSpecificRunningById(id).observeForever {
-            Log.d("Size", it.toString())
+            Log.d("Data", it.toString())
             _running.postValue(it)
         }
-
     }
 }

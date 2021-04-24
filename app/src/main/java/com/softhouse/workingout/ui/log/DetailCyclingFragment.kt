@@ -2,11 +2,13 @@ package com.softhouse.workingout.ui.log
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -17,38 +19,27 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.softhouse.workingout.databinding.FragmentDetailCyclingBinding
 import com.softhouse.workingout.shared.Constants.POLYLINE_COLOR
 import com.softhouse.workingout.shared.Constants.POLYLINE_WIDTH
+import com.softhouse.workingout.shared.DateTimeUtility
 import com.softhouse.workingout.shared.Polyline
+import com.softhouse.workingout.ui.log.dto.CyclingDTO
+import com.softhouse.workingout.ui.log.dto.RunningDTO
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class DetailCyclingFragment : Fragment() {
 
     private val viewModel: DetailCyclingViewModel by viewModels()
-
     lateinit var binding: FragmentDetailCyclingBinding
-
-    private var pathPoints: Polyline = mutableListOf<LatLng>()
-
+    private val args: DetailCyclingFragmentArgs by navArgs()
     private var map: GoogleMap? = null
-
-    private val callback = OnMapReadyCallback { googleMap ->
-
-        // Todo : Remove boilerplate code below
-        val sydney = LatLng(-34.0, 151.0)
-        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-
-        drawPolylines()
-
-        zoomToSeeWholeTrack()
-
-        // TODO : Add Marker for first track and last track
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Invoke trigger for appbar menu
         setHasOptionsMenu(true)
+        // Setup data for record display
+        viewModel.initData(args.recordId)
     }
 
     override fun onCreateView(
@@ -56,7 +47,6 @@ class DetailCyclingFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true)
         binding = FragmentDetailCyclingBinding.inflate(inflater, container, false)
         // Make screen orientation always portrait
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -67,8 +57,52 @@ class DetailCyclingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
 
+        if (viewModel.cycling.value != null) {
+            val startCalendar = DateTimeUtility.getCalenderFromMillis(viewModel.cycling.value!!.startWorkout)
+            val endCalender = DateTimeUtility.getCalenderFromMillis(viewModel.cycling.value!!.endWorkout)
+            binding.dto = CyclingDTO(
+                args.recordId,
+                viewModel.cycling.value!!.distanceInMeters,
+                "${startCalendar.get(Calendar.HOUR_OF_DAY)}:${startCalendar.get(Calendar.MINUTE)}:${
+                    startCalendar.get(
+                        Calendar.SECOND
+                    )
+                }",
+                "${endCalender.get(Calendar.HOUR_OF_DAY)}:${endCalender.get(Calendar.MINUTE)}:${endCalender.get(Calendar.SECOND)}",
+                DateTimeUtility.getTimeMeasurementFromMillis(viewModel.cycling.value!!.endWorkout - viewModel.cycling.value!!.startWorkout)
+            )
+        }
+
+        viewModel.cycling.observe(viewLifecycleOwner, {
+            if (it != null) {
+                val startCalendar = DateTimeUtility.getCalenderFromMillis(it.startWorkout)
+                val endCalender = DateTimeUtility.getCalenderFromMillis(it.endWorkout)
+                binding.dto = CyclingDTO(
+                    args.recordId,
+                    it.distanceInMeters,
+                    "${startCalendar.get(Calendar.HOUR_OF_DAY)}:${startCalendar.get(Calendar.MINUTE)}:${
+                        startCalendar.get(
+                            Calendar.SECOND
+                        )
+                    }",
+                    "${endCalender.get(Calendar.HOUR_OF_DAY)}:${endCalender.get(Calendar.MINUTE)}:${
+                        endCalender.get(
+                            Calendar.SECOND
+                        )
+                    }",
+                    DateTimeUtility.getTimeMeasurementFromMillis(it.endWorkout - it.startWorkout)
+                )
+                drawPolylines()
+                zoomToSeeWholeTrack()
+                markStartEndLocation()
+            }
+        })
+
         binding.mapView.getMapAsync {
-            callback
+            map = it
+            drawPolylines()
+            zoomToSeeWholeTrack()
+            markStartEndLocation()
         }
     }
 
@@ -76,27 +110,49 @@ class DetailCyclingFragment : Fragment() {
      * Drawing Options
      */
     private fun drawPolylines() {
-        val polylineOptions = PolylineOptions()
-            .color(POLYLINE_COLOR)
-            .width(POLYLINE_WIDTH)
-            .addAll(pathPoints)
-        (binding.mapView as GoogleMap).addPolyline(polylineOptions)
+        if (viewModel.cycling.value != null) {
+            Log.d("Map", "Draw polylines")
+            val polylineOptions = PolylineOptions()
+                .color(POLYLINE_COLOR)
+                .width(POLYLINE_WIDTH)
+                .addAll(viewModel.cycling.value!!.points)
+            map?.addPolyline(polylineOptions)
+        }
+
     }
 
     private fun zoomToSeeWholeTrack() {
-        val bounds = LatLngBounds.Builder()
-        for (pos in pathPoints) {
-            bounds.include(pos)
+        if (viewModel.cycling.value != null) {
+            Log.d("Map", "Zoom whole track")
+            val bounds = LatLngBounds.Builder()
+            for (pos in viewModel.cycling.value!!.points) {
+                bounds.include(pos)
+            }
+
+            map?.moveCamera(
+                CameraUpdateFactory.newLatLngBounds(
+                    bounds.build(),
+                    binding.mapView.width,
+                    binding.mapView.height,
+                    (binding.mapView.height * 0.05f).toInt()
+                )
+            )
+        }
+    }
+
+    private fun markStartEndLocation() {
+        if (viewModel.cycling.value != null) {
+            Log.d("Map", "Mark start end location")
+            val start = viewModel.cycling.value!!.points.firstOrNull()
+            val end = viewModel.cycling.value!!.points.lastOrNull()
+
+            if (start != null)
+                map?.addMarker(MarkerOptions().position(start).title("Start"))
+
+            if (end != null)
+                map?.addMarker(MarkerOptions().position(end).title("Finish"))
         }
 
-        map?.moveCamera(
-            CameraUpdateFactory.newLatLngBounds(
-                bounds.build(),
-                binding.mapView.width,
-                binding.mapView.height,
-                (binding.mapView.height * 0.05f).toInt()
-            )
-        )
     }
 
     /**

@@ -62,7 +62,7 @@
                     android:id="@+id/text_duration"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text='@{`` + dto.duration}'
+                    android:text='@{dto.duration}'
                     android:textSize="24sp"
                     android:layout_marginTop="@dimen/text_margin"
                     android:layout_marginBottom="@dimen/text_margin"
