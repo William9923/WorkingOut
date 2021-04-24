@@ -23,6 +23,9 @@ import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import com.softhouse.workingout.R
+import com.softhouse.workingout.data.db.CyclingDao
+import com.softhouse.workingout.data.db.RunningDao
+import com.softhouse.workingout.data.repository.MainRepository
 import com.softhouse.workingout.shared.Constants.FASTEST_LOCATION_INTERVAL
 import com.softhouse.workingout.shared.Constants.LOCATION_UPDATE_INTERVAL
 import com.softhouse.workingout.shared.Constants.NOTIFICATION_CHANNEL_ID
@@ -40,7 +43,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class GeoTrackerService : LifecycleService() {
+class GeoTrackerService @Inject constructor(
+    val mainRepository: MainRepository
+) : LifecycleService() {
 
     /**
      * Service - related variable
@@ -63,11 +68,11 @@ class GeoTrackerService : LifecycleService() {
     lateinit var curNotificationBuilder: NotificationCompat.Builder
 
     private fun postInitialValues() {
-        isTracking.postValue(false)
-        pathPoints.postValue(mutableListOf())
-        timeRunInSeconds.postValue(0L)
-        timeRunInMillis.postValue(0L)
-        distance.postValue(0F)
+        isTracking.value = false
+        pathPoints.value = mutableListOf()
+        timeRunInSeconds.value = 0L
+        timeRunInMillis.value = 0L
+        distance.value = 0F
     }
 
     override fun onCreate() {
@@ -125,9 +130,11 @@ class GeoTrackerService : LifecycleService() {
     private var lastSecondTimestamp = 0L
 
     private fun startTimer() {
+
         addEmptyPolylineIfEmpty()
-        isTracking.postValue(true)
+        isTracking.value = true
         timeStarted = System.currentTimeMillis()
+
         CoroutineScope(Dispatchers.Main).launch {
             while (isTracking.value!!) {
                 // time difference between now and timeStarted
@@ -135,7 +142,7 @@ class GeoTrackerService : LifecycleService() {
                 // post the new lapTime
                 timeRunInMillis.postValue(timeRun + lapTime)
                 if (timeRunInMillis.value!! >= lastSecondTimestamp + 1000L) {
-                    timeRunInSeconds.postValue(timeRunInSeconds.value!! + 1)
+                    timeRunInSeconds.value = timeRunInSeconds.value!! + 1
                     lastSecondTimestamp += 1000L
                 }
                 delay(TIMER_UPDATE_INTERVAL)
@@ -201,7 +208,6 @@ class GeoTrackerService : LifecycleService() {
         startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
 
         timeRunInSeconds.observe(this, {
-
             if (!serviceKilled) {
                 val notification = curNotificationBuilder
                     .setContentText("You have traveled : ${((distance.value ?: 0F) * 0.001).roundTo(2)} km")
@@ -261,6 +267,11 @@ class GeoTrackerService : LifecycleService() {
     private fun addEmptyPolylineIfEmpty() = pathPoints.value.apply {
         pathPoints.postValue(this)
     } ?: pathPoints.postValue(mutableListOf())
+
+
+    private fun endTrackingAndSaveToDB() {
+        // TODO : Add to database
+    }
 
     companion object {
         val isTracking = MutableLiveData<Boolean>()

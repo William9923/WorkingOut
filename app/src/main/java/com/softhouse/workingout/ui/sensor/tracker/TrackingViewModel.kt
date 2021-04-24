@@ -98,22 +98,22 @@ class TrackingViewModel @ViewModelInject constructor(
 
     private fun endRunningWorkoutAndSave() {
         Log.d("ViewModel", "Ending Running Workout")
-        val running = Running(_steps.value!!)
-        Log.d("Running", running.toString())
-        // Show save result
-        viewModelScope.launch {
-            mainRepository.insertRunning(running)
-        }
+//        val running = Running(_steps.value!!)
+//        Log.d("Running", running.toString())
+//        // Show save result
+//        viewModelScope.launch {
+//            mainRepository.insertRunning(running)
+//        }
     }
 
     private fun endCyclingWorkoutAndSave() {
         Log.d("ViewModel", "Ending Cycling Workout")
-        val distanceInMeters = TrackingUtility.calculatePolylineLength(_coordinates.value ?: mutableListOf()).toInt()
-        val cycling = Cycling(distanceInMeters, _coordinates.value!!)
-        Log.d("Cycling", cycling.toString())
-        // Show save result
-        viewModelScope.launch {
-            mainRepository.insertCycling(cycling)
-        }
+//        val distanceInMeters = TrackingUtility.calculatePolylineLength(_coordinates.value ?: mutableListOf()).toInt()
+//        val cycling = Cycling(distanceInMeters, _coordinates.value!!)
+//        Log.d("Cycling", cycling.toString())
+//        // Show save result
+//        viewModelScope.launch {
+//            mainRepository.insertCycling(cycling)
+//        }
     }
 }

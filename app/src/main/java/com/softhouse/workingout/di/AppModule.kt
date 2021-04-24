@@ -32,10 +32,6 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRecordDao(db: AppDatabase) = db.getRecordDao()
-
-    @Singleton
-    @Provides
     fun provideCyclingDao(db: AppDatabase) = db.getCyclingDao()
 
 }
