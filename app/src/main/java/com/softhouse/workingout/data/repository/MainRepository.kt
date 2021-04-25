@@ -16,6 +16,10 @@ class MainRepository @Inject constructor(
     suspend fun insertCycling(cycling: Cycling) = cyclingDao.insertCycling(cycling)
     suspend fun insertRunning(running: Running) = runningDao.insertRunning(running)
 
+    // Query All Data
+    fun getAllRunningRecord() = runningDao.getAllRunningRecord()
+    fun getAllCyclingRecord() = cyclingDao.getAllCyclingRecord()
+
     // Query based on date:
     fun getAllCyclingRecordBasedOnDate(day: Int, month: Int, year: Int): LiveData<List<Cycling>> {
         val calender = DateTimeUtility.getCalender(day, month, year)

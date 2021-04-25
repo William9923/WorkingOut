@@ -59,18 +59,16 @@ class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
         }
 
         // Observe data change
-        viewModel.items.observe(requireActivity(), {
-            Log.d("Observable", "Data changed")
+        viewModel.items.observe(viewLifecycleOwner, {
             if (view is RecyclerView) {
                 if (view?.adapter != null)
                     view.adapter = viewModel.items.value?.let { NewsRecyclerViewAdapter(it, this) }
                 view?.adapter?.notifyDataSetChanged()
-                Log.d("Notify", "Data Changed")
             }
         })
     }
 
-    override fun onNewsClick(position: Int) {
+     override fun onNewsClick(position: Int) {
         val url: String = viewModel.items.value!![position].url
         val action = NewsListDirections.actionNavigationNewsToWebFragment(url)
         NavHostFragment.findNavController(this).navigate(action)

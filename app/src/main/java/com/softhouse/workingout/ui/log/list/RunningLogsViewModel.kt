@@ -25,18 +25,21 @@ class RunningLogsViewModel @ViewModelInject constructor(
     var day: Int = Constants.INVALID_DATE
     var month: Int = Constants.INVALID_MONTH
     var year: Int = Constants.INVALID_YEAR
-    var cycling: LiveData<List<Running>> = _runnings
+    var records: LiveData<List<Running>> = _runnings
     var position: LiveData<Long> = _position
 
     fun initDate(day: Int, month: Int, year: Int) {
-        this.day = day
-        this.month = month
-        this.year = year
+        if (this.day != day || this.month != month || this.year != year) {
+            this.day = day
+            this.month = month
+            this.year = year
+            initData()
+        }
     }
 
-    fun initData(id: Long) {
+    private fun initData() {
         if (day != Constants.INVALID_DATE && month != Constants.INVALID_MONTH && year != Constants.INVALID_YEAR) {
-            mainRepository.getAllRunningRecordBasedOnDate(day, month, year).observeForever {
+            mainRepository.getAllRunningRecord().observeForever {
                 Log.d("Data", it.toString())
                 _runnings.postValue(it)
             }

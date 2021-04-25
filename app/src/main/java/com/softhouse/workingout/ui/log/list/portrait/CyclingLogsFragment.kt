@@ -13,10 +13,12 @@ import com.softhouse.workingout.R
 import com.softhouse.workingout.ui.log.list.CyclingLogsViewModel
 import com.softhouse.workingout.ui.log.list.RunningLogsViewModel
 import com.softhouse.workingout.ui.log.list.portrait.dummy.DummyContent
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * A fragment representing a list of Items.
  */
+@AndroidEntryPoint
 class CyclingLogsFragment : Fragment() {
 
     private var columnCount = 1

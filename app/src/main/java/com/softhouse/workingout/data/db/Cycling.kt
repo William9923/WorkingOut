@@ -14,5 +14,5 @@ data class Cycling(
     @ColumnInfo(name = "end_workout") var endWorkout: Long
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int? = null
+    var id: Long? = null
 }

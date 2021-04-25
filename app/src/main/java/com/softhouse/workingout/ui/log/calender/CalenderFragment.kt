@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.softhouse.workingout.databinding.FragmentCalenderBinding
 import com.softhouse.workingout.ui.sensor.tracker.Mode
 import com.softhouse.workingout.ui.sensor.tracker.TrackingFragmentDirections
@@ -36,6 +37,8 @@ class CalenderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.mode = viewModel.mode.value
+
+        binding.calendarView.setDateSelected(CalendarDay.today(), true)
 
         binding.calendarView.setOnDateChangedListener { _, date, _ ->
             when (viewModel.mode.value) {

@@ -71,6 +71,11 @@
                 android:name="year"
                 app:argType="integer"
                 android:defaultValue="-1"/>
+        <action
+                android:id="@+id/action_navigation_logs_running_to_navigation_running_detail"
+                app:destination="@id/navigation_running_detail"
+                app:popUpToInclusive="false"
+                app:popUpTo="@id/navigation_logs_running"/>
     </fragment>
 
     <fragment

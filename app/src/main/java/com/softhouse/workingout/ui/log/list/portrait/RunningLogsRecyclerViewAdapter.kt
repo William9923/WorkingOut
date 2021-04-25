@@ -1,42 +1,61 @@
 package com.softhouse.workingout.ui.log.list.portrait
 
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.softhouse.workingout.R
+import com.softhouse.workingout.data.NewsItem
+import com.softhouse.workingout.data.db.Running
+import com.softhouse.workingout.databinding.FragmentNewsItemBinding
+import com.softhouse.workingout.databinding.FragmentRunningLogsBinding
+import com.softhouse.workingout.databinding.FragmentRunningLogsListBinding
 
 import com.softhouse.workingout.ui.log.list.portrait.dummy.DummyContent.DummyItem
+import com.softhouse.workingout.ui.news.NewsRecyclerViewAdapter
 
-/**
- * [RecyclerView.Adapter] that can display a [DummyItem].
- * TODO: Replace the implementation with code for your data type.
- */
 class RunningLogsRecyclerViewAdapter(
-    private val values: List<DummyItem>
+    private val values: List<Running>, private val listener: OnRunningRecordClickListener
 ) : RecyclerView.Adapter<RunningLogsRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_running_logs, parent, false)
-        return ViewHolder(view)
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding = FragmentRunningLogsBinding.inflate(layoutInflater)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
+        holder.bind(values[position])
+        holder.itemView.setOnClickListener {
+            Log.d("Event", "Item clicked")
+            holder.onClick(holder.itemView)
+        }
     }
 
     override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val idView: TextView = view.findViewById(R.id.item_number)
-        val contentView: TextView = view.findViewById(R.id.content)
+    interface OnRunningRecordClickListener {
+        fun onRecordClick(position: Int)
+    }
 
+    inner class ViewHolder(val binding: FragmentRunningLogsBinding) : RecyclerView.ViewHolder(binding.root),
+        View.OnClickListener {
         override fun toString(): String {
-            return super.toString() + " '" + contentView.text + "'"
+            return "Running Record no : $adapterPosition"
+        }
+
+        override fun onClick(v: View?) {
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                Log.d("Position", "Index : $adapterPosition")
+                listener.onRecordClick(adapterPosition)
+            }
+        }
+
+        fun bind(data: Running) {
+            binding.data = data
+            binding.executePendingBindings()
         }
     }
 }
