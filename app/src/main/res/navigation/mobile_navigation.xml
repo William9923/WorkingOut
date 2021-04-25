@@ -58,7 +58,7 @@
 
     <fragment
             android:id="@+id/navigation_calender"
-            android:name="com.softhouse.workingout.ui.log.CalenderFragment"
+            android:name="com.softhouse.workingout.ui.log.calender.CalenderFragment"
             android:label="Log Calender"
             tools:layout="@layout/fragment_calender"/>
 

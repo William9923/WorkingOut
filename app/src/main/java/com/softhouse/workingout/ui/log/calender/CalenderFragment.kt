@@ -1,4 +1,4 @@
-package com.softhouse.workingout.ui.log
+package com.softhouse.workingout.ui.log.calender
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.softhouse.workingout.databinding.FragmentCalenderBinding
+import com.softhouse.workingout.ui.sensor.tracker.TrackingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -15,6 +17,8 @@ import java.util.*
 class CalenderFragment : Fragment() {
 
     lateinit var binding: FragmentCalenderBinding
+    private val viewModel: TrackingViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,6 +32,8 @@ class CalenderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.mode = viewModel.mode.value
+
         binding.calendarView.setOnDateChangedListener { _, date, _ ->
             Log.d("Calender:", "Day : ${date.day}")
             Log.d("Calender:", "Month : ${date.month}")
@@ -37,6 +43,11 @@ class CalenderFragment : Fragment() {
             Log.d("Calender:", "Millis : ${calender.timeInMillis}}")
 
             // TODO : (Fragment Navigation to the new data)
+        }
+
+        binding.switchModeBtn.setOnClickListener {
+            viewModel.toggleMode()
+            binding.mode = viewModel.mode.value
         }
     }
 }
