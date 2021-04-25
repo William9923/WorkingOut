@@ -1,4 +1,4 @@
-package com.softhouse.workingout.ui.log.portrait.dummy
+package com.softhouse.workingout.ui.log.list.landscape.dummy
 
 import java.util.ArrayList
 import java.util.HashMap

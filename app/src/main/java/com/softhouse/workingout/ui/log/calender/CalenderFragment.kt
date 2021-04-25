@@ -8,7 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import com.softhouse.workingout.databinding.FragmentCalenderBinding
+import com.softhouse.workingout.ui.sensor.tracker.Mode
+import com.softhouse.workingout.ui.sensor.tracker.TrackingFragmentDirections
 import com.softhouse.workingout.ui.sensor.tracker.TrackingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -35,14 +38,24 @@ class CalenderFragment : Fragment() {
         binding.mode = viewModel.mode.value
 
         binding.calendarView.setOnDateChangedListener { _, date, _ ->
-            Log.d("Calender:", "Day : ${date.day}")
-            Log.d("Calender:", "Month : ${date.month}")
-            Log.d("Calender:", "Month : ${date.year}")
-            val calender = Calendar.getInstance()
-            calender.set(date.year, date.month, date.day)
-            Log.d("Calender:", "Millis : ${calender.timeInMillis}}")
-
-            // TODO : (Fragment Navigation to the new data)
+            when (viewModel.mode.value) {
+                Mode.CYCLING -> {
+                    val action = CalenderFragmentDirections.actionNavigationCalenderToNavigationLogsCycling(
+                        date.day,
+                        date.month,
+                        date.year
+                    )
+                    NavHostFragment.findNavController(this).navigate(action)
+                }
+                Mode.STEPS -> {
+                    val action = CalenderFragmentDirections.actionNavigationCalenderToNavigationLogsRunning(
+                        date.day,
+                        date.month,
+                        date.year
+                    )
+                    NavHostFragment.findNavController(this).navigate(action)
+                }
+            }
         }
 
         binding.switchModeBtn.setOnClickListener {

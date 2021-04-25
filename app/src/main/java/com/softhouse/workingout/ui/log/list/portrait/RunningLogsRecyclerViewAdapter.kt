@@ -1,4 +1,4 @@
-package com.softhouse.workingout.ui.log.portrait
+package com.softhouse.workingout.ui.log.list.portrait
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.softhouse.workingout.R
 
-import com.softhouse.workingout.ui.log.portrait.dummy.DummyContent.DummyItem
+import com.softhouse.workingout.ui.log.list.portrait.dummy.DummyContent.DummyItem
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem].

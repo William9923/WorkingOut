@@ -10,5 +10,5 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.log.landscape.CyclingLogsFragment"
+        tools:context=".ui.log.list.landscape.CyclingLogsFragment"
         tools:listitem="@layout/fragment_cycling_logs_landscape"/>

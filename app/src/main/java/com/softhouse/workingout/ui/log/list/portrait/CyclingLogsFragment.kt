@@ -1,4 +1,4 @@
-package com.softhouse.workingout.ui.log.landscape
+package com.softhouse.workingout.ui.log.list.portrait
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,8 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.softhouse.workingout.R
-import com.softhouse.workingout.ui.log.landscape.dummy.DummyContent
+import com.softhouse.workingout.ui.log.list.CyclingLogsViewModel
+import com.softhouse.workingout.ui.log.list.RunningLogsViewModel
+import com.softhouse.workingout.ui.log.list.portrait.dummy.DummyContent
 
 /**
  * A fragment representing a list of Items.
@@ -17,6 +20,9 @@ import com.softhouse.workingout.ui.log.landscape.dummy.DummyContent
 class CyclingLogsFragment : Fragment() {
 
     private var columnCount = 1
+    private val viewModel: CyclingLogsViewModel by viewModels(
+        ownerProducer = { requireActivity() }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +36,7 @@ class CyclingLogsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_cycling_logs_landscape_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_cycling_logs_list, container, false)
 
         // Set the adapter
         if (view is RecyclerView) {

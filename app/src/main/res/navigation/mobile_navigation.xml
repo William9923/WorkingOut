@@ -10,27 +10,7 @@
             app:destination="@id/navigation_tracking"
             app:launchSingleTop="true"/>
 
-    <fragment
-            android:id="@+id/navigation_news"
-            android:name="com.softhouse.workingout.ui.news.NewsList"
-            android:label="@string/title_news"
-            tools:layout="@layout/fragment_news">
-        <action
-                android:id="@+id/action_navigation_news_to_webFragment"
-                app:destination="@id/webFragment"
-                app:enterAnim="@anim/fragment_fade_enter"
-                app:exitAnim="@anim/fragment_fade_exit"
-                app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-                app:popExitAnim="@animator/nav_default_pop_exit_anim"
-                app:popUpTo="@+id/navigation_news"
-                app:popUpToInclusive="true"
-                >
-            <argument
-                    android:name="url"
-                    android:defaultValue="https://google.com"/>
-        </action>
-    </fragment>
-
+    <!--Tracking Main Menu Navigation-->
     <fragment
             android:id="@+id/navigation_tracking"
             android:name="com.softhouse.workingout.ui.sensor.tracker.TrackingFragment"
@@ -40,7 +20,7 @@
                 android:id="@+id/action_navigation_tracking_to_navigation_cycling_detail"
                 app:destination="@id/navigation_cycling_detail"
                 app:popUpTo="@+id/navigation_tracking"
-                app:popUpToInclusive="true">
+                app:popUpToInclusive="false">
             <argument
                     android:name="record_id"
                     android:defaultValue="-1L"/>
@@ -56,17 +36,61 @@
         </action>
     </fragment>
 
+    <!--    Logs History Navigation-->
     <fragment
             android:id="@+id/navigation_calender"
             android:name="com.softhouse.workingout.ui.log.calender.CalenderFragment"
             android:label="Log Calender"
-            tools:layout="@layout/fragment_calender"/>
+            tools:layout="@layout/fragment_calender">
+        <action
+                android:id="@+id/action_navigation_calender_to_navigation_logs_cycling"
+                app:destination="@id/navigation_logs_cycling"
+                app:popUpTo="@id/navigation_calender"
+                app:popUpToInclusive="false"/>
+        <action
+                android:id="@+id/action_navigation_calender_to_navigation_logs_running"
+                app:destination="@id/navigation_logs_running"
+                app:popUpTo="@id/navigation_calender"
+                app:popUpToInclusive="false"/>
+    </fragment>
 
     <fragment
-            android:id="@+id/navigation_notifications"
-            android:name="com.softhouse.workingout.ui.notifications.NotificationsFragment"
-            android:label="@string/title_notifications"
-            tools:layout="@layout/fragment_notifications"/>
+            android:id="@+id/navigation_logs_running"
+            android:name="com.softhouse.workingout.ui.log.list.portrait.RunningLogsFragment"
+            android:label="Running Logs"
+            tools:layout="@layout/fragment_running_logs">
+        <argument
+                android:name="day"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+        <argument
+                android:name="month"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+        <argument
+                android:name="year"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/navigation_logs_cycling"
+            android:name="com.softhouse.workingout.ui.log.list.portrait.CyclingLogsFragment"
+            android:label="Cycling Logs"
+            tools:layout="@layout/fragment_cycling_logs">
+        <argument
+                android:name="day"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+        <argument
+                android:name="month"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+        <argument
+                android:name="year"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+    </fragment>
 
     <fragment
             android:id="@+id/navigation_running_detail"
@@ -90,6 +114,28 @@
                 android:defaultValue="-1L"/>
     </fragment>
 
+    <!--    News Navigation-->
+    <fragment
+            android:id="@+id/navigation_news"
+            android:name="com.softhouse.workingout.ui.news.NewsList"
+            android:label="@string/title_news"
+            tools:layout="@layout/fragment_news">
+        <action
+                android:id="@+id/action_navigation_news_to_webFragment"
+                app:destination="@id/webFragment"
+                app:enterAnim="@anim/fragment_fade_enter"
+                app:exitAnim="@anim/fragment_fade_exit"
+                app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+                app:popExitAnim="@animator/nav_default_pop_exit_anim"
+                app:popUpTo="@+id/navigation_news"
+                app:popUpToInclusive="false"
+                >
+            <argument
+                    android:name="url"
+                    android:defaultValue="https://google.com"/>
+        </action>
+    </fragment>
+
     <fragment
             android:id="@+id/webFragment"
             android:name="com.softhouse.workingout.ui.news.WebFragment"
@@ -100,5 +146,10 @@
                 app:argType="string"/>
     </fragment>
 
-
+    <!--    Scheduler Navigation-->
+    <fragment
+            android:id="@+id/navigation_notifications"
+            android:name="com.softhouse.workingout.ui.notifications.NotificationsFragment"
+            android:label="@string/title_notifications"
+            tools:layout="@layout/fragment_notifications"/>
 </navigation>
