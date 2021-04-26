@@ -8,13 +8,14 @@ import androidx.lifecycle.ViewModel
 import com.softhouse.workingout.data.db.Cycling
 import com.softhouse.workingout.data.repository.MainRepository
 import com.softhouse.workingout.shared.Constants
+import java.util.ArrayList
 
 class CyclingLogsViewModel @ViewModelInject constructor(
     val mainRepository: MainRepository
 ) : ViewModel() {
 
     private val _cyclings = MutableLiveData<List<Cycling>>().apply {
-        value = null
+        value = ArrayList()
     }
 
     private val _position = MutableLiveData<Long>().apply {
@@ -42,8 +43,6 @@ class CyclingLogsViewModel @ViewModelInject constructor(
                 Log.d("Data", it.toString())
                 _cyclings.postValue(it)
             }
-
-
         }
     }
 }

@@ -95,6 +95,11 @@
                 android:name="year"
                 app:argType="integer"
                 android:defaultValue="-1"/>
+        <action
+                android:id="@+id/action_navigation_logs_cycling_to_navigation_cycling_detail"
+                app:destination="@id/navigation_cycling_detail"
+                app:popUpToInclusive="false"
+                app:popUpTo="@id/navigation_logs_cycling"/>
     </fragment>
 
     <fragment
