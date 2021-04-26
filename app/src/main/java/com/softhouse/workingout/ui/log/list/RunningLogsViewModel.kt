@@ -9,13 +9,14 @@ import com.softhouse.workingout.data.db.Cycling
 import com.softhouse.workingout.data.db.Running
 import com.softhouse.workingout.data.repository.MainRepository
 import com.softhouse.workingout.shared.Constants
+import java.util.ArrayList
 
 class RunningLogsViewModel @ViewModelInject constructor(
     val mainRepository: MainRepository
 ) : ViewModel() {
 
     private val _runnings = MutableLiveData<List<Running>>().apply {
-        value = null
+        value = ArrayList()
     }
 
     private val _position = MutableLiveData<Long>().apply {
