@@ -1,5 +1,6 @@
 package com.softhouse.workingout.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.softhouse.workingout.data.db.*
 import com.softhouse.workingout.shared.DateTimeUtility
@@ -32,6 +33,8 @@ class MainRepository @Inject constructor(
         val calender = DateTimeUtility.getCalender(day, month, year)
         val nextDay = DateTimeUtility.getCalender(day, month, year)
         nextDay.add(Calendar.DAY_OF_MONTH, 1)
+        Log.d("Repository", "Start : ${calender.timeInMillis}")
+        Log.d("Repository", "End : ${nextDay.timeInMillis}")
         return runningDao.getAllRunningBasedOnDate(calender.timeInMillis, nextDay.timeInMillis)
     }
 

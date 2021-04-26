@@ -19,6 +19,7 @@ import com.softhouse.workingout.R
 import com.softhouse.workingout.data.db.Running
 import com.softhouse.workingout.databinding.FragmentRunningLogsBinding
 import com.softhouse.workingout.databinding.FragmentTrackingBinding
+import com.softhouse.workingout.shared.DateTimeUtility
 import com.softhouse.workingout.ui.log.DetailRunningFragmentArgs
 import com.softhouse.workingout.ui.log.list.RunningLogsViewModel
 import com.softhouse.workingout.ui.log.list.portrait.dummy.DummyContent
@@ -26,6 +27,7 @@ import com.softhouse.workingout.ui.news.NewsListDirections
 import com.softhouse.workingout.ui.news.NewsListViewModel
 import com.softhouse.workingout.ui.news.NewsRecyclerViewAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 /**
  * A fragment representing a list of Items.
@@ -41,10 +43,6 @@ class RunningLogsFragment : Fragment(), RunningLogsRecyclerViewAdapter.OnRunning
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Setup date for finding data
-        Log.d("Args", args.day.toString())
-        Log.d("Args", args.month.toString())
-        Log.d("Args", args.year.toString())
         viewModel.initDate(args.day, args.month, args.year)
     }
 
@@ -83,7 +81,7 @@ class RunningLogsFragment : Fragment(), RunningLogsRecyclerViewAdapter.OnRunning
             Log.d("Data", "Change before case")
             if (view is RecyclerView) {
                 Log.d("Data", "Changed")
-                if (view.adapter == null)
+                if (view.adapter != null)
                     view.adapter = viewModel.records.value?.let { RunningLogsRecyclerViewAdapter(it, this) }
                 Log.d("Adapter", "notify")
                 view.adapter?.notifyDataSetChanged()

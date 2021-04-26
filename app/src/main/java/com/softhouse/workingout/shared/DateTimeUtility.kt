@@ -1,5 +1,6 @@
 package com.softhouse.workingout.shared
 
+import android.util.Log
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -7,7 +8,12 @@ object DateTimeUtility {
 
     fun getCalender(day: Int, month: Int, year: Int): Calendar {
         val calender = Calendar.getInstance()
-        calender.set(year, month, day)
+        calender.set(Calendar.YEAR, year)
+        calender.set(Calendar.MONTH, month - 1) // starts from 0
+        calender.set(Calendar.DAY_OF_MONTH, day)
+        calender.set(Calendar.HOUR_OF_DAY, 0)
+        calender.set(Calendar.MINUTE, 0)
+        calender.set(Calendar.SECOND, 0)
         return calender
     }
 
