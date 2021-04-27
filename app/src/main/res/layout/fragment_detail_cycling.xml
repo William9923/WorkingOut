@@ -79,7 +79,7 @@
                     android:id="@+id/text_distance"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
-                    android:text='@{`` + dto.distance + "meter(s)"}'
+                    android:text='@{`` + dto.distance + " meter(s)"}'
                     android:textSize="24sp"
                     android:layout_weight="0.25"
                     android:layout_margin="@dimen/activity_horizontal_margin"

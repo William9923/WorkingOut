@@ -65,7 +65,7 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         binding.mode = viewModel.mode.value!!
         binding.started = isTrackingStarted()
 
-        // Initializing listener for UI Event
+        // Initializing listener for UI Event, TODO : Ahadi task spec 4
         binding.actionBtn.setOnClickListener {
             if (!isTrackingStarted()) {
                 when (viewModel.mode.value!!) {

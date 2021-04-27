@@ -29,6 +29,9 @@ object Constants {
     const val NOTIFICATION_ID = 99
 
     const val INVALID_ID_DB = -1L
+    const val INVALID_DATE = -1
+    const val INVALID_MONTH = -1
+    const val INVALID_YEAR = -1
 }
 
 

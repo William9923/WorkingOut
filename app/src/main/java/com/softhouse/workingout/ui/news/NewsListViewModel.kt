@@ -55,7 +55,7 @@ class NewsListViewModel : ViewModel() {
                                 )
                             }
                         }
-                        _items.value = news
+                        _items.postValue(news)
                     } else {
                         Log.e("ERROR:", "Fetch data not successful")
                     }

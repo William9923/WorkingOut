@@ -10,9 +10,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
+import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.softhouse.workingout.R
 
 /**
@@ -56,18 +59,16 @@ class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
         }
 
         // Observe data change
-        viewModel.items.observe(requireActivity(), {
-            Log.d("Observable", "Data changed")
+        viewModel.items.observe(viewLifecycleOwner, {
             if (view is RecyclerView) {
                 if (view?.adapter != null)
                     view.adapter = viewModel.items.value?.let { NewsRecyclerViewAdapter(it, this) }
                 view?.adapter?.notifyDataSetChanged()
-                Log.d("Notify", "Data Changed")
             }
         })
     }
 
-    override fun onNewsClick(position: Int) {
+     override fun onNewsClick(position: Int) {
         val url: String = viewModel.items.value!![position].url
         val action = NewsListDirections.actionNavigationNewsToWebFragment(url)
         NavHostFragment.findNavController(this).navigate(action)

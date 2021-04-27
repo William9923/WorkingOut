@@ -1,4 +1,4 @@
-package com.softhouse.workingout.ui.log.portrait
+package com.softhouse.workingout.ui.log.list.landscape
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.softhouse.workingout.R
 
-import com.softhouse.workingout.ui.log.portrait.dummy.DummyContent.DummyItem
+import com.softhouse.workingout.ui.log.list.landscape.dummy.DummyContent.DummyItem
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem].
@@ -19,7 +19,7 @@ class CyclingLogsRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_cycling_logs, parent, false)
+            .inflate(R.layout.fragment_cycling_logs_landscape, parent, false)
         return ViewHolder(view)
     }
 
