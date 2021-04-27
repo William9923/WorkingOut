@@ -19,6 +19,7 @@
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            class="com.softhouse.workingout.ui.log.DetailRunningFragment"
             tools:context=".ui.log.DetailRunningFragment">
 
 

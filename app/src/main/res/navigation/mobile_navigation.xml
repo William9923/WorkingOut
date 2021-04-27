@@ -77,10 +77,27 @@
                 app:popUpToInclusive="false"
                 app:popUpTo="@id/navigation_logs_running"/>
         <action
-                android:id="@+id/action_navigation_logs_running_to_navigation_logs_cycling_two_pane"
-                app:destination="@id/navigation_logs_cycling_two_pane"
-                app:popUpTo="@id/navigation_calender"
-                app:popUpToInclusive="false"/>
+                android:id="@+id/action_navigation_logs_running_to_navigation_two_pane_running_logs"
+                app:destination="@id/navigation_two_pane_running_logs"
+                app:popUpToInclusive="false"
+                app:popUpTo="@id/navigation_calender">
+            <argument
+                    android:name="day"
+                    android:defaultValue="-1"/>
+            <argument
+                    android:name="month"
+                    android:defaultValue="-1"/>
+            <argument
+                    android:name="year"
+                    android:defaultValue="-1"/>
+        </action>
+    </fragment>
+
+    <fragment
+            android:id="@+id/navigation_two_pane_running_logs"
+            android:name="com.softhouse.workingout.ui.log.list.TwoPaneRunningLogsFragment"
+            android:label="Running Logs"
+            tools:layout="@layout/fragment_two_pane_running_logs">
     </fragment>
 
     <fragment
@@ -108,33 +125,10 @@
     </fragment>
 
     <fragment
-            android:id="@+id/navigation_logs_cycling_two_pane"
-            android:name="com.softhouse.workingout.ui.log.list.TwoPaneCyclingLogsFragment"
-            android:label="Cycling Logs"
-            tools:layout="@layout/fragment_two_pane_running_logs">
-        <argument
-                android:name="day"
-                app:argType="integer"
-                android:defaultValue="-1"/>
-        <argument
-                android:name="month"
-                app:argType="integer"
-                android:defaultValue="-1"/>
-        <argument
-                android:name="year"
-                app:argType="integer"
-                android:defaultValue="-1"/>
-    </fragment>
-
-    <fragment
             android:id="@+id/navigation_running_detail"
             android:name="com.softhouse.workingout.ui.log.DetailRunningFragment"
             android:label="Run Result Details"
             tools:layout="@layout/fragment_detail_running">
-        <argument
-                android:name="record_id"
-                app:argType="long"
-                android:defaultValue="-1L"/>
     </fragment>
 
     <fragment
@@ -145,7 +139,8 @@
         <argument
                 android:name="record_id"
                 app:argType="long"
-                android:defaultValue="-1L"/>
+                android:defaultValue="-1L"
+                />
     </fragment>
 
     <!--    News Navigation-->

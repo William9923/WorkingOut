@@ -39,18 +39,17 @@ class RunningLogsFragment : Fragment(), RunningLogsRecyclerViewAdapter.OnRunning
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_running_logs_list, container, false)
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         // Set the adapter
         initRecyclerViewAdapter(view)
-
-        // TODO : Change biar bisa ganti orientation
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         return view
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        if (view is RecyclerView) {
-            // TODO : Navigate to the landscape fragment
+        if (requireActivity().resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            val action = RunningLogsFragmentDirections.actionNavigationLogsRunningToNavigationTwoPaneRunningLogs()
+            NavHostFragment.findNavController(this).navigate(action)
         }
     }
 
@@ -80,7 +79,8 @@ class RunningLogsFragment : Fragment(), RunningLogsRecyclerViewAdapter.OnRunning
     override fun onRecordClick(position: Int) {
         Log.d("Detect", "Item in $position clicked")
         val id: Long = viewModel.records.value!![position].id!!
-        val action = RunningLogsFragmentDirections.actionNavigationLogsRunningToNavigationRunningDetail(id)
+        viewModel.initSpecificData(id)
+        val action = RunningLogsFragmentDirections.actionNavigationLogsRunningToNavigationRunningDetail()
         NavHostFragment.findNavController(this).navigate(action)
     }
 

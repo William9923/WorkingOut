@@ -43,7 +43,6 @@ class CyclingLogsFragment : Fragment(), CyclingLogsRecyclerViewAdapter.OnCycling
         // Set the adapter
         initRecyclerViewAdapter(view)
 
-        // TODO : Change biar bisa ganti orientation
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         return view
     }

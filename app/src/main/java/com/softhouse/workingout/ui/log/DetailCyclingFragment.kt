@@ -39,7 +39,8 @@ class DetailCyclingFragment : Fragment() {
         // Invoke trigger for appbar menu
         setHasOptionsMenu(true)
         // Setup data for record display
-        viewModel.initData(args.recordId)
+        if (args.recordId != null)
+            viewModel.initData(args.recordId)
     }
 
     override fun onCreateView(
@@ -51,6 +52,10 @@ class DetailCyclingFragment : Fragment() {
         // Make screen orientation always portrait
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         return binding.root
+    }
+
+    fun setDataID(id: Long) {
+        viewModel.initData(id)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
