@@ -1,0 +1,33 @@
+<!-- two_pane.xml -->
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.slidingpanelayout.widget.SlidingPaneLayout
+            android:id="@+id/sliding_pane_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_pane"
+                android:layout_width="280dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                app:layoutManager="LinearLayoutManager"
+                tools:context=".ui.log.list.RunningLogsFragment"
+                tools:listitem="@layout/fragment_running_logs"/>
+
+        <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/detail_container"
+                android:layout_width="300dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="#ff333333"
+                android:name="com.softhouse.workingout.ui.log.DetailRunningFragment"/>
+    </androidx.slidingpanelayout.widget.SlidingPaneLayout>
+</layout>

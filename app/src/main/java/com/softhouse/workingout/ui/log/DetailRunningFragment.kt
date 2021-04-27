@@ -54,26 +54,11 @@ class DetailRunningFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (viewModel.running.value != null) {
-            val startCalendar = DateTimeUtility.getCalenderFromMillis(viewModel.running.value!!.startWorkout)
-            val endCalender = DateTimeUtility.getCalenderFromMillis(viewModel.running.value!!.endWorkout)
-            binding.dto = RunningDTO(
-                args.recordId,
-                viewModel.running.value!!.steps,
-                "${startCalendar.get(Calendar.HOUR_OF_DAY)}:${startCalendar.get(Calendar.MINUTE)}:${
-                    startCalendar.get(
-                        Calendar.SECOND
-                    )
-                }",
-                "${endCalender.get(Calendar.HOUR_OF_DAY)}:${endCalender.get(Calendar.MINUTE)}:${endCalender.get(Calendar.SECOND)}",
-                getTimeMeasurementFromMillis(viewModel.running.value!!.endWorkout - viewModel.running.value!!.startWorkout)
-            )
-        }
-
         viewModel.running.observe(viewLifecycleOwner, {
             if (it != null) {
                 val startCalendar = DateTimeUtility.getCalenderFromMillis(it.startWorkout)
                 val endCalender = DateTimeUtility.getCalenderFromMillis(it.endWorkout)
+
                 binding.dto = RunningDTO(
                     args.recordId,
                     it.steps,
@@ -89,6 +74,9 @@ class DetailRunningFragment : Fragment() {
                     }",
                     getTimeMeasurementFromMillis(it.endWorkout - it.startWorkout)
                 )
+                binding.show = true
+            } else {
+                binding.show = false
             }
         })
     }

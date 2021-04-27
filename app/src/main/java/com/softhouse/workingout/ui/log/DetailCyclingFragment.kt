@@ -57,22 +57,6 @@ class DetailCyclingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
 
-        if (viewModel.cycling.value != null) {
-            val startCalendar = DateTimeUtility.getCalenderFromMillis(viewModel.cycling.value!!.startWorkout)
-            val endCalender = DateTimeUtility.getCalenderFromMillis(viewModel.cycling.value!!.endWorkout)
-            binding.dto = CyclingDTO(
-                args.recordId,
-                viewModel.cycling.value!!.distanceInMeters,
-                "${startCalendar.get(Calendar.HOUR_OF_DAY)}:${startCalendar.get(Calendar.MINUTE)}:${
-                    startCalendar.get(
-                        Calendar.SECOND
-                    )
-                }",
-                "${endCalender.get(Calendar.HOUR_OF_DAY)}:${endCalender.get(Calendar.MINUTE)}:${endCalender.get(Calendar.SECOND)}",
-                DateTimeUtility.getTimeMeasurementFromMillis(viewModel.cycling.value!!.endWorkout - viewModel.cycling.value!!.startWorkout)
-            )
-        }
-
         viewModel.cycling.observe(viewLifecycleOwner, {
             if (it != null) {
                 val startCalendar = DateTimeUtility.getCalenderFromMillis(it.startWorkout)
@@ -92,17 +76,19 @@ class DetailCyclingFragment : Fragment() {
                     }",
                     DateTimeUtility.getTimeMeasurementFromMillis(it.endWorkout - it.startWorkout)
                 )
+
                 drawPolylines()
                 zoomToSeeWholeTrack()
                 markStartEndLocation()
+
+                binding.show = true
+            } else {
+                binding.show = false
             }
         })
 
         binding.mapView.getMapAsync {
             map = it
-            drawPolylines()
-            zoomToSeeWholeTrack()
-            markStartEndLocation()
         }
     }
 

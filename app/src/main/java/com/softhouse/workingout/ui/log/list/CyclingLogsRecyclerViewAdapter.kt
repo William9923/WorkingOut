@@ -1,28 +1,20 @@
-package com.softhouse.workingout.ui.log.list.portrait
+package com.softhouse.workingout.ui.log.list
 
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.softhouse.workingout.R
-import com.softhouse.workingout.data.NewsItem
-import com.softhouse.workingout.data.db.Running
-import com.softhouse.workingout.databinding.FragmentNewsItemBinding
-import com.softhouse.workingout.databinding.FragmentRunningLogsBinding
-import com.softhouse.workingout.databinding.FragmentRunningLogsListBinding
+import com.softhouse.workingout.data.db.Cycling
+import com.softhouse.workingout.databinding.FragmentCyclingLogsBinding
 
-import com.softhouse.workingout.ui.log.list.portrait.dummy.DummyContent.DummyItem
-import com.softhouse.workingout.ui.news.NewsRecyclerViewAdapter
-
-class RunningLogsRecyclerViewAdapter(
-    private val values: List<Running>, private val listener: OnRunningRecordClickListener
-) : RecyclerView.Adapter<RunningLogsRecyclerViewAdapter.ViewHolder>() {
+class CyclingLogsRecyclerViewAdapter(
+    private val values: List<Cycling>, private val listener: OnCyclingRecordClickListener
+) : RecyclerView.Adapter<CyclingLogsRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = FragmentRunningLogsBinding.inflate(layoutInflater)
+        val binding = FragmentCyclingLogsBinding.inflate(layoutInflater)
         return ViewHolder(binding)
     }
 
@@ -36,14 +28,14 @@ class RunningLogsRecyclerViewAdapter(
 
     override fun getItemCount(): Int = values.size
 
-    interface OnRunningRecordClickListener {
+    interface OnCyclingRecordClickListener {
         fun onRecordClick(position: Int)
     }
 
-    inner class ViewHolder(val binding: FragmentRunningLogsBinding) : RecyclerView.ViewHolder(binding.root),
+    inner class ViewHolder(val binding: FragmentCyclingLogsBinding) : RecyclerView.ViewHolder(binding.root),
         View.OnClickListener {
         override fun toString(): String {
-            return "Running Record no : $adapterPosition"
+            return "Cycling Record no : $adapterPosition"
         }
 
         override fun onClick(v: View?) {
@@ -53,7 +45,7 @@ class RunningLogsRecyclerViewAdapter(
             }
         }
 
-        fun bind(data: Running) {
+        fun bind(data: Cycling) {
             binding.data = data
             binding.executePendingBindings()
         }
