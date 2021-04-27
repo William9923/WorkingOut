@@ -10,16 +10,25 @@
                 name="data" />
     </data>
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
             android:id="@+id/card"
             android:layout_width="match_parent"
+            app:cardCornerRadius="8dp"
+            app:cardBackgroundColor="@color/lightBlue"
+            android:layout_marginBottom="18dp"
+            app:cardUseCompatPadding="true"
+            android:layout_margin="28dp"
             android:layout_height="wrap_content">
+
+        <FrameLayout
+                android:background="@color/lightBlue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="12dp">
+                android:orientation="vertical">
 
             <!-- Media -->
             <ImageView
@@ -69,7 +78,7 @@
 
         </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 </layout>
 
 
