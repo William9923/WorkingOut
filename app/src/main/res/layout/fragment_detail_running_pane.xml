@@ -46,10 +46,10 @@
                     android:layout_width="wrap_content"
                     android:text='@{dto.duration}'
                     android:visibility="@{show ? View.VISIBLE : View.GONE}"
-                    android:textSize="18sp"
+                    android:textSize="24sp"
                     android:layout_marginTop="@dimen/text_margin"
                     android:layout_marginBottom="@dimen/text_margin"
-                    />
+            />
 
             <TextView
                     android:id="@+id/text_val_steps"
@@ -70,9 +70,9 @@
             <TextView
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
-                    android:text="steps"
+                    android:text="step(s)"
                     android:visibility="@{show ? View.VISIBLE : View.GONE}"
-                    android:textSize="14sp"
+                    android:textSize="24sp"
                     android:layout_weight="0.25"
                     android:textAlignment="center"
                     android:layout_margin="@dimen/activity_horizontal_margin"/>

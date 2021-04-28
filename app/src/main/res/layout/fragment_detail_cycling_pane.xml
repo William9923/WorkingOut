@@ -34,9 +34,9 @@
                 android:textAlignment="center"/>
 
         <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:gravity="center"
                 android:layout_gravity="center"
         >
@@ -62,7 +62,7 @@
                         android:text='@{`` + dto.distance}'
                         android:visibility="@{show ? View.VISIBLE : View.GONE}"
                         android:textSize="28sp"
-                        android:layout_weight="0.15"
+                        android:layout_weight="0.2"
                         android:textStyle="bold"
                         android:textAlignment="textEnd"/>
 
