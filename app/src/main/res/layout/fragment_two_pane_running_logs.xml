@@ -12,8 +12,8 @@
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_pane"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_width="240dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="start"
                 app:layoutManager="LinearLayoutManager"
                 class="com.softhouse.workingout.ui.log.portrait.RunningLogsFragment"
@@ -26,6 +26,6 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:background="#ffffff"
-                class="com.softhouse.workingout.ui.log.DetailRunningFragment"/>
+                class="com.softhouse.workingout.ui.log.list.DetailRunningPaneFragment"/>
     </androidx.slidingpanelayout.widget.SlidingPaneLayout>
 </layout>

@@ -98,6 +98,11 @@
             android:name="com.softhouse.workingout.ui.log.list.TwoPaneRunningLogsFragment"
             android:label="Running Logs"
             tools:layout="@layout/fragment_two_pane_running_logs">
+        <action
+                android:id="@+id/action_navigation_two_pane_running_logs_to_navigation_logs_running"
+                app:destination="@id/navigation_logs_running"
+                app:popUpTo="@id/navigation_calender"
+                app:popUpToInclusive="false"/>
     </fragment>
 
     <fragment
@@ -129,6 +134,10 @@
             android:name="com.softhouse.workingout.ui.log.DetailRunningFragment"
             android:label="Run Result Details"
             tools:layout="@layout/fragment_detail_running">
+        <argument
+                android:name="record_id"
+                app:argType="long"
+                android:defaultValue="-1L"/>
     </fragment>
 
     <fragment

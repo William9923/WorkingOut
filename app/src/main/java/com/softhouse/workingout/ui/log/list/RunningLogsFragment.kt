@@ -79,8 +79,7 @@ class RunningLogsFragment : Fragment(), RunningLogsRecyclerViewAdapter.OnRunning
     override fun onRecordClick(position: Int) {
         Log.d("Detect", "Item in $position clicked")
         val id: Long = viewModel.records.value!![position].id!!
-        viewModel.initSpecificData(id)
-        val action = RunningLogsFragmentDirections.actionNavigationLogsRunningToNavigationRunningDetail()
+        val action = RunningLogsFragmentDirections.actionNavigationLogsRunningToNavigationRunningDetail(id)
         NavHostFragment.findNavController(this).navigate(action)
     }
 

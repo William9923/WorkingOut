@@ -9,4 +9,6 @@
     <string name="web_news">News Webview</string>
     <string name="stop_notifications">Stop Notifications</string>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyD5qQ6ejUOIwvufFU8SE9ySF3svVhYCoYg</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

@@ -1,52 +1,51 @@
-package com.softhouse.workingout.ui.log
+package com.softhouse.workingout.ui.log.list
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
+import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentDetailRunningBinding
+import com.softhouse.workingout.databinding.FragmentDetailRunningPaneBinding
 import com.softhouse.workingout.shared.Constants
 import com.softhouse.workingout.shared.DateTimeUtility
-import com.softhouse.workingout.shared.DateTimeUtility.getTimeMeasurementFromMillis
+import com.softhouse.workingout.ui.log.DetailRunningViewModel
 import com.softhouse.workingout.ui.log.dto.RunningDTO
-import com.softhouse.workingout.ui.log.list.RunningLogsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+
 @AndroidEntryPoint
-class DetailRunningFragment : Fragment() {
+class DetailRunningPaneFragment(val id: Long = Constants.INVALID_ID_DB) : Fragment() {
+
+    lateinit var binding: FragmentDetailRunningPaneBinding
 
     private val viewModel: DetailRunningViewModel by viewModels()
-    lateinit var binding: FragmentDetailRunningBinding
-
-    private val args: DetailRunningFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Invoke trigger for appbar menu
         setHasOptionsMenu(true)
         // Setup data for record display
-        if (args.recordId != null)
-            viewModel.initData(args.recordId)
+        viewModel.initData(id)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentDetailRunningBinding.inflate(inflater, container, false)
-        // Make screen orientation always portrait
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        binding = FragmentDetailRunningPaneBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.show = false
         viewModel.running.observe(viewLifecycleOwner, {
             if (it != null) {
                 val startCalendar = DateTimeUtility.getCalenderFromMillis(it.startWorkout)
@@ -65,12 +64,16 @@ class DetailRunningFragment : Fragment() {
                             Calendar.SECOND
                         )
                     }",
-                    getTimeMeasurementFromMillis(it.endWorkout - it.startWorkout)
+                    DateTimeUtility.getTimeMeasurementFromMillis(it.endWorkout - it.startWorkout)
                 )
                 binding.show = true
+                Log.d("SHOW" , "NOT NULL DATA")
             } else {
+                Log.d("SHOW" , "NULL DATA")
                 binding.show = false
             }
         })
     }
+
+    companion object
 }
