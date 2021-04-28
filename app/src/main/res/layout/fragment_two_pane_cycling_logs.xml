@@ -20,6 +20,11 @@
                 tools:context=".ui.log.list.CyclingLogsFragment"
                 tools:listitem="@layout/fragment_cycling_logs"/>
 
+        <View
+                style="@style/Divider_Horizontal"
+                android:id="@+id/divider"
+                android:layout_marginTop="@dimen/text_margin" android:layout_width="5dp"/>
+
         <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/detail_container"
                 android:layout_width="wrap_content"
