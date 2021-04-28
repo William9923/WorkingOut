@@ -117,6 +117,9 @@ dependencies {
     // Material Calender
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
 
+    // Two Pane Layout
+    implementation "androidx.slidingpanelayout:slidingpanelayout:1.2.0-alpha01"
+
     // Utilities
     implementation("com.squareup.okhttp3:logging-interceptor:4.2.0")
     testImplementation 'junit:junit:4.12'

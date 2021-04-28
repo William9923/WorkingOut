@@ -28,53 +28,17 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="center"
                 >
 
-            <LinearLayout
-                    android:layout_width="match_parent"
+            <TextView
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/activity_vertical_margin"
-                    android:layout_weight="0.1">
-
-                <TextView
-                        android:id="@+id/text_start_time"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:text='@{dto.startWorkout}'
-                        android:visibility="@{show ? View.VISIBLE : View.GONE}"
-                        android:layout_margin="@dimen/text_margin"
-                        android:textSize="18sp"
-                        android:textAlignment="center"/>
-
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:text='No Content to display'
-                        android:visibility="@{show ? View.GONE : View.VISIBLE}"
-                        android:layout_margin="@dimen/text_margin"
-                        android:textSize="24sp"
-                        android:textAlignment="center"/>
-
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:text="-"
-                        android:visibility="@{show ? View.VISIBLE : View.GONE}"
-                        android:layout_margin="@dimen/text_margin"/>
-
-                <TextView
-                        android:id="@+id/text_end_time"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:text='@{dto.endWorkout}'
-                        android:visibility="@{show ? View.VISIBLE : View.GONE}"
-                        android:layout_margin="@dimen/text_margin"
-                        android:textSize="18sp"/>
-            </LinearLayout>
+                    android:layout_width="wrap_content"
+                    android:text='No Content'
+                    android:visibility="@{show ? View.GONE : View.VISIBLE}"
+                    android:layout_margin="@dimen/text_margin"
+                    android:textSize="24sp"
+                    android:textAlignment="center"/>
 
             <TextView
                     android:id="@+id/text_duration"
@@ -82,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:text='@{dto.duration}'
                     android:visibility="@{show ? View.VISIBLE : View.GONE}"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     android:layout_marginTop="@dimen/text_margin"
                     android:layout_marginBottom="@dimen/text_margin"
                     />
@@ -90,11 +54,11 @@
             <TextView
                     android:id="@+id/text_val_steps"
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
+                    android:layout_width="275dp"
                     android:text='@{`` + dto.steps}'
                     android:visibility="@{show ? View.VISIBLE : View.GONE}"
                     android:layout_margin="@dimen/text_margin"
-                    android:textSize="40sp"
+                    android:textSize="24sp"
                     android:layout_weight="0.25"
                     android:textStyle="bold"
                     android:textAllCaps="true"
@@ -108,7 +72,7 @@
                     android:layout_width="match_parent"
                     android:text="steps"
                     android:visibility="@{show ? View.VISIBLE : View.GONE}"
-                    android:textSize="24sp"
+                    android:textSize="14sp"
                     android:layout_weight="0.25"
                     android:textAlignment="center"
                     android:layout_margin="@dimen/activity_horizontal_margin"/>
