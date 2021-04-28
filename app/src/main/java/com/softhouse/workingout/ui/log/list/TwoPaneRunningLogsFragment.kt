@@ -40,19 +40,19 @@ class TwoPaneRunningLogsFragment : Fragment(), RunningLogsRecyclerViewAdapter.On
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTwoPaneRunningLogsBinding.inflate(inflater, container, false)
-        binding.slidingPaneLayout.lockMode = SlidingPaneLayout.LOCK_MODE_LOCKED
         initRecyclerViewAdapter(binding.listPane)
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         return binding.root
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        Log.d("Config", "Configuration changed!!")
     }
 
     private fun initRecyclerViewAdapter(view: View) {
         // Set the adapter
         if (view is RecyclerView) {
-            view.layoutManager = when {
-                columnCount <= 1 -> LinearLayoutManager(context)
-                else -> GridLayoutManager(context, columnCount)
-            }
+            view.layoutManager = LinearLayoutManager(context)
             view.adapter = viewModel.records.value?.let { RunningLogsRecyclerViewAdapter(it, this) }
         }
 
@@ -77,11 +77,7 @@ class TwoPaneRunningLogsFragment : Fragment(), RunningLogsRecyclerViewAdapter.On
                 R.id.detail_container,
                 newFragment
             )
-            if (binding.slidingPaneLayout.isOpen) {
-                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            }
         }
-        binding.slidingPaneLayout.open()
     }
 
     companion object

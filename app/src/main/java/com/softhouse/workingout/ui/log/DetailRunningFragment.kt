@@ -37,7 +37,7 @@ class DetailRunningFragment : Fragment() {
     ): View? {
         binding = FragmentDetailRunningBinding.inflate(inflater, container, false)
         // Make screen orientation always portrait
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+//        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         return binding.root
     }
 
