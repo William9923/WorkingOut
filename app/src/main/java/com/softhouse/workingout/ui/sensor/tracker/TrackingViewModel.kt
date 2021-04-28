@@ -18,7 +18,11 @@ class TrackingViewModel : ViewModel() {
     var mode: LiveData<Mode> = _mode
 
     fun toggleMode() {
-        _mode.value = if (mode.value == Mode.CYCLING) Mode.STEPS else Mode.CYCLING
+        _mode.value = when (_mode.value) {
+            Mode.STEPS -> Mode.CYCLING
+            Mode.CYCLING -> Mode.STEPS
+            else -> Mode.STEPS
+        }
     }
 
     fun initMode(defaultMode: Mode) {

@@ -2,6 +2,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
+        <item name="colorPrimary">#536dfe</item>
+        <item name="colorPrimaryDark">#0043ca</item>
+        <item name="colorAccent">#f9a825</item>
         <!--        <item name="colorPrimary">#212121</item>-->
         <!--        <item name="colorPrimaryVariant">#000000</item>-->
         <!--        <item name="colorOnPrimary">#FFFFFF</item>-->
@@ -13,7 +16,6 @@
         <!--        <item name="colorSurface">#FFFFFF</item>-->
         <!--        <item name="colorOnSurface">#212121</item>-->
         <!--        <item name="colorOnBackground">#212121</item>-->
-
         <item name="android:windowActionBarOverlay">true</item>
 
         <item name="fontFamily">@font/roboto_mono</item>
@@ -52,6 +54,5 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:background">?android:attr/listDivider</item>
     </style>
-
 
 </resources>

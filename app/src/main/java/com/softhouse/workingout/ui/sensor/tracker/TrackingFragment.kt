@@ -80,15 +80,13 @@ class TrackingFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             }
         }
 
-        binding.switchMode.setOnCheckedChangeListener { buttonView, _ ->
+        binding.switchModeBtn.setOnClickListener {
             if (!isTrackingStarted()) {
                 viewModel.toggleMode()
                 binding.mode = viewModel.mode.value!!
             } else {
-                Log.d("Switch", "Hid Checked Change Listener")
                 Snackbar.make(requireView(), "Tracker have been started!", Snackbar.LENGTH_SHORT)
                     .show()
-                buttonView.toggle()
             }
         }
     }
