@@ -51,6 +51,7 @@ class DetailCyclingPaneFragment(val id: Long = Constants.INVALID_ID_DB) : Fragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.mapView.onCreate(savedInstanceState)
         binding.show = false
         viewModel.cycling.observe(viewLifecycleOwner, {
             if (it != null) {
@@ -74,15 +75,14 @@ class DetailCyclingPaneFragment(val id: Long = Constants.INVALID_ID_DB) : Fragme
                 )
                 binding.show = true
 
+                drawPolylines()
+                zoomToSeeWholeTrack()
+                markStartEndLocation()
+
             } else {
 
                 binding.show = false
             }
-
-            drawPolylines()
-            zoomToSeeWholeTrack()
-            markStartEndLocation()
-
         })
 
         binding.mapView.getMapAsync {

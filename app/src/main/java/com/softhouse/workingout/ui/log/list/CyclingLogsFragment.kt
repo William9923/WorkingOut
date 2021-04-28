@@ -40,17 +40,17 @@ class CyclingLogsFragment : Fragment(), CyclingLogsRecyclerViewAdapter.OnCycling
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_cycling_logs_list, container, false)
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         // Set the adapter
         initRecyclerViewAdapter(view)
-
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         return view
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        if (view is RecyclerView) {
-            // TODO : Navigate to the landscape fragment
+        if (requireActivity().resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            val action = CyclingLogsFragmentDirections.actionNavigationLogsCyclingToNavigationTwoPaneCyclingLogs()
+            NavHostFragment.findNavController(this).navigate(action)
         }
     }
 

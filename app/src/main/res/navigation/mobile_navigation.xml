@@ -106,6 +106,18 @@
     </fragment>
 
     <fragment
+            android:id="@+id/navigation_two_pane_cycling_logs"
+            android:name="com.softhouse.workingout.ui.log.list.TwoPaneCyclingLogsFragment"
+            android:label="Cycling Logs"
+            tools:layout="@layout/fragment_two_pane_cycling_logs">
+        <action
+                android:id="@+id/action_navigation_two_pane_cycling_logs_to_navigation_logs_cycling"
+                app:destination="@id/navigation_logs_cycling"
+                app:popUpTo="@id/navigation_calender"
+                app:popUpToInclusive="false"/>
+    </fragment>
+
+    <fragment
             android:id="@+id/navigation_logs_cycling"
             android:name="com.softhouse.workingout.ui.log.list.CyclingLogsFragment"
             android:label="Cycling Logs"
@@ -127,6 +139,11 @@
                 app:destination="@id/navigation_cycling_detail"
                 app:popUpToInclusive="false"
                 app:popUpTo="@id/navigation_logs_cycling"/>
+        <action
+                android:id="@+id/action_navigation_logs_cycling_to_navigation_two_pane_cycling_logs"
+                app:destination="@id/navigation_two_pane_cycling_logs"
+                app:popUpTo="@id/navigation_calender"
+                app:popUpToInclusive="false"/>
     </fragment>
 
     <fragment

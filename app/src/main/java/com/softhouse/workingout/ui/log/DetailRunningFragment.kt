@@ -18,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class DetailRunningFragment : Fragment() {
+class DetailRunningFragment() : Fragment() {
 
     private val viewModel: DetailRunningViewModel by viewModels()
     lateinit var binding: FragmentDetailRunningBinding

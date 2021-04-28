@@ -54,10 +54,6 @@ class DetailCyclingFragment : Fragment() {
         return binding.root
     }
 
-    fun setDataID(id: Long) {
-        viewModel.initData(id)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
