@@ -19,15 +19,16 @@ class RunningLogsViewModel @ViewModelInject constructor(
         value = ArrayList()
     }
 
-    private val _position = MutableLiveData<Long>().apply {
-        value = Constants.INVALID_ID_DB
+    private val _running = MutableLiveData<Running>().apply {
+        value = null
     }
 
     var day: Int = Constants.INVALID_DATE
     var month: Int = Constants.INVALID_MONTH
     var year: Int = Constants.INVALID_YEAR
     var records: LiveData<List<Running>> = _runnings
-    var position: LiveData<Long> = _position
+
+    var running: LiveData<Running> = _running
 
     fun initDate(day: Int, month: Int, year: Int) {
         if (this.day != day || this.month != month || this.year != year) {

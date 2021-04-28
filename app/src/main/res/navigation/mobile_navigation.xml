@@ -56,7 +56,7 @@
 
     <fragment
             android:id="@+id/navigation_logs_running"
-            android:name="com.softhouse.workingout.ui.log.list.portrait.RunningLogsFragment"
+            android:name="com.softhouse.workingout.ui.log.list.RunningLogsFragment"
             android:label="Running Logs"
             tools:layout="@layout/fragment_running_logs">
         <argument
@@ -76,11 +76,50 @@
                 app:destination="@id/navigation_running_detail"
                 app:popUpToInclusive="false"
                 app:popUpTo="@id/navigation_logs_running"/>
+        <action
+                android:id="@+id/action_navigation_logs_running_to_navigation_two_pane_running_logs"
+                app:destination="@id/navigation_two_pane_running_logs"
+                app:popUpToInclusive="false"
+                app:popUpTo="@id/navigation_calender">
+            <argument
+                    android:name="day"
+                    android:defaultValue="-1"/>
+            <argument
+                    android:name="month"
+                    android:defaultValue="-1"/>
+            <argument
+                    android:name="year"
+                    android:defaultValue="-1"/>
+        </action>
+    </fragment>
+
+    <fragment
+            android:id="@+id/navigation_two_pane_running_logs"
+            android:name="com.softhouse.workingout.ui.log.list.TwoPaneRunningLogsFragment"
+            android:label="Running Logs"
+            tools:layout="@layout/fragment_two_pane_running_logs">
+        <action
+                android:id="@+id/action_navigation_two_pane_running_logs_to_navigation_logs_running"
+                app:destination="@id/navigation_logs_running"
+                app:popUpTo="@id/navigation_calender"
+                app:popUpToInclusive="false"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/navigation_two_pane_cycling_logs"
+            android:name="com.softhouse.workingout.ui.log.list.TwoPaneCyclingLogsFragment"
+            android:label="Cycling Logs"
+            tools:layout="@layout/fragment_two_pane_cycling_logs">
+        <action
+                android:id="@+id/action_navigation_two_pane_cycling_logs_to_navigation_logs_cycling"
+                app:destination="@id/navigation_logs_cycling"
+                app:popUpTo="@id/navigation_calender"
+                app:popUpToInclusive="false"/>
     </fragment>
 
     <fragment
             android:id="@+id/navigation_logs_cycling"
-            android:name="com.softhouse.workingout.ui.log.list.portrait.CyclingLogsFragment"
+            android:name="com.softhouse.workingout.ui.log.list.CyclingLogsFragment"
             android:label="Cycling Logs"
             tools:layout="@layout/fragment_cycling_logs">
         <argument
@@ -100,6 +139,11 @@
                 app:destination="@id/navigation_cycling_detail"
                 app:popUpToInclusive="false"
                 app:popUpTo="@id/navigation_logs_cycling"/>
+        <action
+                android:id="@+id/action_navigation_logs_cycling_to_navigation_two_pane_cycling_logs"
+                app:destination="@id/navigation_two_pane_cycling_logs"
+                app:popUpTo="@id/navigation_calender"
+                app:popUpToInclusive="false"/>
     </fragment>
 
     <fragment
@@ -121,7 +165,8 @@
         <argument
                 android:name="record_id"
                 app:argType="long"
-                android:defaultValue="-1L"/>
+                android:defaultValue="-1L"
+                />
     </fragment>
 
     <!--    News Navigation-->

@@ -1,69 +1,65 @@
-package com.softhouse.workingout.ui.log
+package com.softhouse.workingout.ui.log.list
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
-import com.softhouse.workingout.databinding.FragmentDetailCyclingBinding
-import com.softhouse.workingout.shared.Constants.POLYLINE_COLOR
-import com.softhouse.workingout.shared.Constants.POLYLINE_WIDTH
+import com.softhouse.workingout.R
+import com.softhouse.workingout.databinding.FragmentDetailCyclingPaneBinding
+import com.softhouse.workingout.databinding.FragmentDetailRunningPaneBinding
+import com.softhouse.workingout.shared.Constants
 import com.softhouse.workingout.shared.DateTimeUtility
-import com.softhouse.workingout.shared.Polyline
+import com.softhouse.workingout.ui.log.DetailCyclingViewModel
+import com.softhouse.workingout.ui.log.DetailRunningViewModel
 import com.softhouse.workingout.ui.log.dto.CyclingDTO
 import com.softhouse.workingout.ui.log.dto.RunningDTO
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
-@AndroidEntryPoint
-class DetailCyclingFragment : Fragment() {
 
-    private val viewModel: DetailCyclingViewModel by viewModels()
-    lateinit var binding: FragmentDetailCyclingBinding
-    private val args: DetailCyclingFragmentArgs by navArgs()
+@AndroidEntryPoint
+class DetailCyclingPaneFragment(val id: Long = Constants.INVALID_ID_DB) : Fragment() {
+
+    lateinit var binding: FragmentDetailCyclingPaneBinding
     private var map: GoogleMap? = null
+    private val viewModel: DetailCyclingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Invoke trigger for appbar menu
         setHasOptionsMenu(true)
         // Setup data for record display
-        if (args.recordId != null)
-            viewModel.initData(args.recordId)
+        viewModel.initData(id)
     }
 
+
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentDetailCyclingBinding.inflate(inflater, container, false)
-        // Make screen orientation always portrait
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        binding = FragmentDetailCyclingPaneBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
-
+        binding.show = false
         viewModel.cycling.observe(viewLifecycleOwner, {
             if (it != null) {
                 val startCalendar = DateTimeUtility.getCalenderFromMillis(it.startWorkout)
                 val endCalender = DateTimeUtility.getCalenderFromMillis(it.endWorkout)
+
                 binding.dto = CyclingDTO(
-                    args.recordId,
+                    it.id ?: Constants.INVALID_ID_DB,
                     it.distanceInMeters,
                     "${startCalendar.get(Calendar.HOUR_OF_DAY)}:${startCalendar.get(Calendar.MINUTE)}:${
                         startCalendar.get(
@@ -77,13 +73,14 @@ class DetailCyclingFragment : Fragment() {
                     }",
                     DateTimeUtility.getTimeMeasurementFromMillis(it.endWorkout - it.startWorkout)
                 )
+                binding.show = true
 
                 drawPolylines()
                 zoomToSeeWholeTrack()
                 markStartEndLocation()
 
-                binding.show = true
             } else {
+
                 binding.show = false
             }
         })
@@ -100,8 +97,8 @@ class DetailCyclingFragment : Fragment() {
         if (viewModel.cycling.value != null) {
             Log.d("Map", "Draw polylines")
             val polylineOptions = PolylineOptions()
-                .color(POLYLINE_COLOR)
-                .width(POLYLINE_WIDTH)
+                .color(Constants.POLYLINE_COLOR)
+                .width(Constants.POLYLINE_WIDTH)
                 .addAll(viewModel.cycling.value!!.points)
             map?.addPolyline(polylineOptions)
         }
@@ -174,4 +171,6 @@ class DetailCyclingFragment : Fragment() {
         super.onSaveInstanceState(outState)
         binding.mapView.onSaveInstanceState(outState)
     }
+
+    companion object
 }

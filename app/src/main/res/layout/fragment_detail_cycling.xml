@@ -8,6 +8,13 @@
         <variable
                 name="dto"
                 type="com.softhouse.workingout.ui.log.dto.CyclingDTO"/>
+
+        <variable
+                name="show"
+                type="Boolean"/>
+
+        <import type="android.view.View"/>
+
     </data>
 
     <FrameLayout
@@ -38,6 +45,7 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text='@{dto.startWorkout}'
+                        android:visibility="@{show ? View.VISIBLE : View.GONE}"
                         android:layout_margin="@dimen/text_margin"
                         android:textSize="18sp"
                         android:textAlignment="center"/>
@@ -45,7 +53,17 @@
                 <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
+                        android:text='No Content to display'
+                        android:visibility="@{show ? View.GONE : View.VISIBLE}"
+                        android:layout_margin="@dimen/text_margin"
+                        android:textSize="24sp"
+                        android:textAlignment="center"/>
+
+                <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
                         android:text="-"
+                        android:visibility="@{show ? View.VISIBLE : View.GONE}"
                         android:layout_margin="@dimen/text_margin"/>
 
                 <TextView
@@ -53,6 +71,7 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text='@{dto.endWorkout}'
+                        android:visibility="@{show ? View.VISIBLE : View.GONE}"
                         android:layout_margin="@dimen/text_margin"
                         android:textSize="18sp"/>
             </LinearLayout>
@@ -62,6 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text='@{dto.duration}'
+                    android:visibility="@{show ? View.VISIBLE : View.GONE}"
                     android:textSize="24sp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
@@ -72,6 +92,7 @@
                     android:id="@+id/mapView"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:visibility="@{show ? View.VISIBLE : View.INVISIBLE}"
                     android:layout_weight="0.25"
                     android:layout_margin="@dimen/activity_horizontal_margin"/>
 
@@ -80,6 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:text='@{`` + dto.distance + " meter(s)"}'
+                    android:visibility="@{show ? View.VISIBLE : View.GONE}"
                     android:textSize="24sp"
                     android:layout_weight="0.25"
                     android:layout_margin="@dimen/activity_horizontal_margin"

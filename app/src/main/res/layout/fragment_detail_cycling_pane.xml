@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+                name="dto"
+                type="com.softhouse.workingout.ui.log.dto.CyclingDTO"/>
+
+        <variable
+                name="show"
+                type="Boolean"/>
+
+        <import type="android.view.View"/>
+    </data>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="center"
+                >
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text='No Content'
+                    android:visibility="@{show ? View.GONE : View.VISIBLE}"
+                    android:layout_margin="@dimen/text_margin"
+                    android:textSize="24sp"
+                    android:textAlignment="center"/>
+
+            <com.google.android.gms.maps.MapView
+                    android:id="@+id/mapView"
+                    android:layout_width="350dp"
+                    android:layout_height="150dp"
+                    android:visibility="@{show ? View.VISIBLE : View.INVISIBLE}"
+                    android:layout_weight="0.2"/>
+
+            <TextView
+                    android:id="@+id/text_distance"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text='@{`` + dto.distance + " meter(s)"}'
+                    android:visibility="@{show ? View.VISIBLE : View.GONE}"
+                    android:textSize="14sp"
+                    android:layout_weight="0.25"
+                    android:textStyle="bold"
+                    android:textAlignment="center"/>
+
+        </LinearLayout>
+</layout>

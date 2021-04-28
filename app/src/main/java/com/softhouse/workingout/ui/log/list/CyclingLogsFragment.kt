@@ -1,48 +1,37 @@
-package com.softhouse.workingout.ui.log.list.portrait
+package com.softhouse.workingout.ui.log.list
 
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.softhouse.workingout.R
-import com.softhouse.workingout.data.db.Running
-import com.softhouse.workingout.databinding.FragmentRunningLogsBinding
-import com.softhouse.workingout.databinding.FragmentTrackingBinding
-import com.softhouse.workingout.shared.DateTimeUtility
-import com.softhouse.workingout.ui.log.DetailRunningFragmentArgs
-import com.softhouse.workingout.ui.log.list.RunningLogsViewModel
-import com.softhouse.workingout.ui.log.list.portrait.dummy.DummyContent
-import com.softhouse.workingout.ui.news.NewsListDirections
-import com.softhouse.workingout.ui.news.NewsListViewModel
-import com.softhouse.workingout.ui.news.NewsRecyclerViewAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 /**
  * A fragment representing a list of Items.
  */
 @AndroidEntryPoint
-class RunningLogsFragment : Fragment(), RunningLogsRecyclerViewAdapter.OnRunningRecordClickListener {
+class CyclingLogsFragment : Fragment(), CyclingLogsRecyclerViewAdapter.OnCyclingRecordClickListener {
 
     private var columnCount = 1
-    private val args: RunningLogsFragmentArgs by navArgs()
-    private val viewModel: RunningLogsViewModel by viewModels(
+    private val args: CyclingLogsFragmentArgs by navArgs()
+    private val viewModel: CyclingLogsViewModel by viewModels(
         ownerProducer = { requireActivity() }
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         viewModel.initDate(args.day, args.month, args.year)
     }
 
@@ -50,19 +39,18 @@ class RunningLogsFragment : Fragment(), RunningLogsRecyclerViewAdapter.OnRunning
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_running_logs_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_cycling_logs_list, container, false)
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         // Set the adapter
         initRecyclerViewAdapter(view)
-
-        // TODO : Change biar bisa ganti orientation
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         return view
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        if (view is RecyclerView) {
-            // TODO : Navigate to the landscape fragment
+        if (requireActivity().resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            val action = CyclingLogsFragmentDirections.actionNavigationLogsCyclingToNavigationTwoPaneCyclingLogs()
+            NavHostFragment.findNavController(this).navigate(action)
         }
     }
 
@@ -73,7 +61,7 @@ class RunningLogsFragment : Fragment(), RunningLogsRecyclerViewAdapter.OnRunning
                 columnCount <= 1 -> LinearLayoutManager(context)
                 else -> GridLayoutManager(context, columnCount)
             }
-            view.adapter = viewModel.records.value?.let { RunningLogsRecyclerViewAdapter(it, this) }
+            view.adapter = viewModel.records.value?.let { CyclingLogsRecyclerViewAdapter(it, this) }
         }
 
         // Observe data change
@@ -82,7 +70,7 @@ class RunningLogsFragment : Fragment(), RunningLogsRecyclerViewAdapter.OnRunning
             if (view is RecyclerView) {
                 Log.d("Data", "Changed")
                 if (view.adapter != null)
-                    view.adapter = viewModel.records.value?.let { RunningLogsRecyclerViewAdapter(it, this) }
+                    view.adapter = viewModel.records.value?.let { CyclingLogsRecyclerViewAdapter(it, this) }
                 Log.d("Adapter", "notify")
                 view.adapter?.notifyDataSetChanged()
             }
@@ -92,7 +80,7 @@ class RunningLogsFragment : Fragment(), RunningLogsRecyclerViewAdapter.OnRunning
     override fun onRecordClick(position: Int) {
         Log.d("Detect", "Item in $position clicked")
         val id: Long = viewModel.records.value!![position].id!!
-        val action = RunningLogsFragmentDirections.actionNavigationLogsRunningToNavigationRunningDetail(id)
+        val action = CyclingLogsFragmentDirections.actionNavigationLogsCyclingToNavigationCyclingDetail(id)
         NavHostFragment.findNavController(this).navigate(action)
     }
 
