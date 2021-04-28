@@ -2,4 +2,5 @@
 <resources>
     <color name="black_overlay">#66000000</color>
     <color name="lightBlue">#DCF1F7</color>
+    <color name="lightBlueSecondary">#aabec4</color>
 </resources>
