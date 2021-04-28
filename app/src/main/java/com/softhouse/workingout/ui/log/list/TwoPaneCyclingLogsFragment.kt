@@ -1,60 +1,142 @@
 package com.softhouse.workingout.ui.log.list
 
+import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.softhouse.workingout.R
+import com.softhouse.workingout.databinding.FragmentTwoPaneCyclingLogsBinding
+import com.softhouse.workingout.databinding.FragmentTwoPaneRunningLogsBinding
+import com.softhouse.workingout.shared.Constants
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TwoPaneCyclingLogsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class TwoPaneCyclingLogsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private val viewModel: CyclingLogsViewModel by viewModels(
+        ownerProducer = { requireActivity() }
+    )
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    lateinit var binding: FragmentTwoPaneCyclingLogsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_two_pane_cycling_logs, container, false)
+        binding = FragmentTwoPaneRunningLogsBinding.inflate(inflater, container, false)
+        initRecyclerViewAdapter(binding.listPane)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TwoPaneCyclingLogsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TwoPaneCyclingLogsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (requireActivity().resources?.configuration?.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            val action =
+                TwoPaneRunningLogsFragmentDirections.actionNavigationTwoPaneRunningLogsToNavigationLogsRunning()
+            NavHostFragment.findNavController(this).navigate(action)
+        }
+    }
+
+    private fun initRecyclerViewAdapter(view: View) {
+        // Set the adapter
+        if (view is RecyclerView) {
+            view.layoutManager = LinearLayoutManager(context)
+            view.adapter = viewModel.records.value?.let { RunningLogsRecyclerViewAdapter(it, this) }
+        }
+        // Observe data change
+        viewModel.records.observe(viewLifecycleOwner, {
+            Log.d("Data", "Change before case")
+            if (view is RecyclerView) {
+                view.adapter = viewModel.records.value?.let { RunningLogsRecyclerViewAdapter(it, this) }
+                view.adapter?.notifyDataSetChanged()
             }
+        })
+        replaceSidePane(Constants.INVALID_ID_DB)
+    }
+
+    override fun onRecordClick(position: Int) {
+        Log.d("Detect", "Item in $position clicked")
+        val id: Long = viewModel.records.value!![position].id!!
+        replaceSidePane(id)
+    }
+
+    private fun replaceSidePane(id: Long) {
+        childFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace(
+                R.id.detail_container,
+                DetailRunningPaneFragment(id)
+            )
+        }
     }
 }
+//
+//@AndroidEntryPoint
+//class TwoPaneRunningLogsFragment : Fragment(), RunningLogsRecyclerViewAdapter.OnRunningRecordClickListener {
+//
+//    private val viewModel: RunningLogsViewModel by viewModels(
+//        ownerProducer = { requireActivity() }
+//    )
+//
+//    lateinit var binding: FragmentTwoPaneRunningLogsBinding
+//
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        binding = FragmentTwoPaneRunningLogsBinding.inflate(inflater, container, false)
+//        initRecyclerViewAdapter(binding.listPane)
+//        return binding.root
+//    }
+//
+//    override fun onConfigurationChanged(newConfig: Configuration) {
+//        super.onConfigurationChanged(newConfig)
+//        if (requireActivity().resources?.configuration?.orientation == Configuration.ORIENTATION_PORTRAIT) {
+//            val action =
+//                TwoPaneRunningLogsFragmentDirections.actionNavigationTwoPaneRunningLogsToNavigationLogsRunning()
+//            NavHostFragment.findNavController(this).navigate(action)
+//        }
+//    }
+//
+//    private fun initRecyclerViewAdapter(view: View) {
+//        // Set the adapter
+//        if (view is RecyclerView) {
+//            view.layoutManager = LinearLayoutManager(context)
+//            view.adapter = viewModel.records.value?.let { RunningLogsRecyclerViewAdapter(it, this) }
+//        }
+//        // Observe data change
+//        viewModel.records.observe(viewLifecycleOwner, {
+//            Log.d("Data", "Change before case")
+//            if (view is RecyclerView) {
+//                view.adapter = viewModel.records.value?.let { RunningLogsRecyclerViewAdapter(it, this) }
+//                view.adapter?.notifyDataSetChanged()
+//            }
+//        })
+//        replaceSidePane(Constants.INVALID_ID_DB)
+//    }
+//
+//    override fun onRecordClick(position: Int) {
+//        Log.d("Detect", "Item in $position clicked")
+//        val id: Long = viewModel.records.value!![position].id!!
+//        replaceSidePane(id)
+//    }
+//
+//    private fun replaceSidePane(id: Long) {
+//        childFragmentManager.commit {
+//            setReorderingAllowed(true)
+//            replace(
+//                R.id.detail_container,
+//                DetailRunningPaneFragment(id)
+//            )
+//        }
+//    }
+//
+//    companion object
+//}

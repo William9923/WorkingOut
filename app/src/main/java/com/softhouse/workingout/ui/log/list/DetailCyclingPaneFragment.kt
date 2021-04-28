@@ -1,60 +1,176 @@
 package com.softhouse.workingout.ui.log.list
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.softhouse.workingout.R
+import com.softhouse.workingout.databinding.FragmentDetailCyclingPaneBinding
+import com.softhouse.workingout.databinding.FragmentDetailRunningPaneBinding
+import com.softhouse.workingout.shared.Constants
+import com.softhouse.workingout.shared.DateTimeUtility
+import com.softhouse.workingout.ui.log.DetailCyclingViewModel
+import com.softhouse.workingout.ui.log.DetailRunningViewModel
+import com.softhouse.workingout.ui.log.dto.CyclingDTO
+import com.softhouse.workingout.ui.log.dto.RunningDTO
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [DetailCyclingPaneFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class DetailCyclingPaneFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+@AndroidEntryPoint
+class DetailCyclingPaneFragment(val id: Long = Constants.INVALID_ID_DB) : Fragment() {
+
+    lateinit var binding: FragmentDetailCyclingPaneBinding
+    private var map: GoogleMap? = null
+    private val viewModel: DetailCyclingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        // Invoke trigger for appbar menu
+        setHasOptionsMenu(true)
+        // Setup data for record display
+        viewModel.initData(id)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail_cycling_pane, container, false)
+        binding = FragmentDetailCyclingPaneBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DetailCyclingPaneFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DetailCyclingPaneFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.show = false
+        viewModel.cycling.observe(viewLifecycleOwner, {
+            if (it != null) {
+                val startCalendar = DateTimeUtility.getCalenderFromMillis(it.startWorkout)
+                val endCalender = DateTimeUtility.getCalenderFromMillis(it.endWorkout)
+
+                binding.dto = CyclingDTO(
+                    it.id ?: Constants.INVALID_ID_DB,
+                    it.distanceInMeters,
+                    "${startCalendar.get(Calendar.HOUR_OF_DAY)}:${startCalendar.get(Calendar.MINUTE)}:${
+                        startCalendar.get(
+                            Calendar.SECOND
+                        )
+                    }",
+                    "${endCalender.get(Calendar.HOUR_OF_DAY)}:${endCalender.get(Calendar.MINUTE)}:${
+                        endCalender.get(
+                            Calendar.SECOND
+                        )
+                    }",
+                    DateTimeUtility.getTimeMeasurementFromMillis(it.endWorkout - it.startWorkout)
+                )
+                binding.show = true
+
+            } else {
+
+                binding.show = false
             }
+
+            drawPolylines()
+            zoomToSeeWholeTrack()
+            markStartEndLocation()
+
+        })
+
+        binding.mapView.getMapAsync {
+            map = it
+        }
     }
+
+    /**
+     * Drawing Options
+     */
+    private fun drawPolylines() {
+        if (viewModel.cycling.value != null) {
+            Log.d("Map", "Draw polylines")
+            val polylineOptions = PolylineOptions()
+                .color(Constants.POLYLINE_COLOR)
+                .width(Constants.POLYLINE_WIDTH)
+                .addAll(viewModel.cycling.value!!.points)
+            map?.addPolyline(polylineOptions)
+        }
+
+    }
+
+    private fun zoomToSeeWholeTrack() {
+        if (viewModel.cycling.value != null) {
+            Log.d("Map", "Zoom whole track")
+            val bounds = LatLngBounds.Builder()
+            for (pos in viewModel.cycling.value!!.points) {
+                bounds.include(pos)
+            }
+
+            map?.moveCamera(
+                CameraUpdateFactory.newLatLngBounds(
+                    bounds.build(),
+                    binding.mapView.width,
+                    binding.mapView.height,
+                    (binding.mapView.height * 0.05f).toInt()
+                )
+            )
+        }
+    }
+
+    private fun markStartEndLocation() {
+        if (viewModel.cycling.value != null) {
+            Log.d("Map", "Mark start end location")
+            val start = viewModel.cycling.value!!.points.firstOrNull()
+            val end = viewModel.cycling.value!!.points.lastOrNull()
+
+            if (start != null)
+                map?.addMarker(MarkerOptions().position(start).title("Start"))
+
+            if (end != null)
+                map?.addMarker(MarkerOptions().position(end).title("Finish"))
+        }
+
+    }
+
+    /**
+     * MapView State
+     */
+    override fun onResume() {
+        super.onResume()
+        binding.mapView.onResume()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.mapView.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.mapView.onStop()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.mapView.onPause()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.mapView.onLowMemory()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        binding.mapView.onSaveInstanceState(outState)
+    }
+
+    companion object
 }

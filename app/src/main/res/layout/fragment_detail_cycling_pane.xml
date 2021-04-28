@@ -1,21 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+                name="dto"
+                type="com.softhouse.workingout.ui.log.dto.CyclingDTO"/>
+
+        <variable
+                name="show"
+                type="Boolean"/>
+
+        <import type="android.view.View"/>
     </data>
 
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.log.list.DetailCyclingPaneFragment">
+            class="com.softhouse.workingout.ui.log.DetailRunningFragment"
+            tools:context=".ui.log.DetailRunningFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
+
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/hello_blank_fragment"/>
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="center"
+                >
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text='No Content'
+                    android:visibility="@{show ? View.GONE : View.VISIBLE}"
+                    android:layout_margin="@dimen/text_margin"
+                    android:textSize="24sp"
+                    android:textAlignment="center"/>
+
+            <TextView
+                    android:id="@+id/text_duration"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text='@{dto.duration}'
+                    android:visibility="@{show ? View.VISIBLE : View.GONE}"
+                    android:textSize="18sp"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginBottom="@dimen/text_margin"
+                    />
+
+            <com.google.android.gms.maps.MapView
+                    android:id="@+id/mapView"
+                    android:layout_width="300dp"
+                    android:layout_height="200dp"
+                    android:visibility="@{show ? View.VISIBLE : View.INVISIBLE}"
+                    android:layout_weight="0.2"
+                    android:layout_margin="@dimen/activity_horizontal_margin"/>
+
+            <TextView
+                    android:id="@+id/text_distance"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text='@{`` + dto.distance + " meter(s)"}'
+                    android:visibility="@{show ? View.VISIBLE : View.GONE}"
+                    android:textSize="14sp"
+                    android:layout_weight="0.25"
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    android:textStyle="bold"
+                    android:textAlignment="center"/>
+
+        </LinearLayout>
 
     </FrameLayout>
 </layout>
