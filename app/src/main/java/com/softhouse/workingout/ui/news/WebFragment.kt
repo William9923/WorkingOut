@@ -43,7 +43,7 @@ class WebFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val webView: WebView = view.findViewById(R.id.webview)
-        webView.loadUrl(url)
+        webView.loadUrl(url.toString())
         webView.webViewClient = WebViewClient()
         with(webView.settings) {
             javaScriptEnabled = true

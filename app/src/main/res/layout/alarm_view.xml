@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AlarmMaterialCardViewStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/doub_grid_size">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/doub_grid_size">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageView"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/alarm_background"
+            android:contentDescription="@string/alarm_image"
+            android:src="@drawable/ic_round_alarm"
+            app:contentPadding="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/RoundedImageView" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/trackImageView"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/alarm_background"
+            android:contentDescription="@string/alarm_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/RoundedImageView"
+            tools:src="@tools:sample/avatars"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/alarmTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4.Custom"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@id/imageView"
+            app:layout_constraintTop_toTopOf="@id/imageView"
+            tools:text="08:50" />
+
+        <TextView
+            android:id="@+id/alarmTimePeriodTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/alarmTimeTextView"
+            app:layout_constraintStart_toEndOf="@id/alarmTimeTextView"
+            app:layout_constraintTop_toTopOf="@id/alarmTimeTextView"
+            tools:text="AM" />
+
+        <TextView
+            android:id="@+id/mondayTextView"
+            style="@style/DaysTextViewStyle"
+            android:text="@string/monday_abbr"
+            app:layout_constraintBottom_toBottomOf="@id/imageView"
+            app:layout_constraintStart_toStartOf="@id/alarmTimeTextView"
+            app:layout_constraintTop_toBottomOf="@id/alarmTimeTextView" />
+
+        <TextView
+            android:id="@+id/tuesdayTextView"
+            style="@style/DaysTextViewStyle"
+            android:layout_marginStart="8dp"
+            android:text="@string/tuesday_abbr"
+            app:layout_constraintBottom_toBottomOf="@id/imageView"
+            app:layout_constraintStart_toEndOf="@id/mondayTextView"
+            app:layout_constraintTop_toBottomOf="@id/alarmTimeTextView" />
+
+        <TextView
+            android:id="@+id/wednesdayTextView"
+            style="@style/DaysTextViewStyle"
+            android:layout_marginStart="8dp"
+            android:text="@string/wednesday_abbr"
+            app:layout_constraintBottom_toBottomOf="@id/imageView"
+            app:layout_constraintStart_toEndOf="@id/tuesdayTextView"
+            app:layout_constraintTop_toBottomOf="@id/alarmTimeTextView" />
+
+        <TextView
+            android:id="@+id/thursdayTextView"
+            style="@style/DaysTextViewStyle"
+            android:layout_marginStart="8dp"
+            android:text="@string/thursday_abbr"
+            app:layout_constraintBottom_toBottomOf="@id/imageView"
+            app:layout_constraintStart_toEndOf="@id/wednesdayTextView"
+            app:layout_constraintTop_toBottomOf="@id/alarmTimeTextView" />
+
+        <TextView
+            android:id="@+id/fridayTextView"
+            style="@style/DaysTextViewStyle"
+            android:layout_marginStart="8dp"
+            android:text="@string/friday_abbr"
+            app:layout_constraintBottom_toBottomOf="@id/imageView"
+            app:layout_constraintStart_toEndOf="@id/thursdayTextView"
+            app:layout_constraintTop_toBottomOf="@id/alarmTimeTextView" />
+
+        <TextView
+            android:id="@+id/saturdayTextView"
+            style="@style/DaysTextViewStyle"
+            android:layout_marginStart="8dp"
+            android:text="@string/saturday_abbr"
+            app:layout_constraintBottom_toBottomOf="@id/imageView"
+            app:layout_constraintStart_toEndOf="@id/fridayTextView"
+            app:layout_constraintTop_toBottomOf="@id/alarmTimeTextView" />
+
+        <TextView
+            android:id="@+id/sundayTextView"
+            style="@style/DaysTextViewStyle"
+            android:layout_marginStart="8dp"
+            android:text="@string/sunday_abbr"
+            app:layout_constraintBottom_toBottomOf="@id/imageView"
+            app:layout_constraintStart_toEndOf="@id/saturdayTextView"
+            app:layout_constraintTop_toBottomOf="@id/alarmTimeTextView" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/alarmSwitch"
+            style="@style/SwitchStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

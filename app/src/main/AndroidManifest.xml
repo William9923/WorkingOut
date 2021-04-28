@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <!-- Permission for internet -->
     <uses-permission android:name="android.permission.INTERNET"/> <!-- Permission for sensor driver usage in the application -->
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.google.android.things.permission.MANAGE_SENSOR_DRIVERS"/> <!-- Permission for foreground service permission (for notification, etc) -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/> <!-- Permission for step counter -->
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>

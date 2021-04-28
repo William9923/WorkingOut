@@ -9,4 +9,122 @@
     <string name="web_news">News Webview</string>
     <string name="stop_notifications">Stop Notifications</string>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyD5qQ6ejUOIwvufFU8SE9ySF3svVhYCoYg</string>
+    <string name="add_alarm">Add alarm</string>
+    <string name="monday_abbr">M</string>
+    <string name="tuesday_abbr">T</string>
+    <string name="wednesday_abbr">W</string>
+    <string name="thursday_abbr">T</string>
+    <string name="friday_abbr">F</string>
+    <string name="saturday_abbr">S</string>
+    <string name="sunday_abbr">S</string>
+    <string name="am">AM</string>
+    <string name="pm">PM</string>
+    <string name="alarm_image">Alarm Image</string>
+    <string name="all_alarms_off">All alarms off</string>
+    <plurals name="number_of_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="number_of_hours">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="number_of_minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <string name="in_days_hours">in %1$s, %2$s</string>
+    <string name="in_hours_minutes">in %1$s, %2$s</string>
+    <string name="in_minutes">in %1$s</string>
+    <string name="now">Now</string>
+    <string name="add_music">Add Music</string>
+    <string name="enter_a_description">Enter a description</string>
+    <string name="vibrate">Vibrate</string>
+    <string name="snooze">Snooze</string>
+    <string name="days">Days</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="no_alarm_available">No alarm available</string>
+    <string name="click_below_to_add_new_alarm">Click below to add new alarm.</string>
+    <string name="alarm_go_off">Alarm will go off</string>
+    <string name="turn_off">Turn Off</string>
+    <string name="turn_off_alarm_now">You can turn off this alarm now.</string>
+    <string name="weekdays">Week</string>
+    <string name="weekend">Weekend</string>
+    <string name="everyday">Everyday</string>
+    <string name="once">Once</string>
+    <string name="preferences">Preferences</string>
+    <string name="alarms">Alarms</string>
+    <string name="read_alarm_time_aloud">Read alarm time</string>
+    <string name="face_phone_down_to_snooze">Face phone down to snooze</string>
+    <string name="slide_to_turn_off_alarm">Slide to turn off alarm</string>
+    <string name="snooze_duration">Snooze duration</string>
+    <string name="audio">Audio</string>
+    <string name="fade_in_duration">Fade in duration</string>
+    <string name="use_alarm_volume">Use alarm volume</string>
+    <string name="volume">Volume</string>
+    <string name="fallback_music">Fallback Music</string>
+    <string name="fallback_music_warning">SpotiAlarm will play this music if there is no music selected or something goes wrong when playing the music.</string>
+    <string name="fallback_default">Default</string>
+    <string name="complete_action_using">Complete action using</string>
+    <string name="alarm_speech">It is %1$d %2$d</string>
+    <string name="tts_not_supported">TTS not supported</string>
+    <string name="options">Options</string>
+    <string name="search_anything">Search anything</string>
+    <string name="library">Library</string>
+    <string name="favs">Favorite Songs</string>
+    <string name="explore">Explore</string>
+    <string name="featured">Featured</string>
+    <string name="moods">Moods</string>
+    <string name="genres">Genres</string>
+    <string name="top_songs">Top Songs</string>
+    <string name="top_albums">Top Albums</string>
+    <string name="top_artists">Top Artists</string>
+    <string name="error_occurred">Error occurred</string>
+    <string name="tracks">Tracks</string>
+    <string name="artists">Artists</string>
+    <string name="playlists">Playlists</string>
+    <string name="albums">Albums</string>
+    <string name="play_music">Play Music</string>
+    <string name="album_image">Album Image</string>
+    <string name="forward">Forward</string>
+    <string name="genre">Genre</string>
+    <string name="playlist">Playlist</string>
+    <string name="track">Track</string>
+    <string name="choose_a_song">Choose a song</string>
+    <string name="source_image">Source Image</string>
+    <string name="favorite">Favorite</string>
+    <string name="add_to_alarm">Add to alarm</string>
+    <string-array name="snooze_intervals">
+        <item> 5 min</item>
+        <item>10 min</item>
+        <item>15 min</item>
+        <item>20 min</item>
+        <item>25 min</item>
+        <item>30 min</item>
+    </string-array>
+    <string-array name="fade_intervals">
+        <item> 5 sec</item>
+        <item>10 sec</item>
+        <item>15 sec</item>
+        <item>20 sec</item>
+        <item>25 sec</item>
+        <item>30 sec</item>
+    </string-array>
+    <string-array name="manufacturers">
+        <item>xiaomi</item>
+    </string-array>
+    <string name="no_track_available">There is no available song</string>
+    <string name="no_playlist_available">There is no available playlist</string>
+    <string name="no_genre_available">There is no available genre</string>
+    <string name="no_artist_available">There is no available artist</string>
+    <string name="no_album_available">There is no available album</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="auto_start_warning">SpotiAlarm needs Auto-Start permission to reschedule alarms when the device reboots.</string>
+    <string name="settings">Settings</string>
+    <string name="auto_start">Auto Start</string>
+    <string name="show_on_lock_screen">Show on Lock Screen</string>
+    <string name="show_on_lock_screen_warning">SpotiAlarm needs this permission to be shown on Lock Screen when the alarm goes off.</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="listen_offline">Listen Offline</string>
 </resources>

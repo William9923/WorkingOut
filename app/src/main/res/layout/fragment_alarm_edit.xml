@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:behavior_hideable="false"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    tools:context=".alarm.edit.AlarmEditFragment">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/headerBackgroundImageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:alpha="0.2"
+        android:contentDescription="@string/source_image"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/vibrationFab"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/HeaderBackgroundImageView"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:contentDescription="@string/alarm_image"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/RoundedImageView"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/songNameTextView"
+        style="@style/MusicTitleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@id/singerNameTextView"
+        app:layout_constraintEnd_toStartOf="@id/musicFab"
+        app:layout_constraintStart_toEndOf="@id/imageView"
+        app:layout_constraintTop_toTopOf="@id/imageView"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Song Name" />
+
+    <TextView
+        android:id="@+id/singerNameTextView"
+        style="@style/MusicSubTitleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageView"
+        app:layout_constraintEnd_toStartOf="@id/musicFab"
+        app:layout_constraintStart_toEndOf="@id/imageView"
+        app:layout_constraintTop_toBottomOf="@id/songNameTextView"
+        tools:text="Singer Name" />
+
+    <TextView
+        android:id="@+id/alarmTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4.Custom"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        tools:text="08:50" />
+
+    <TextView
+        android:id="@+id/alarmTimePeriodTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/alarmTimeTextView"
+        app:layout_constraintStart_toEndOf="@id/alarmTimeTextView"
+        app:layout_constraintTop_toTopOf="@id/alarmTimeTextView"
+        tools:text="AM" />
+
+    <TextView
+        android:id="@+id/durationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:drawablePadding="5dp"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:textColor="@color/grayLight"
+        app:drawableStartCompat="@drawable/ic_round_alarm"
+        app:layout_constraintBottom_toBottomOf="@id/alarmTimeTextView"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintTop_toTopOf="@id/alarmTimeTextView"
+        tools:text="in 5 days, 11 hours" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/musicFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:contentDescription="@string/add_music"
+        android:src="@drawable/ic_music"
+        app:layout_constraintBottom_toBottomOf="@id/imageView"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintTop_toTopOf="@id/imageView" />
+
+    <TextView
+        android:id="@+id/addMusicTextView"
+        style="@style/SubtitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:text="@string/add_music"
+        app:layout_constraintBottom_toBottomOf="@id/musicFab"
+        app:layout_constraintEnd_toStartOf="@id/musicFab"
+        app:layout_constraintTop_toTopOf="@id/musicFab" />
+
+    <EditText
+        android:id="@+id/descriptionEditText"
+        style="@style/CustomEditTextStyle"
+        android:layout_marginTop="20dp"
+        android:hint="@string/enter_a_description"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/alarmTimeTextView"
+        tools:text="Description" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/snoozeFab"
+        style="@style/CheckableCustomExtendedFab"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/snooze"
+        app:icon="@drawable/ic_snooze"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/vibrationFab"
+        app:layout_constraintTop_toBottomOf="@id/descriptionEditText" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/vibrationFab"
+        style="@style/CheckableCustomExtendedFab"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/vibrate"
+        app:icon="@drawable/ic_vibration"
+        app:layout_constraintEnd_toStartOf="@id/snoozeFab"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/descriptionEditText" />
+
+    <TextView
+        android:id="@+id/daysTextView"
+        style="@style/SubtitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/days"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/vibrationFab" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/weekDaysChip"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/weekdays"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/daysTextView" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/weekEndsChip"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="@string/weekend"
+        app:layout_constraintStart_toEndOf="@id/weekDaysChip"
+        app:layout_constraintTop_toTopOf="@id/weekDaysChip" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/everydayChip"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="@string/everyday"
+        app:layout_constraintStart_toEndOf="@id/weekEndsChip"
+        app:layout_constraintTop_toTopOf="@id/weekDaysChip" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/onceChip"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="@string/once"
+        app:layout_constraintStart_toEndOf="@id/everydayChip"
+        app:layout_constraintTop_toTopOf="@id/weekDaysChip" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/daysToggleGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/weekDaysChip">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mondayButton"
+            style="@style/RoundMaterialButton"
+            android:text="@string/monday_abbr" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/tuesdayButton"
+            style="@style/RoundMaterialButton"
+            android:text="@string/tuesday_abbr" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/wednesdayButton"
+            style="@style/RoundMaterialButton"
+            android:text="@string/wednesday_abbr" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/thursdayButton"
+            style="@style/RoundMaterialButton"
+            android:text="@string/thursday_abbr" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/fridayButton"
+            style="@style/RoundMaterialButton"
+            android:text="@string/friday_abbr" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/saturdayButton"
+            style="@style/RoundMaterialButton"
+            android:text="@string/saturday_abbr" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sundayButton"
+            style="@style/RoundMaterialButton"
+            android:text="@string/sunday_abbr" />
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/deleteFab"
+        style="@style/CustomExtendedFab"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="@string/delete"
+        app:backgroundTint="?attr/colorPrimaryVariant"
+        app:icon="@drawable/ic_delete"
+        app:layout_constraintBottom_toBottomOf="@id/saveFab"
+        app:layout_constraintEnd_toStartOf="@id/saveFab"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toTopOf="@id/saveFab" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/saveFab"
+        style="@style/CustomExtendedFab"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/save"
+        app:icon="@drawable/ic_alarm_on"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/deleteFab"
+        app:layout_constraintTop_toBottomOf="@id/daysToggleGroup"
+        app:layout_constraintVertical_bias="1" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="20dp" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/musicGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="imageView, singerNameTextView, songNameTextView,
+        headerBackgroundImageView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

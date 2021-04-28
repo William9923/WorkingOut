@@ -158,8 +158,43 @@
 
     <!--    Scheduler Navigation-->
     <fragment
-            android:id="@+id/navigation_notifications"
-            android:name="com.softhouse.workingout.ui.notifications.NotificationsFragment"
-            android:label="@string/title_notifications"
-            tools:layout="@layout/fragment_notifications"/>
+        android:id="@+id/alarmFragment"
+        android:name="com.softhouse.workingout.ui.schedule.SchedulerFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_alarm">
+        <action
+            android:id="@+id/action_mainFragment_to_alarmEditFragment"
+            app:destination="@id/alarmEditFragment"
+            app:enterAnim="@anim/fragment_open_enter" />
+        <action
+            android:id="@+id/action_mainFragment_to_preferencesFragment"
+            app:destination="@id/preferencesFragment"
+            app:enterAnim="@anim/slide_up" />
+    </fragment>
+    <dialog
+        android:id="@+id/alarmEditFragment"
+        android:name="com.softhouse.workingout.alarm.edit.AlarmEditFragment"
+        android:label="fragment_alarm_edit"
+        tools:layout="@layout/fragment_alarm_edit">
+        <argument
+            android:name="alarmId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_alarmEditFragment_to_alarmFragment"
+            app:destination="@id/alarmFragment"
+            app:exitAnim="@anim/slide_down"
+            app:popUpTo="@id/alarmFragment"
+            app:popUpToInclusive="true" />
+<!--        <action-->
+<!--            android:id="@+id/action_alarmEditFragment_to_optionsFragment"-->
+<!--            app:destination="@id/optionsFragment"-->
+<!--            app:enterAnim="@anim/slide_up" />-->
+    </dialog>
+    <dialog
+        android:id="@+id/preferencesFragment"
+        android:name="com.softhouse.workingout.preferences.PreferencesFragment"
+        android:label="PreferencesFragment"
+        tools:layout="@layout/fragment_preferences" />
+
 </navigation>
