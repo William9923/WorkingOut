@@ -21,17 +21,30 @@
             android:layout_height="match_parent"
             tools:context=".ui.sensor.tracker.TrackingFragment">
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <Button
+                android:id="@+id/switch_mode_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Change Mode"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintVertical_bias="0.174"/>
+
+        <TextView
+                android:id="@+id/text_mode"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:text='@{mode.toString()}'
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintVertical_bias="0.205"
-                android:id="@+id/switch_mode"
-                android:text='@{mode == Mode.STEPS ? "Running" : "Cycling"}'/>
+                android:layout_margin="@dimen/text_margin"
+                android:textSize="18sp"
+                android:textAlignment="center" app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="0.1"/>
 
         <TextView
                 android:id="@+id/text_tracker"
