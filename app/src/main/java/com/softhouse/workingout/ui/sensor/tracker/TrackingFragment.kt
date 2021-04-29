@@ -17,7 +17,6 @@ import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentTrackingBinding
 import com.softhouse.workingout.service.GeoTrackerService
 import com.softhouse.workingout.service.StepTrackerService
-import com.softhouse.workingout.shared.Constants
 import com.softhouse.workingout.shared.Constants.INVALID_ID_DB
 import com.softhouse.workingout.shared.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.softhouse.workingout.shared.TrackingUtility

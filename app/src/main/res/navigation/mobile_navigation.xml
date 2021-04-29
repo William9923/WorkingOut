@@ -205,8 +205,15 @@
     <fragment
             android:id="@+id/navigation_scheduler"
             android:name="com.softhouse.workingout.ui.schedules.ScheduleFragment"
-            android:label="Schedule"
+            android:label="New Schedule"
             tools:layout="@layout/fragment_schedule"/>
 
-
+    <fragment
+            android:id="@+id/navigation_schedule_list"
+            android:name="com.softhouse.workingout.ui.schedules.ViewScheduleFragment"
+            android:label="Schedule Plan"
+            tools:layout="@layout/fragment_view_schedule_list">
+        <action android:id="@+id/action_navigation_schedule_list_to_navigation_scheduler"
+                app:destination="@id/navigation_scheduler"/>
+    </fragment>
 </navigation>

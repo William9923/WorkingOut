@@ -12,11 +12,11 @@ class StopScheduleService(private val context: Context) : ScheduleService(contex
 
     private fun getIntent() = Intent(context, ScheduleOnStopReceiver::class.java)
 
-    fun setSingleAlarm(timeInMillis: Long, mode: Mode) {
+    fun setSingleAlarm(timeInMillis: Long, mode: Mode, autoStart: Boolean = true) {
         Log.d("Alarm", "Setting Up stop alarm")
         val alarm = Calendar.getInstance()
-//        alarm.add(Calendar.SECOND, 10)
-        alarm.timeInMillis = timeInMillis
+        alarm.add(Calendar.SECOND, 10)
+//        alarm.timeInMillis = timeInMillis
         val intentAction = when (mode) {
             Mode.STEPS -> StepTrackerService.ACTION_STOP_SERVICE_STEP
             Mode.CYCLING -> GeoTrackerService.ACTION_STOP_SERVICE_GEO
@@ -31,13 +31,19 @@ class StopScheduleService(private val context: Context) : ScheduleService(contex
             getIntent().apply {
                 action = intentAction
                 putExtra(Constants.REPETITIVE_FLAG, false)
+                putExtra(Constants.START_SERVICE_FLAG, autoStart)
             },
             requestCode
         )
         super.setAlarm(alarm.timeInMillis, pendingIntent)
     }
 
-    fun setRepeatingAlarm(timeInMillis: Long, mode: Mode, interval: Long = 24 * 60 * 60 * 1000L) {
+    fun setRepeatingAlarm(
+        timeInMillis: Long,
+        mode: Mode,
+        autoStart: Boolean = true,
+        interval: Long = 24 * 60 * 60 * 1000L,
+    ) {
         Log.d("Alarm", "Setting Up stop repeating alarm")
         val alarm = Calendar.getInstance()
 //        alarm.add(Calendar.SECOND, 10)
@@ -57,16 +63,17 @@ class StopScheduleService(private val context: Context) : ScheduleService(contex
                 action = intentAction
                 putExtra(Constants.REPETITIVE_FLAG, true)
                 putExtra(Constants.INTERVAL_FLAG, interval)
+                putExtra(Constants.START_SERVICE_FLAG, autoStart)
             },
             requestCode
         )
         super.setAlarm(alarm.timeInMillis, pendingIntent)
     }
 
-    fun setRepeatingWeeksAlarm(listOfTime: List<Long>, mode: Mode) {
+    fun setRepeatingWeeksAlarm(listOfTime: List<Long>, mode: Mode, autoStart: Boolean = true) {
         Log.d("Alarm", "Setting Up week stop repeating alarm")
         listOfTime.forEach {
-            setRepeatingAlarm(it, mode, 7 * 24 * 60 * 60 * 1000)
+            setRepeatingAlarm(it, mode, autoStart, 7 * 24 * 60 * 60 * 1000)
         }
     }
 }

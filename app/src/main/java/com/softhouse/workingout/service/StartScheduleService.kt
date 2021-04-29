@@ -12,9 +12,7 @@ class StartScheduleService(private val context: Context) : ScheduleService(conte
 
     private fun getIntent() = Intent(context, ScheduleOnStartReceiver::class.java)
 
-    // TODO : Debugging function can be stopped
-
-    fun setSingleAlarm(timeInMillis: Long, mode: Mode) {
+    fun setSingleAlarm(timeInMillis: Long, mode: Mode, autoStart: Boolean = true) {
         Log.d("Alarm", "Setting Up start alarm")
         val alarm = Calendar.getInstance()
 //        alarm.add(Calendar.SECOND, 5)
@@ -33,13 +31,19 @@ class StartScheduleService(private val context: Context) : ScheduleService(conte
             getIntent().apply {
                 action = intentAction
                 putExtra(Constants.REPETITIVE_FLAG, false)
+                putExtra(Constants.START_SERVICE_FLAG, autoStart)
             },
             requestCode
         )
         super.setAlarm(alarm.timeInMillis, pendingIntent)
     }
 
-    fun setRepeatingAlarm(timeInMillis: Long, mode: Mode, interval: Long = 24 * 60 * 60 * 1000L) {
+    fun setRepeatingAlarm(
+        timeInMillis: Long,
+        mode: Mode,
+        autoStart: Boolean = true,
+        interval: Long = 24 * 60 * 60 * 1000L,
+    ) {
         Log.d("Alarm", "Setting Up start repeating alarm")
         val alarm = Calendar.getInstance()
 //        alarm.add(Calendar.SECOND, 5)
@@ -59,16 +63,17 @@ class StartScheduleService(private val context: Context) : ScheduleService(conte
                 action = intentAction
                 putExtra(Constants.REPETITIVE_FLAG, true)
                 putExtra(Constants.INTERVAL_FLAG, interval)
+                putExtra(Constants.START_SERVICE_FLAG, autoStart)
             },
             requestCode
         )
         super.setAlarm(alarm.timeInMillis, pendingIntent)
     }
 
-    fun setRepeatingWeeksAlarm(listOfTime: List<Long>, mode: Mode) {
+    fun setRepeatingWeeksAlarm(listOfTime: List<Long>, mode: Mode, autoStart: Boolean = true) {
         Log.d("Alarm", "Setting Up week repeating alarm")
         listOfTime.forEach {
-            setRepeatingAlarm(it, mode, 7 * 24 * 60 * 60 * 1000L)
+            setRepeatingAlarm(it, mode, autoStart, 7 * 24 * 60 * 60 * 1000L)
         }
     }
 }

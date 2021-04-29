@@ -106,8 +106,8 @@ class ScheduleFragment : Fragment() {
                             endTime!!.get(Calendar.SECOND)
                         )
 
-                        startScheduleService.setSingleAlarm(start.timeInMillis, mode)
-                        stopScheduleService.setSingleAlarm(end.timeInMillis, mode)
+                        startScheduleService.setSingleAlarm(start.timeInMillis, mode, autoStart)
+                        stopScheduleService.setSingleAlarm(end.timeInMillis, mode, autoStart)
                     }
                     Types.REPEATING -> {
                         val date = Calendar.getInstance()
@@ -130,8 +130,8 @@ class ScheduleFragment : Fragment() {
                             endTime!!.get(Calendar.SECOND)
                         )
 
-                        startScheduleService.setRepeatingAlarm(start.timeInMillis, mode)
-                        stopScheduleService.setRepeatingAlarm(end.timeInMillis, mode)
+                        startScheduleService.setRepeatingAlarm(start.timeInMillis, mode, autoStart)
+                        stopScheduleService.setRepeatingAlarm(end.timeInMillis, mode, autoStart)
                     }
                     Types.REPEATING_WEEK -> {
                         val listOfStartMillis = mutableListOf<Long>()
@@ -156,8 +156,8 @@ class ScheduleFragment : Fragment() {
                                 listOfStopMillis.add(end.timeInMillis)
                             }
                         }
-                        startScheduleService.setRepeatingWeeksAlarm(listOfStartMillis, mode)
-                        stopScheduleService.setRepeatingWeeksAlarm(listOfStopMillis, mode)
+                        startScheduleService.setRepeatingWeeksAlarm(listOfStartMillis, mode, autoStart)
+                        stopScheduleService.setRepeatingWeeksAlarm(listOfStopMillis, mode, autoStart)
                     }
                 }
             } else {
@@ -236,6 +236,7 @@ class ScheduleFragment : Fragment() {
 
         binding.chkBoxAuto.isChecked = autoStart
         binding.chkBoxAuto.setOnCheckedChangeListener { _, isChecked ->
+            Log.d("Checkbox", "Val : $isChecked")
             autoStart = isChecked
         }
 
