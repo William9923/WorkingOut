@@ -37,7 +37,7 @@ class StopScheduleService(private val context: Context) : ScheduleService(contex
         super.setAlarm(alarm.timeInMillis, pendingIntent)
     }
 
-    fun setRepeatingAlarm(timeInMillis: Long, mode: Mode, interval: Long = 10 * 1000L) {
+    fun setRepeatingAlarm(timeInMillis: Long, mode: Mode, interval: Long = 24 * 60 * 60 * 1000L) {
         Log.d("Alarm", "Setting Up stop repeating alarm")
         val alarm = Calendar.getInstance()
 //        alarm.add(Calendar.SECOND, 10)
@@ -66,7 +66,7 @@ class StopScheduleService(private val context: Context) : ScheduleService(contex
     fun setRepeatingWeeksAlarm(listOfTime: List<Long>, mode: Mode) {
         Log.d("Alarm", "Setting Up week stop repeating alarm")
         listOfTime.forEach {
-            setRepeatingAlarm(it, mode, 7 * 10 * 1000L)
+            setRepeatingAlarm(it, mode, 7 * 24 * 60 * 60 * 1000)
         }
     }
 }
