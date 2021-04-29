@@ -100,7 +100,28 @@ class ScheduleFragment : Fragment() {
                         stopScheduleService.setSingleAlarm(end.timeInMillis, mode)
                     }
                     Types.REPEATING -> {
-                        // TODO :
+                        val date = Calendar.getInstance()
+                        val start = Calendar.getInstance()
+                        val end = Calendar.getInstance()
+                        start.set(
+                            date.get(Calendar.YEAR),
+                            date.get(Calendar.MONTH),
+                            date.get(Calendar.DAY_OF_MONTH),
+                            startTime!!.get(Calendar.HOUR_OF_DAY),
+                            startTime!!.get(Calendar.MINUTE),
+                            startTime!!.get(Calendar.SECOND)
+                        )
+                        end.set(
+                            date.get(Calendar.YEAR),
+                            date.get(Calendar.MONTH),
+                            date.get(Calendar.DAY_OF_MONTH),
+                            endTime!!.get(Calendar.HOUR_OF_DAY),
+                            endTime!!.get(Calendar.MINUTE),
+                            endTime!!.get(Calendar.SECOND)
+                        )
+
+                        startScheduleService.setRepeatingAlarm(start.timeInMillis, mode)
+                        stopScheduleService.setRepeatingAlarm(end.timeInMillis, mode)
                     }
                     Types.REPEATING_WEEK -> {
                         // TODO :

@@ -18,7 +18,7 @@ open class ScheduleService(private val context: Context) {
 
     private val alarmManager: AlarmManager? = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
 
-    protected fun setSingleAlarm(timeInMillis: Long, pendingIntent: PendingIntent) {
+    protected fun setAlarm(timeInMillis: Long, pendingIntent: PendingIntent) {
         alarmManager?.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 alarmManager.setExactAndAllowWhileIdle(
@@ -32,48 +32,6 @@ open class ScheduleService(private val context: Context) {
                     timeInMillis,
                     pendingIntent
                 )
-            }
-        }
-    }
-
-    fun setRepeatingAlarm(timeInMillis: Long, pendingIntent: PendingIntent) {
-        alarmManager?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    timeInMillis,
-                    24 * 60 * 60 * 1000,
-                    pendingIntent
-                )
-            } else {
-                alarmManager.setExact(
-                    AlarmManager.RTC_WAKEUP,
-                    timeInMillis,
-                    pendingIntent
-                )
-            }
-        }
-    }
-
-    fun setRepeatingWeekAlarm(multTimeInMillis: List<Long>, pendingIntent: PendingIntent) {
-
-        multTimeInMillis.forEach { timeInMillis ->
-            alarmManager?.let {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setRepeating(
-                        AlarmManager.RTC_WAKEUP,
-                        timeInMillis,
-                        7 * 24 * 60 * 60 * 1000,
-                        pendingIntent
-                    )
-                } else {
-                    alarmManager.setRepeating(
-                        AlarmManager.RTC_WAKEUP,
-                        timeInMillis,
-                        7 * 24 * 60 * 60 * 1000,
-                        pendingIntent
-                    )
-                }
             }
         }
     }

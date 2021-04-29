@@ -12,11 +12,13 @@ class StartScheduleService(private val context: Context) : ScheduleService(conte
 
     private fun getIntent() = Intent(context, ScheduleOnStartReceiver::class.java)
 
+    // TODO : Debugging function can be stopped
+
     fun setSingleAlarm(timeInMillis: Long, mode: Mode) {
-        Log.d("Alarm", "Setting Up alarm")
+        Log.d("Alarm", "Setting Up start alarm")
         val alarm = Calendar.getInstance()
-        alarm.add(Calendar.SECOND, 5)
-//        alarm.timeInMillis = timeInMillis
+//        alarm.add(Calendar.SECOND, 5)
+        alarm.timeInMillis = timeInMillis
         val intentAction = when (mode) {
             Mode.STEPS -> StepTrackerService.ACTION_START_OR_RESUME_SERVICE_STEP
             Mode.CYCLING -> GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO
@@ -30,9 +32,36 @@ class StartScheduleService(private val context: Context) : ScheduleService(conte
         val pendingIntent = getPendingIntent(
             getIntent().apply {
                 action = intentAction
+                putExtra(Constants.REPETITIVE_FLAG, false)
             },
             requestCode
         )
-        super.setSingleAlarm(alarm.timeInMillis, pendingIntent)
+        super.setAlarm(alarm.timeInMillis, pendingIntent)
+    }
+
+    fun setRepeatingAlarm(timeInMillis: Long, mode: Mode) {
+        Log.d("Alarm", "Setting Up start repeating alarm")
+        val alarm = Calendar.getInstance()
+        alarm.add(Calendar.SECOND, 5)
+//        alarm.timeInMillis = timeInMillis
+        val intentAction = when (mode) {
+            Mode.STEPS -> StepTrackerService.ACTION_START_OR_RESUME_SERVICE_STEP
+            Mode.CYCLING -> GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO
+        }
+
+        val requestCode = when (mode) {
+            Mode.STEPS -> Constants.ALARM_STEP_REPEATING_NOTIFICATION_ID
+            Mode.CYCLING -> Constants.ALARM_GEO_REPEATING_NOTIFICATION_ID
+        }
+
+        val pendingIntent = getPendingIntent(
+            getIntent().apply {
+                action = intentAction
+                putExtra(Constants.REPETITIVE_FLAG, true)
+                putExtra(Constants.INTERVAL_FLAG, 10 * 1000L)
+            },
+            requestCode
+        )
+        super.setAlarm(alarm.timeInMillis, pendingIntent)
     }
 }

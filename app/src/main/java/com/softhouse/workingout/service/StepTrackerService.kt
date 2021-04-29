@@ -177,7 +177,8 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
                 }
                 ACTION_STOP_SERVICE_STEP -> {
                     Log.d("StepService", "Stopping service...")
-                    endTrackingAndSaveToDB()
+                    if (isTracking.value!!)
+                        endTrackingAndSaveToDB()
                     killService()
                 }
                 else -> Log.d("StepService", "Unrecognized action")

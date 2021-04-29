@@ -106,7 +106,8 @@ class GeoTrackerService : LifecycleService() {
                 }
                 ACTION_STOP_SERVICE_GEO -> {
                     Log.d("GeoService", "Stopping service...")
-                    endTrackingAndSaveToDB()
+                    if (isTracking.value!!)
+                        endTrackingAndSaveToDB()
                     killService()
                 }
                 else -> Log.d("GeoService", "Unrecognized action")
