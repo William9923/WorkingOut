@@ -7,6 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.softhouse.workingout.data.db.Running
 import com.softhouse.workingout.databinding.FragmentRunningLogsBinding
+import com.softhouse.workingout.shared.Constants
+import com.softhouse.workingout.shared.DateTimeUtility
+import com.softhouse.workingout.shared.DateTimeUtility.getTimeMeasurementFromMillis
+import com.softhouse.workingout.ui.log.dto.RunningDTO
+import java.util.*
 
 class RunningLogsRecyclerViewAdapter(
     private val values: List<Running>, private val listener: OnRunningRecordClickListener
@@ -46,7 +51,23 @@ class RunningLogsRecyclerViewAdapter(
         }
 
         fun bind(data: Running) {
-            binding.data = data
+            val startCalendar = DateTimeUtility.getCalenderFromMillis(data.startWorkout)
+            val endCalender = DateTimeUtility.getCalenderFromMillis(data.endWorkout)
+            binding.data = RunningDTO(
+                data.id ?: Constants.INVALID_ID_DB,
+                data.steps,
+                "${startCalendar.get(Calendar.HOUR_OF_DAY)}:${startCalendar.get(Calendar.MINUTE)}:${
+                    startCalendar.get(
+                        Calendar.SECOND
+                    )
+                }",
+                "${endCalender.get(Calendar.HOUR_OF_DAY)}:${endCalender.get(Calendar.MINUTE)}:${
+                    endCalender.get(
+                        Calendar.SECOND
+                    )
+                }",
+                getTimeMeasurementFromMillis(data.endWorkout - data.startWorkout)
+            )
             binding.executePendingBindings()
         }
     }
