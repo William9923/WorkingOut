@@ -7,143 +7,122 @@
 
         <variable
                 name="data"
-                type="com.softhouse.workingout.data.db.Running"/>
+                type="com.softhouse.workingout.ui.log.dto.RunningDTO"/>
 
     </data>
 
     <com.google.android.material.card.MaterialCardView
             android:id="@+id/card"
-            android:layout_width="150dp"
-            android:layout_height="200dp"
-            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
             app:cardCornerRadius="15dp"
             app:cardUseCompatPadding="true"
     >
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:orientation="horizontal"
+                android:background="@color/lightBlueSecondary"
         >
             <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:background="@color/lightBlueSecondary"
-                    android:orientation="vertical"
-                    android:layout_margin="0dp"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
             >
                 <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        app:srcCompat="@drawable/shoe_sneaker"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    app:srcCompat="@drawable/shoe_sneaker"
                 />
             </LinearLayout>
 
             <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:layout_margin="0dp"
-                    android:orientation="horizontal"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="25dp"
             >
-                <LinearLayout
-                        android:layout_width="75dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/lightBlueSecondary"
-                >
-                    <com.google.android.material.card.MaterialCardView
-                            android:layout_width="75dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="10dp"
-                            app:cardCornerRadius="5dp"
-                            app:cardUseCompatPadding="true"
-
-                    >
-                        <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical"
-                                android:background="@color/lightBlue"
-                        >
-                            <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="30dp"
-                                    android:orientation="horizontal"
-                            >
-                                    <ImageView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
-                                            app:srcCompat="@drawable/outline_hourglass_bottom_24"
-                                    >
-                                    </ImageView>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                            >
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-                </LinearLayout>
-
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/lightBlueSecondary"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="5dp"
+                        app:cardUseCompatPadding="true"
                 >
-                    <com.google.android.material.card.MaterialCardView
-                            android:layout_width="75dp"
+                    <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginTop="10dp"
-
-                            app:cardCornerRadius="5dp"
-                            app:cardUseCompatPadding="true"
+                            android:orientation="horizontal"
+                            android:background="@color/lightBlue"
                     >
+                        <LinearLayout
+                                android:layout_width="50dp"
+                                android:layout_height="match_parent"
+                        >
+                            <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center_vertical"
+                                    app:srcCompat="@drawable/outline_directions_walk_24"
+                            >
+                            </ImageView>
+                        </LinearLayout>
                         <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:orientation="vertical"
-                                android:background="@color/lightBlue"
                         >
-                            <LinearLayout
+                            <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:lines="1"
+                                    android:textSize="20sp"
+                                    android:text='@{`` + data.steps + " STEPS"}'>
+                            </TextView>
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="5dp"
+                        app:cardUseCompatPadding="true"
+                >
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:background="@color/lightBlue"
+                    >
+                        <LinearLayout
+                                android:layout_width="50dp"
+                                android:layout_height="match_parent"
+                        >
+                            <ImageView
                                     android:layout_width="match_parent"
                                     android:layout_height="30dp"
-                                    android:orientation="horizontal"
+                                    android:layout_gravity="center_vertical"
+                                    app:srcCompat="@drawable/outline_hourglass_bottom_24"
                             >
-                                    <ImageView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="30dp"
-                                            android:layout_gravity="center_vertical"
-                                            app:srcCompat="@drawable/outline_directions_walk_24"
-                                    >
-                                    </ImageView>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                            >
-                                <TextView
-                                        android:id="@+id/text_detail"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:lines="1"
-                                        android:textSize="24sp"
-                                        android:text='@{`` + data.steps}'>
-                                </TextView>
-                            </LinearLayout>
-
+                            </ImageView>
                         </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-                </LinearLayout>
+                        <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                        >
+                            <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:lines="1"
+                                    android:textSize="20sp"
+                                    android:text='@{`` + data.duration}'>
+                            </TextView>
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
         </LinearLayout>
-
-
     </com.google.android.material.card.MaterialCardView>
 </layout>

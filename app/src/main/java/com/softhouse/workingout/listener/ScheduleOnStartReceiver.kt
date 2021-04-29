@@ -19,9 +19,11 @@ class ScheduleOnStartReceiver : BroadcastReceiver() {
         when (intent?.action) {
             Constants.ACTION_STEP_SINGLE_ALARM_TIME -> {
                 Log.d("OnStartReceiver", "SingleSTEPAlarmTriggered")
-                // TODO : Jalanin service
                 scheduleService.sendStepCommandToService(context!!, StepTrackerService.ACTION_START_OR_RESUME_SERVICE_STEP)
                 // TODO : Create Notification for starting
+
+
+
                 // TODO : Create alarm buat matiin
             }
             Constants.ACTION_STEP_REPEATING_ALARM_TIME -> {

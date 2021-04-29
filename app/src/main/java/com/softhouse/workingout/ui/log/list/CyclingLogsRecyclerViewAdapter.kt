@@ -7,6 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.softhouse.workingout.data.db.Cycling
 import com.softhouse.workingout.databinding.FragmentCyclingLogsBinding
+import com.softhouse.workingout.shared.Constants
+import com.softhouse.workingout.shared.DateTimeUtility
+import com.softhouse.workingout.ui.log.dto.CyclingDTO
+import com.softhouse.workingout.ui.log.dto.RunningDTO
+import java.util.*
 
 class CyclingLogsRecyclerViewAdapter(
     private val values: List<Cycling>, private val listener: OnCyclingRecordClickListener
@@ -46,7 +51,23 @@ class CyclingLogsRecyclerViewAdapter(
         }
 
         fun bind(data: Cycling) {
-            binding.data = data
+            val startCalendar = DateTimeUtility.getCalenderFromMillis(data.startWorkout)
+            val endCalender = DateTimeUtility.getCalenderFromMillis(data.endWorkout)
+            binding.data = CyclingDTO(
+                data.id ?: Constants.INVALID_ID_DB,
+                data.distanceInMeters,
+                "${startCalendar.get(Calendar.HOUR_OF_DAY)}:${startCalendar.get(Calendar.MINUTE)}:${
+                    startCalendar.get(
+                        Calendar.SECOND
+                    )
+                }",
+                "${endCalender.get(Calendar.HOUR_OF_DAY)}:${endCalender.get(Calendar.MINUTE)}:${
+                    endCalender.get(
+                        Calendar.SECOND
+                    )
+                }",
+                DateTimeUtility.getTimeMeasurementFromMillis(data.endWorkout - data.startWorkout)
+            )
             binding.executePendingBindings()
         }
     }
