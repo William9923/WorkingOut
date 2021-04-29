@@ -5,9 +5,12 @@
 
     <data>
 
+        <import type="com.softhouse.workingout.ui.sensor.tracker.Mode"/>
         <variable
                 name="mode"
                 type="com.softhouse.workingout.ui.sensor.tracker.Mode"/>
+
+
 
     </data>
 
