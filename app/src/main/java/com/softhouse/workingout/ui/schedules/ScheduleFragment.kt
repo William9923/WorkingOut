@@ -16,6 +16,8 @@ import com.google.android.material.timepicker.TimeFormat
 import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentScheduleBinding
 import com.softhouse.workingout.service.ScheduleService
+import com.softhouse.workingout.service.StartScheduleService
+import com.softhouse.workingout.service.StopScheduleService
 import com.softhouse.workingout.ui.sensor.tracker.Mode
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -25,7 +27,7 @@ class ScheduleFragment : Fragment() {
 
     lateinit var binding: FragmentScheduleBinding
 
-    val dayMap = mutableMapOf(
+    private val dayMap = mutableMapOf(
         "Mon" to false,
         "Tues" to false,
         "Wed" to false,
@@ -45,11 +47,13 @@ class ScheduleFragment : Fragment() {
 
     var date: Calendar? = null
 
-    lateinit var scheduleService: ScheduleService
+    lateinit var startScheduleService: StartScheduleService
+    lateinit var stopScheduleService: StopScheduleService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        scheduleService = ScheduleService(requireContext())
+        startScheduleService = StartScheduleService(requireContext())
+        stopScheduleService = StopScheduleService(requireContext())
     }
 
     override fun onCreateView(
@@ -72,7 +76,35 @@ class ScheduleFragment : Fragment() {
             if (isFilled()) {
                 Log.d("Fragment", "Action Button clicked!")
                 when (type) {
-                    Types.SINGLE -> scheduleService.setSingleAlarm(date!!, startTime!!, endTime!!, mode)
+                    Types.SINGLE -> {
+                        val start = Calendar.getInstance()
+                        val end = Calendar.getInstance()
+                        start.set(
+                            date!!.get(Calendar.YEAR),
+                            date!!.get(Calendar.MONTH),
+                            date!!.get(Calendar.DAY_OF_MONTH),
+                            startTime!!.get(Calendar.HOUR_OF_DAY),
+                            startTime!!.get(Calendar.MINUTE),
+                            startTime!!.get(Calendar.SECOND)
+                        )
+                        end.set(
+                            date!!.get(Calendar.YEAR),
+                            date!!.get(Calendar.MONTH),
+                            date!!.get(Calendar.DAY_OF_MONTH),
+                            endTime!!.get(Calendar.HOUR_OF_DAY),
+                            endTime!!.get(Calendar.MINUTE),
+                            endTime!!.get(Calendar.SECOND)
+                        )
+
+                        startScheduleService.setSingleAlarm(start.timeInMillis, mode)
+                        stopScheduleService.setSingleAlarm(end.timeInMillis, mode)
+                    }
+                    Types.REPEATING -> {
+                        // TODO :
+                    }
+                    Types.REPEATING_WEEK -> {
+                        // TODO :
+                    }
                 }
             } else {
                 Toast.makeText(requireContext(), "Time not filled", Toast.LENGTH_SHORT).show()
