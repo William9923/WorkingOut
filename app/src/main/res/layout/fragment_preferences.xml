@@ -35,17 +35,6 @@
             app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toBottomOf="@id/preferencesTextView" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/upcomingTtsButton"
-            style="@style/CustomOutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:enabled="false"
-            android:text="@string/upcoming"
-            app:layout_constraintBottom_toBottomOf="@id/readAlarmSwitch"
-            app:layout_constraintEnd_toStartOf="@id/readAlarmSwitch"
-            app:layout_constraintTop_toTopOf="@id/readAlarmSwitch" />
-
         <TextView
             android:id="@+id/readAlarmTextView"
             style="@style/PreferenceSectionTextView"
@@ -146,49 +135,13 @@
             app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toBottomOf="@id/snoozeDurationTextView" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/upcomingListenOfflineButton"
-            style="@style/CustomOutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:enabled="false"
-            android:text="@string/upcoming"
-            app:layout_constraintBottom_toBottomOf="@id/listenOfflineSwitch"
-            app:layout_constraintEnd_toStartOf="@id/listenOfflineSwitch"
-            app:layout_constraintTop_toTopOf="@id/listenOfflineSwitch" />
-
-        <TextView
-            android:id="@+id/listenOfflineTextView"
-            style="@style/PreferenceSectionTextView"
-            android:text="@string/listen_offline"
-            app:layout_constraintBottom_toBottomOf="@id/listenOfflineSwitch"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toTopOf="@id/listenOfflineSwitch" />
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/listenOfflineSwitch"
-            style="@style/PreferenceSectionTextView"
-            android:layout_width="wrap_content"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toBottomOf="@id/audioPreferencesTextView"
-            android:enabled="false"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="@color/blueGrayDarker"
-            android:layout_marginTop="3dp"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@id/listenOfflineTextView" />
-
         <TextView
             android:id="@+id/fadeDurationTextView"
             style="@style/PreferenceSectionTextView"
             android:layout_marginTop="6dp"
             android:text="@string/fade_in_duration"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@id/listenOfflineTextView" />
+            app:layout_constraintTop_toBottomOf="@id/audioPreferencesTextView" />
 
         <TextView
             android:id="@+id/fadeValueTextView"
@@ -280,16 +233,6 @@
             app:layout_constraintTop_toTopOf="@id/fallbackTextView"
             tools:text="@string/fallback_default" />
 
-        <TextView
-            android:id="@+id/fallbackWarningTextView"
-            style="@style/PreferenceSectionExplanationTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/fallback_music_warning"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@id/fallbackTextView" />
-
         <View
             android:id="@+id/fallbackDivider"
             android:layout_width="0dp"
@@ -298,7 +241,7 @@
             android:background="@color/blueGrayDarker"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@id/fallbackWarningTextView" />
+            app:layout_constraintTop_toBottomOf="@id/fallbackValueTextView" />
 
         <TextView
             android:id="@+id/settingsTextView"
@@ -308,7 +251,7 @@
             android:layout_marginTop="20dp"
             android:text="@string/settings"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@id/fallbackWarningTextView" />
+            app:layout_constraintTop_toBottomOf="@id/fallbackValueTextView" />
 
         <TextView
             android:id="@+id/autoStartTextView"

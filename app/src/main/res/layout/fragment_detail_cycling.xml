@@ -42,6 +42,7 @@
 
                 <TextView
                         android:id="@+id/text_start_time"
+                        android:textColor="@color/grayLight"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text='@{dto.startWorkout}'
@@ -52,6 +53,7 @@
 
                 <TextView
                         android:layout_height="wrap_content"
+                        android:textColor="@color/grayLight"
                         android:layout_width="wrap_content"
                         android:text='No Content to display'
                         android:visibility="@{show ? View.GONE : View.VISIBLE}"
@@ -63,12 +65,14 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="-"
+                        android:textColor="@color/grayLight"
                         android:visibility="@{show ? View.VISIBLE : View.GONE}"
                         android:layout_margin="@dimen/text_margin"/>
 
                 <TextView
                         android:id="@+id/text_end_time"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/grayLight"
                         android:layout_width="wrap_content"
                         android:text='@{dto.endWorkout}'
                         android:visibility="@{show ? View.VISIBLE : View.GONE}"
@@ -84,6 +88,7 @@
                     android:visibility="@{show ? View.VISIBLE : View.GONE}"
                     android:textSize="24sp"
                     android:layout_marginTop="8dp"
+                    android:textColor="@color/grayLight"
                     android:layout_marginBottom="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"/>
@@ -92,6 +97,7 @@
                     android:id="@+id/mapView"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:textColor="@color/grayLight"
                     android:visibility="@{show ? View.VISIBLE : View.INVISIBLE}"
                     android:layout_weight="0.25"
                     android:layout_margin="@dimen/activity_horizontal_margin"/>
@@ -101,6 +107,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:text='@{`` + dto.distance + " meter(s)"}'
+                    android:textColor="@color/grayLight"
                     android:visibility="@{show ? View.VISIBLE : View.GONE}"
                     android:textSize="24sp"
                     android:layout_weight="0.25"

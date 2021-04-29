@@ -37,9 +37,6 @@ class EditViewModel(
     private val _goToMainPageEvent = MutableLiveData<Event<Unit>>()
     val goToMainPageEvent: LiveData<Event<Unit>> get() = _goToMainPageEvent
 
-    private val _goToMusicPageEvent = MutableLiveData<Event<Unit>>()
-    val goToMusicPageEvent: LiveData<Event<Unit>> get() = _goToMusicPageEvent
-
     private val _alarmDateTime = MutableLiveData<LocalDateTime?>()
     val alarmDateTime: LiveData<LocalDateTime?> = _alarmDateTime
 
@@ -154,7 +151,7 @@ class EditViewModel(
     }
 
     fun onMusicFabClicked() {
-        _goToMusicPageEvent.value = Event(Unit)
+//        _goToMusicPageEvent.value = Event(Unit)
     }
 
     fun onTrackUpdated(trackId: String) {

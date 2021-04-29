@@ -44,6 +44,7 @@
                         android:id="@+id/text_start_time"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
+                        android:textColor="@color/grayLight"
                         android:text='@{dto.startWorkout}'
                         android:visibility="@{show ? View.VISIBLE : View.GONE}"
                         android:layout_margin="@dimen/text_margin"
@@ -53,6 +54,7 @@
                 <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
+                        android:textColor="@color/grayLight"
                         android:text='No Content to display'
                         android:visibility="@{show ? View.GONE : View.VISIBLE}"
                         android:layout_margin="@dimen/text_margin"
@@ -63,11 +65,13 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="-"
+                        android:textColor="@color/grayLight"
                         android:visibility="@{show ? View.VISIBLE : View.GONE}"
                         android:layout_margin="@dimen/text_margin"/>
 
                 <TextView
                         android:id="@+id/text_end_time"
+                        android:textColor="@color/grayLight"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text='@{dto.endWorkout}'
@@ -84,6 +88,7 @@
                     android:visibility="@{show ? View.VISIBLE : View.GONE}"
                     android:textSize="24sp"
                     android:layout_marginTop="@dimen/text_margin"
+                    android:textColor="@color/grayLight"
                     android:layout_marginBottom="@dimen/text_margin"
                     />
 
@@ -96,6 +101,7 @@
                     android:layout_margin="@dimen/text_margin"
                     android:textSize="40sp"
                     android:layout_weight="0.25"
+                    android:textColor="@color/grayLight"
                     android:textStyle="bold"
                     android:textAllCaps="true"
                     app:autoSizeMinTextSize="28sp"
@@ -111,6 +117,7 @@
                     android:textSize="24sp"
                     android:layout_weight="0.25"
                     android:textAlignment="center"
+                    android:textColor="@color/grayLight"
                     android:layout_margin="@dimen/activity_horizontal_margin"/>
         </LinearLayout>
 

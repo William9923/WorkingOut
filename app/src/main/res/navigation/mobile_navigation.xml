@@ -205,7 +205,7 @@
     <fragment
         android:id="@+id/alarmFragment"
         android:name="com.softhouse.workingout.ui.schedule.SchedulerFragment"
-        android:label="MainFragment"
+        android:label="Schedule"
         tools:layout="@layout/fragment_alarm">
         <action
             android:id="@+id/action_mainFragment_to_alarmEditFragment"

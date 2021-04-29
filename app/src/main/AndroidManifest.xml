@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.softhouse.workingout">
+        xmlns:tools="http://schemas.android.com/tools"
+        package="com.softhouse.workingout">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <!-- Permission for internet -->
@@ -11,6 +12,12 @@
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
             android:name=".BaseApplication"
@@ -19,7 +26,40 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/Theme.MyApp">
+        <receiver
+                android:name=".listener.BootReceiver"
+                android:enabled="true"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+                android:name=".alarm.active.ActiveAlarmActivity"
+                android:excludeFromRecents="true"
+                android:screenOrientation="portrait"
+                android:showOnLockScreen="true"
+                android:showWhenLocked="true"
+                android:turnScreenOn="true"
+                tools:ignore="LockedOrientationActivity"
+                tools:targetApi="o_mr1" />
+
+        <service android:name=".service.AlarmService" />
+        <service android:name=".service.RescheduleAlarmsService" />
+
+        <receiver
+                android:name=".listener.AlarmReceiver"
+                android:enabled="true"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="ACTION_ALARM_FIRED" />
+                <action android:name="ACTION_SNOOZE" />
+                <action android:name="ACTION_TURN_OFF" />
+            </intent-filter>
+        </receiver>
+
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

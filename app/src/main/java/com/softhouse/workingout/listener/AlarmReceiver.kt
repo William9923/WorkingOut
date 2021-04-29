@@ -20,8 +20,8 @@ import java.time.LocalDateTime
 class AlarmReceiver : BroadcastReceiver(), KoinComponent {
 
     companion object {
-        const val EXTRA_ALARM = "SPOTIALARM"
-        const val EXTRA_ALARM_SNOOZE = "SPOTIALARM_SNOOZE"
+        const val EXTRA_ALARM = "WORKINGOUT"
+        const val EXTRA_ALARM_SNOOZE = "WORKINGOUT_SNOOZE"
 
         const val ACTION_SNOOZE = "ACTION_SNOOZE"
         const val ACTION_TURN_OFF = "ACTION_TURN_OFF"

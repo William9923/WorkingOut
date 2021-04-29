@@ -36,7 +36,7 @@
     <style name="Main.Button" parent="Widget.AppCompat.Button.Colored">
         <item name="textAppearanceButton">@style/TextAppearance.App.Button</item>
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
-        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/green</item>
     </style>
 
     <style name="TextAppearance.App.Button" parent="TextAppearance.MaterialComponents.Button">

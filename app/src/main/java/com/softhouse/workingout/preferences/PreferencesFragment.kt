@@ -122,9 +122,6 @@ class PreferencesFragment : BaseBottomSheetDialogFragment() {
         binding.slideToTurnOffSwitch.setOnCheckedChangeListener { _, isChecked ->
             Preferences.slideToTurnOff = isChecked
         }
-        binding.listenOfflineSwitch.setOnCheckedChangeListener { _, isChecked ->
-            Preferences.listenOffline = isChecked
-        }
         binding.useAlarmVolumeSwitch.setOnCheckedChangeListener { _, isChecked ->
             Preferences.useDeviceAlarmVolume = isChecked
             binding.volumeSlider.isEnabled = !isChecked

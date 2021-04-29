@@ -18,18 +18,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".ui.log.calender.CalenderFragment"
+            android:textColor="@color/grayLight"
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
         <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/calendarView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:mcv_showOtherDates="all"
                 app:mcv_selectionColor="#00F"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                />
+                android:background="@color/grayLight" />
 
         <Button
                 android:id="@+id/switch_mode_btn"
