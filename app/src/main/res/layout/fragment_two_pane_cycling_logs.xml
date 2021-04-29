@@ -12,13 +12,18 @@
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_pane"
-                android:layout_width="240dp"
+                android:layout_width="280dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 app:layoutManager="LinearLayoutManager"
                 class="com.softhouse.workingout.ui.log.portrait.CyclingLogsFragment"
                 tools:context=".ui.log.list.CyclingLogsFragment"
                 tools:listitem="@layout/fragment_cycling_logs"/>
+
+        <View
+                style="@style/Divider_Horizontal"
+                android:id="@+id/divider"
+                android:layout_marginTop="@dimen/text_margin" android:layout_width="5dp"/>
 
         <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/detail_container"

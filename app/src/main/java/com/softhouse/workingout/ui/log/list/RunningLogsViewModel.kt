@@ -42,7 +42,6 @@ class RunningLogsViewModel @ViewModelInject constructor(
     private fun initData() {
         if (day != Constants.INVALID_DATE && month != Constants.INVALID_MONTH && year != Constants.INVALID_YEAR) {
             mainRepository.getAllRunningRecordBasedOnDate(day, month, year).observeForever {
-                Log.d("Data", it.toString())
                 _runnings.postValue(it)
             }
         }

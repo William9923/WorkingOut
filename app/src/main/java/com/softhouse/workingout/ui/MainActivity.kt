@@ -66,9 +66,15 @@ class MainActivity : AppCompatActivity() {
         if (resources?.configuration?.orientation == Configuration.ORIENTATION_PORTRAIT) {
             val navView: BottomNavigationView = findViewById(R.id.nav_view)
             navView.visibility = VISIBLE
+
+            // Show AppBar
+            supportActionBar?.show()
         } else {
             val navView: BottomNavigationView = findViewById(R.id.nav_view)
             navView.visibility = GONE
+
+            // Hide AppBar
+            supportActionBar?.hide()
         }
     }
 

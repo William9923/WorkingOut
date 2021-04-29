@@ -48,9 +48,15 @@ class NewsListViewModel : ViewModel() {
                                     NewsItem(
                                         index,
                                         title,
-                                        description,
+                                        if (description.length <= 100) description else description.substring(
+                                            0,
+                                            100
+                                        ) + "...",
                                         element.url,
-                                        element.urlToImage!!
+                                        element.urlToImage!!,
+                                        element.source?.name ?: "",
+                                        element.author ?: "",
+                                        element.publishedAt?.substring(0,10) ?: ""
                                     )
                                 )
                             }

@@ -4,7 +4,6 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
-
     <androidx.slidingpanelayout.widget.SlidingPaneLayout
             android:id="@+id/sliding_pane_layout"
             android:layout_width="match_parent"
@@ -12,13 +11,18 @@
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_pane"
-                android:layout_width="240dp"
+                android:layout_width="280dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 app:layoutManager="LinearLayoutManager"
                 class="com.softhouse.workingout.ui.log.portrait.RunningLogsFragment"
                 tools:context=".ui.log.list.RunningLogsFragment"
                 tools:listitem="@layout/fragment_running_logs"/>
+
+        <View
+                style="@style/Divider_Horizontal"
+                android:id="@+id/divider"
+                android:layout_marginTop="@dimen/text_margin" android:layout_width="5dp"/>
 
         <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/detail_container"

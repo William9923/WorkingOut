@@ -8,7 +8,10 @@ data class NewsItem(
     val title: String,
     val desc: String,
     val url: String,
-    val imageURL: String
+    val imageURL: String,
+    val source: String,
+    val author: String,
+    val publishedAt: String
 ) {
     override fun toString(): String = title + "\n" + desc
 }

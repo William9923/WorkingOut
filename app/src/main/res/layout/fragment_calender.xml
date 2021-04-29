@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
+        <import type="com.softhouse.workingout.ui.sensor.tracker.Mode"/>
         <variable
                 name="mode"
                 type="com.softhouse.workingout.ui.sensor.tracker.Mode"/>
+
+
 
     </data>
 
@@ -24,23 +28,18 @@
                 android:layout_height="wrap_content"
                 app:mcv_showOtherDates="all"
                 app:mcv_selectionColor="#00F"
+                android:layout_margin="@dimen/activity_horizontal_margin"
                 />
 
         <Button
                 android:id="@+id/switch_mode_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Change Mode"
+                android:text='@{(mode == Mode.STEPS) ? "Running" : "Cycling"}'
+                android:tooltipText="Click me to change mode!"
+                app:icon="@drawable/baseline_touch_app_24"
+                android:theme="@style/Secondary.Button"
                 />
-
-        <TextView
-                android:id="@+id/text_mode"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text='@{mode.toString()}'
-                android:layout_margin="@dimen/text_margin"
-                android:textSize="18sp"
-                android:textAlignment="center"/>
 
     </LinearLayout>
 </layout>
