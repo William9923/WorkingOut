@@ -20,7 +20,6 @@ class DetailCyclingViewModel @ViewModelInject constructor(
 
     fun initData(id: Long) {
         mainRepository.getSpecificCyclingById(id).observeForever {
-            Log.d("Data", it.toString())
             _cycling.postValue(it)
         }
     }

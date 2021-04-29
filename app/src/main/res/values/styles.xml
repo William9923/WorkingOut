@@ -2,28 +2,51 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
-        <!--        <item name="colorPrimary">#212121</item>-->
-        <!--        <item name="colorPrimaryVariant">#000000</item>-->
-        <!--        <item name="colorOnPrimary">#FFFFFF</item>-->
-        <!--        <item name="colorSecondary">#2962FF</item>-->
-        <!--        <item name="colorSecondaryVariant">#0039CB</item>-->
-        <!--        <item name="colorOnSecondary">#FFFFFF</item>-->
-        <!--        <item name="colorError">#F44336</item>-->
-        <!--        <item name="colorOnError">#FFFFFF</item>-->
-        <!--        <item name="colorSurface">#FFFFFF</item>-->
-        <!--        <item name="colorOnSurface">#212121</item>-->
-        <!--        <item name="colorOnBackground">#212121</item>-->
-
+        <item name="colorPrimary">#536dfe</item>
+        <item name="colorPrimaryDark">#0043ca</item>
+        <item name="colorAccent">#f9a825</item>
         <item name="android:windowActionBarOverlay">true</item>
 
-        <item name="fontFamily">@font/roboto_mono</item>
-        <item name="android:fontFamily">@font/roboto_mono</item>
+<!--        <item name="fontFamily">@font/roboto_mono</item>-->
+<!--        <item name="android:fontFamily">@font/roboto_mono</item>-->
 
         <item name="materialCardViewStyle">@style/AppCard</item>
+        <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
+
+    </style>
+
+    <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="titleTextAppearance">@style/TextAppearance.App.Headline6</item>
+    </style>
+
+    <style name="TextAppearance.App.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="AppCard" parent="Widget.MaterialComponents.CardView">
         <item name="cardElevation">8dp</item>
+    </style>
+
+    <style name="Secondary.Button" parent="Widget.AppCompat.Button.Colored">
+        <item name="textAppearanceButton">@style/TextAppearance.App.Button</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="colorPrimary">#f9a825</item>
+    </style>
+
+    <style name="Main.Button" parent="Widget.AppCompat.Button.Colored">
+        <item name="textAppearanceButton">@style/TextAppearance.App.Button</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="TextAppearance.App.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:fontFamily">@font/roboto_mono</item>
+    </style>
+
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">15dp</item>
     </style>
 
     <style name="AppBottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView.Colored"/>
@@ -41,6 +64,12 @@
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
+    <style name="Divider_Horizontal">
+        <item name="android:layout_width">2dp</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 

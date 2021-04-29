@@ -20,5 +20,4 @@
             android:id="@+id/alarmFragment"
             android:icon="@drawable/outline_analytics_24"
             android:title="@string/alarms"/>
-
 </menu>

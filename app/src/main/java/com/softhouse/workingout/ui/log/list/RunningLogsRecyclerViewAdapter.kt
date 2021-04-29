@@ -1,26 +1,20 @@
-package com.softhouse.workingout.ui.log.list.portrait
+package com.softhouse.workingout.ui.log.list
 
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.softhouse.workingout.R
-import com.softhouse.workingout.data.db.Cycling
 import com.softhouse.workingout.data.db.Running
-import com.softhouse.workingout.databinding.FragmentCyclingLogsBinding
 import com.softhouse.workingout.databinding.FragmentRunningLogsBinding
 
-import com.softhouse.workingout.ui.log.list.portrait.dummy.DummyContent.DummyItem
-
-class CyclingLogsRecyclerViewAdapter(
-    private val values: List<Cycling>, private val listener: OnCyclingRecordClickListener
-) : RecyclerView.Adapter<CyclingLogsRecyclerViewAdapter.ViewHolder>() {
+class RunningLogsRecyclerViewAdapter(
+    private val values: List<Running>, private val listener: OnRunningRecordClickListener
+) : RecyclerView.Adapter<RunningLogsRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = FragmentCyclingLogsBinding.inflate(layoutInflater)
+        val binding = FragmentRunningLogsBinding.inflate(layoutInflater)
         return ViewHolder(binding)
     }
 
@@ -34,14 +28,14 @@ class CyclingLogsRecyclerViewAdapter(
 
     override fun getItemCount(): Int = values.size
 
-    interface OnCyclingRecordClickListener {
+    interface OnRunningRecordClickListener {
         fun onRecordClick(position: Int)
     }
 
-    inner class ViewHolder(val binding: FragmentCyclingLogsBinding) : RecyclerView.ViewHolder(binding.root),
+    inner class ViewHolder(val binding: FragmentRunningLogsBinding) : RecyclerView.ViewHolder(binding.root),
         View.OnClickListener {
         override fun toString(): String {
-            return "Cycling Record no : $adapterPosition"
+            return "Running Record no : $adapterPosition"
         }
 
         override fun onClick(v: View?) {
@@ -51,7 +45,7 @@ class CyclingLogsRecyclerViewAdapter(
             }
         }
 
-        fun bind(data: Cycling) {
+        fun bind(data: Running) {
             binding.data = data
             binding.executePendingBindings()
         }

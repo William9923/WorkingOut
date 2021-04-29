@@ -1,7 +1,10 @@
 package com.softhouse.workingout.ui
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.findNavController
@@ -55,6 +58,24 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         navigateToTrackingFragmentIfNeeded(intent)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        if (resources?.configuration?.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            val navView: BottomNavigationView = findViewById(R.id.nav_view)
+            navView.visibility = VISIBLE
+
+            // Show AppBar
+            supportActionBar?.show()
+        } else {
+            val navView: BottomNavigationView = findViewById(R.id.nav_view)
+            navView.visibility = GONE
+
+            // Hide AppBar
+            supportActionBar?.hide()
+        }
     }
 
     // To navigate back to tracking menu

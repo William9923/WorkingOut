@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.softhouse.workingout.data.db.Cycling
+import com.softhouse.workingout.data.db.Running
 import com.softhouse.workingout.data.repository.MainRepository
 import com.softhouse.workingout.shared.Constants
 import java.util.ArrayList
@@ -18,15 +19,16 @@ class CyclingLogsViewModel @ViewModelInject constructor(
         value = ArrayList()
     }
 
-    private val _position = MutableLiveData<Long>().apply {
-        value = Constants.INVALID_ID_DB
+    private val _cycling = MutableLiveData<Running>().apply {
+        value = null
     }
+
+    var cycling: LiveData<Running> = _cycling
 
     var day: Int = Constants.INVALID_DATE
     var month: Int = Constants.INVALID_MONTH
     var year: Int = Constants.INVALID_YEAR
     var records: LiveData<List<Cycling>> = _cyclings
-    var position: LiveData<Long> = _position
 
     fun initDate(day: Int, month: Int, year: Int) {
         if (this.day != day || this.month != month || this.year != year) {

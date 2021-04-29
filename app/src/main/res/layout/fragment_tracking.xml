@@ -21,18 +21,36 @@
             android:layout_height="match_parent"
             tools:context=".ui.sensor.tracker.TrackingFragment">
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:textAlignment="center"
+                android:textSize="48sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintVertical_bias="0.205"
-                android:id="@+id/switch_mode"
-                android:text='@{mode == Mode.STEPS ? "Running" : "Cycling"}'/>
-
+                app:layout_constraintVertical_bias="0.037"
+                android:textStyle="bold"
+                android:text='@{(mode == Mode.STEPS) ? "Running" : "Cycling"}'
+                app:layout_constraintHorizontal_bias="0.498"/>
+        <Button
+                android:id="@+id/switch_mode_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{(mode == Mode.STEPS) ? "Running" : "Cycling"}'
+                android:tooltipText="Click me to change mode!"
+                app:icon="@drawable/baseline_touch_app_24"
+                android:theme="@style/Secondary.Button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintVertical_bias="0.18"
+        />
         <TextView
                 android:id="@+id/text_tracker"
                 android:layout_width="wrap_content"
@@ -80,16 +98,17 @@
 
         <Button
                 android:id="@+id/action_btn"
-                android:layout_width="183dp"
-                android:layout_height="93dp"
+                android:layout_width="305dp"
+                android:layout_height="89dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintVertical_bias="0.857"
+                app:layout_constraintVertical_bias="0.821"
                 android:textSize="24sp"
                 android:text='@{started ? "STOP" : "START"}'
-                />
+                android:theme="@style/Main.Button"
+        />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,13 +14,18 @@
             android:id="@+id/card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            android:layout_margin="15dp"
+            app:cardCornerRadius="15dp"
+            app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="@color/lightBlue"
+
+    >
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                >
+        >
 
             <!-- Media -->
             <ImageView
@@ -29,7 +34,7 @@
                     android:layout_height="194dp"
                     android:scaleType="centerCrop"
                     app:loadImage='@{data.imageURL}'
-                    />
+            />
 
             <LinearLayout
                     android:layout_width="match_parent"
@@ -43,28 +48,57 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:text='@{data.title.substring(0,10) + "..."}'
-                        />
-
-                <TextView
-                        android:id="@+id/subtitle_card"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textAppearance="?attr/textAppearanceBody2"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:text='@{data.title.substring(10) + "..."}'
-                        />
+                        android:text='@{data.title}'
+                />
 
                 <TextView
                         android:id="@+id/content_card"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="24dp"
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="?android:attr/textColorSecondary"
-                        android:text='@{data.desc.substring(0, 20) + "..."}'
-                        />
+                        android:text='@{data.desc}'
+                />
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                >
+
+                    <TextView
+                            android:id="@+id/source_card"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:textStyle="bold"
+                            android:text='@{data.source}'
+                    />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:textStyle="bold"
+                            android:text=' - '
+                    />
+
+                    <TextView
+                            android:id="@+id/publish_card"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:text='@{data.publishedAt}'
+                    />
+                </LinearLayout>
+
 
             </LinearLayout>
 

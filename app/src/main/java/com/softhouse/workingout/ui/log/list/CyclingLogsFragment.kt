@@ -1,23 +1,20 @@
-package com.softhouse.workingout.ui.log.list.portrait
+package com.softhouse.workingout.ui.log.list
 
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.softhouse.workingout.R
-import com.softhouse.workingout.ui.log.list.CyclingLogsViewModel
-import com.softhouse.workingout.ui.log.list.RunningLogsViewModel
-import com.softhouse.workingout.ui.log.list.portrait.dummy.DummyContent
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -43,18 +40,17 @@ class CyclingLogsFragment : Fragment(), CyclingLogsRecyclerViewAdapter.OnCycling
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_cycling_logs_list, container, false)
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         // Set the adapter
         initRecyclerViewAdapter(view)
-
-        // TODO : Change biar bisa ganti orientation
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         return view
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        if (view is RecyclerView) {
-            // TODO : Navigate to the landscape fragment
+        if (requireActivity().resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            val action = CyclingLogsFragmentDirections.actionNavigationLogsCyclingToNavigationTwoPaneCyclingLogs()
+            NavHostFragment.findNavController(this).navigate(action)
         }
     }
 
