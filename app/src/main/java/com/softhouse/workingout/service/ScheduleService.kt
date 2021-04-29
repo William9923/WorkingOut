@@ -8,7 +8,9 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import com.softhouse.workingout.listener.ScheduleOnStartReceiver
+import com.softhouse.workingout.listener.ScheduleOnStopReceiver
 import com.softhouse.workingout.shared.Constants
+import com.softhouse.workingout.ui.sensor.tracker.Mode
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -16,7 +18,7 @@ class ScheduleService(private val context: Context) {
 
     private val alarmManager: AlarmManager? = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
 
-    fun setSingleAlarm(date: Calendar, startTime: Calendar, endTime: Calendar) {
+    fun setSingleAlarm(date: Calendar, startTime: Calendar, endTime: Calendar, mode: Mode) {
         Log.d("Alarm", "Setting Up alarm")
         val alarm = Calendar.getInstance()
         alarm.add(Calendar.SECOND, 5)
@@ -31,16 +33,20 @@ class ScheduleService(private val context: Context) {
 //        Log.d("Alarm", "Will occur in : ${alarm.get(Calendar.DAY_OF_MONTH)} " +
 //                "| ${alarm.get(Calendar.MONTH)}" +
 //                "| ${alarm.get(Calendar.HOUR_OF_DAY)} : ${alarm.get(Calendar.MINUTE)} : ${alarm.get(Calendar.SECOND)}")
-
+        val intentAction = when (mode) {
+            Mode.STEPS -> Constants.ACTION_STEP_SINGLE_ALARM_TIME
+            Mode.CYCLING -> Constants.ACTION_GEO_SINGLE_ALARM_TIME
+        }
         Log.d("Alarm", "Millis : ${alarm.timeInMillis}")
         Log.d("Alarm", "Current Time : ${System.currentTimeMillis()}")
 
         setAlarm(
             alarm.timeInMillis,
             getPendingIntent(
-                getIntent().apply {
-                    action = Constants.ACTION_SINGLE_ALARM_TIME
+                getStartIntent().apply {
+                    action = intentAction
                     putExtra(Constants.EXTRA_EXACT_ALARM_TIME, alarm.timeInMillis)
+                    putExtra(Constants.EXTRA_EXACT_END_ALARM_TIME, endTime.timeInMillis)
                 }
             )
         )
@@ -50,8 +56,8 @@ class ScheduleService(private val context: Context) {
         setAlarm(
             timeInMillis,
             getPendingIntent(
-                getIntent().apply {
-                    action = Constants.ACTION_REPEATING_ALARM_TIME
+                getStartIntent().apply {
+                    action = Constants.ACTION_STEP_REPEATING_ALARM_TIME
                     putExtra(Constants.EXTRA_EXACT_ALARM_TIME, timeInMillis)
                 }
             )
@@ -87,6 +93,21 @@ class ScheduleService(private val context: Context) {
         }
     }
 
-    private fun getIntent() = Intent(context, ScheduleOnStartReceiver::class.java)
+    private fun getStartIntent() = Intent(context, ScheduleOnStartReceiver::class.java)
+
+    private fun getStopIntent() = Intent(context, ScheduleOnStopReceiver::class.java)
+
+    // Service related Intent
+    fun sendStepCommandToService(context: Context, action: String) =
+        Intent(context, StepTrackerService::class.java).also {
+            it.action = action
+            context.startService(it)
+        }
+
+    fun sendLocationCommandToService(context: Context, action: String) =
+        Intent(context, GeoTrackerService::class.java).also {
+            it.action = action
+            context.startService(it)
+        }
 
 }

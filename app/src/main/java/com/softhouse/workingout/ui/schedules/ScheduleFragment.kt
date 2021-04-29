@@ -72,7 +72,7 @@ class ScheduleFragment : Fragment() {
             if (isFilled()) {
                 Log.d("Fragment", "Action Button clicked!")
                 when (type) {
-                    Types.SINGLE -> scheduleService.setSingleAlarm(date!!, startTime!!, endTime!!)
+                    Types.SINGLE -> scheduleService.setSingleAlarm(date!!, startTime!!, endTime!!, mode)
                 }
             } else {
                 Toast.makeText(requireContext(), "Time not filled", Toast.LENGTH_SHORT).show()
