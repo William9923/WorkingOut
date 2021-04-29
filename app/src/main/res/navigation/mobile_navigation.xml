@@ -203,8 +203,10 @@
 
     <!--    Scheduler Navigation-->
     <fragment
-            android:id="@+id/navigation_notifications"
-            android:name="com.softhouse.workingout.ui.notifications.NotificationsFragment"
-            android:label="@string/title_notifications"
-            tools:layout="@layout/fragment_notifications"/>
+            android:id="@+id/navigation_scheduler"
+            android:name="com.softhouse.workingout.ui.schedules.ScheduleFragment"
+            android:label="Schedule"
+            tools:layout="@layout/fragment_schedule"/>
+
+
 </navigation>

@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         // Setup link for appbar configuration
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_news, R.id.navigation_tracking, R.id.navigation_calender, R.id.navigation_notifications
+                R.id.navigation_news, R.id.navigation_tracking, R.id.navigation_calender, R.id.navigation_scheduler
             )
         )
 
