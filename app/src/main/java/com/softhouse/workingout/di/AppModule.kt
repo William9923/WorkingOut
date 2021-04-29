@@ -34,4 +34,8 @@ object AppModule {
     @Provides
     fun provideCyclingDao(db: AppDatabase) = db.getCyclingDao()
 
+    @Singleton
+    @Provides
+    fun provideAlarmDao(db: AppDatabase) = db.getAlarmDao()
+
 }

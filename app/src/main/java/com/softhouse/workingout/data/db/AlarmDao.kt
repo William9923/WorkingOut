@@ -1,4 +1,4 @@
-package com.softhouse.workingout.data.repository
+package com.softhouse.workingout.data.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

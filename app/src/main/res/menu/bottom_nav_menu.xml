@@ -17,8 +17,8 @@
             android:title="History"/>
 
     <item
-            android:id="@+id/navigation_notifications"
+            android:id="@+id/alarmFragment"
             android:icon="@drawable/outline_analytics_24"
-            android:title="@string/title_notifications"/>
+            android:title="@string/alarms"/>
 
 </menu>

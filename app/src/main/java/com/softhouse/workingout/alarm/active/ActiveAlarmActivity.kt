@@ -118,6 +118,7 @@ class ActiveAlarmActivity : AppCompatActivity() {
         }
     }
 
+    @KoinApiExtension
     private fun stopForegroundService() {
         val intent = Intent(this, AlarmService::class.java)
         stopService(intent)

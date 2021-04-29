@@ -20,6 +20,7 @@ import com.softhouse.workingout.alarm.active.ActiveAlarmActivity
 import com.softhouse.workingout.listener.AlarmReceiver
 import com.softhouse.workingout.data.Alarm
 import com.softhouse.workingout.preferences.Preferences
+import org.koin.core.component.KoinApiExtension
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -62,6 +63,7 @@ fun calculateDurationString(
     }
 }
 
+@KoinApiExtension
 fun Context.createPendingIntentToActivity(alarm: Alarm): PendingIntent {
     val intent = Intent(this, ActiveAlarmActivity::class.java).apply {
         flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -75,6 +77,7 @@ fun Context.createPendingIntentToActivity(alarm: Alarm): PendingIntent {
     )
 }
 
+@KoinApiExtension
 fun Context.createPendingIntentToBroadcast(
     alarm: Alarm,
     snoozed: Boolean = false
@@ -91,6 +94,7 @@ fun Context.createPendingIntentToBroadcast(
     )
 }
 
+@KoinApiExtension
 fun Alarm.schedule(context: Context, snoozed: Boolean = false): LocalDateTime? {
     val date = nearestDateTime() ?: return null
     val time = date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
@@ -104,12 +108,14 @@ fun Alarm.schedule(context: Context, snoozed: Boolean = false): LocalDateTime? {
     return date
 }
 
+@KoinApiExtension
 fun Alarm.cancel(context: Context) {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val pendingIntent = context.createPendingIntentToBroadcast(this)
     alarmManager.cancel(pendingIntent)
 }
 
+@KoinApiExtension
 fun Alarm.snooze(context: Context) {
     var future = alarmTime
     future = future.plusMinutes(Preferences.snoozeDuration.toLong())

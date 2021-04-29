@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.softhouse.androidutils.Result
 import com.softhouse.workingout.data.Alarm
+import com.softhouse.workingout.data.db.AlarmDao
 
 class AlarmRepository(private val alarmDao: AlarmDao) {
 

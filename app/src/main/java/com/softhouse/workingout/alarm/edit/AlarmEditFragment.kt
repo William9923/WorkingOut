@@ -34,7 +34,7 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAlarmEditBinding.inflate(inflater)
         return binding.root
     }
@@ -151,7 +151,7 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
         val picker = TimePickerDialog(
             requireContext(),
             R.style.TimePickerDialogTheme,
-            TimePickerDialog.OnTimeSetListener { _, hour, minute ->
+            { _, hour, minute ->
                 val formatter = DateTimeFormatter.ofPattern("hh:mm")
                 val time = LocalTime.of(hour, minute)
                 binding.alarmTimeTextView.text = time.format(formatter)
