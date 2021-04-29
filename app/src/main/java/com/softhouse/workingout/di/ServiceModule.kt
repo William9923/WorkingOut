@@ -8,7 +8,6 @@ import androidx.room.Room
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.softhouse.workingout.R
 import com.softhouse.workingout.data.db.AppDatabase
-import com.softhouse.workingout.listener.StopNotificationListener
 import com.softhouse.workingout.shared.Constants
 import com.softhouse.workingout.ui.MainActivity
 import dagger.Module

@@ -6,13 +6,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.softhouse.workingout.R
 import com.softhouse.workingout.databinding.FragmentScheduleBinding
+import com.softhouse.workingout.service.ScheduleService
+import com.softhouse.workingout.ui.sensor.tracker.Mode
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -21,7 +25,32 @@ class ScheduleFragment : Fragment() {
 
     lateinit var binding: FragmentScheduleBinding
 
-    private val viewModel: ScheduleViewModel by viewModels()
+    val dayMap = mutableMapOf(
+        "Mon" to false,
+        "Tues" to false,
+        "Wed" to false,
+        "Thurs" to false,
+        "Fri" to false,
+        "Sat" to false,
+        "Sun" to false
+    )
+
+    var mode: Mode = Mode.STEPS
+    var type: Types = Types.SINGLE
+    var autoStart: Boolean = true
+
+    var startTime: Calendar? = null
+    var endTime: Calendar? = null
+    var target: Long = 0
+
+    var date: Calendar? = null
+
+    lateinit var scheduleService: ScheduleService
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        scheduleService = ScheduleService(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,24 +65,28 @@ class ScheduleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.initMode()
-        viewModel.initType()
-
-        binding.mode = viewModel.mode.value!!
-        binding.types = viewModel.type.value!!
+        binding.mode = mode
+        binding.types = type
 
         binding.actionBtn.setOnClickListener {
-            Log.d("Picker", "Save Schedule")
+            if (isFilled()) {
+                Log.d("Fragment", "Action Button clicked!")
+                when (type) {
+                    Types.SINGLE -> scheduleService.setSingleAlarm(date!!, startTime!!, endTime!!)
+                }
+            } else {
+                Toast.makeText(requireContext(), "Time not filled", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.switchModeBtn.setOnClickListener {
-            viewModel.toggleMode()
-            binding.mode = viewModel.mode.value!!
+            toggleMode()
+            binding.mode = mode
         }
 
         binding.switchTypesBtn.setOnClickListener {
-            viewModel.toggleType()
-            binding.types = viewModel.type.value!!
+            toggleType()
+            binding.types = type
         }
 
         binding.startTimeBtn.setOnClickListener {
@@ -68,6 +101,11 @@ class ScheduleFragment : Fragment() {
             picker.addOnPositiveButtonClickListener {
                 Log.d("Picker", "End Button finished")
                 binding.startTimeText.text = "${picker.hour}:${picker.minute}"
+
+                val calendar = Calendar.getInstance()
+                calendar.set(Calendar.HOUR_OF_DAY, picker.hour)
+                calendar.set(Calendar.MINUTE, picker.minute)
+                startTime = calendar
             }
         }
 
@@ -84,6 +122,11 @@ class ScheduleFragment : Fragment() {
             picker.addOnPositiveButtonClickListener {
                 Log.d("Picker", "End Button finished")
                 binding.endTimeText.text = "${picker.hour}:${picker.minute}"
+
+                val calendar = Calendar.getInstance()
+                calendar.set(Calendar.HOUR_OF_DAY, picker.hour)
+                calendar.set(Calendar.MINUTE, picker.minute)
+                endTime = calendar
             }
         }
 
@@ -101,34 +144,51 @@ class ScheduleFragment : Fragment() {
                     "Picker",
                     "${calendar.get(Calendar.YEAR)} / ${calendar.get(Calendar.MONTH)} / ${calendar.get(Calendar.DAY_OF_MONTH)}"
                 )
+                date = calendar
             }
         }
 
-        binding.chkBoxAuto.setOnCheckedChangeListener { buttonView, isChecked ->
-            // Responds to checkbox being checked/unchecked
-            if (isChecked) {
-                Log.d("Picker", "Auto Timer")
-            } else {
-                Log.d("Picker", "Manual timer")
-            }
+        binding.chkBoxAuto.isChecked = autoStart
+        binding.chkBoxAuto.setOnCheckedChangeListener { _, isChecked ->
+            autoStart = isChecked
         }
 
-        binding.toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
-            // Respond to button selection
+        binding.toggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            // TODO : For repeating week
             when (checkedId) {
-                R.id.buttonMon -> Log.d("Picker", "Toggle BTN Monday")
-                R.id.buttonTues -> Log.d("Picker", "Toggle BTN Tuesday")
-                R.id.buttonWed -> Log.d("Picker", "Toggle BTN Wednesday")
-                R.id.buttonThurs -> Log.d("Picker", "Toggle BTN Thursday")
-                R.id.buttonFri -> Log.d("Picker", "Toggle BTN Friday")
-                R.id.buttonSat -> Log.d("Picker", "Toggle BTN Saturday")
-                R.id.buttonSun -> Log.d("Picker", "Toggle BTN Sunday")
-            }
-
-            if (isChecked) {
-                Log.d("Picker", "Activate ID : ${checkedId}")
+                R.id.buttonMon -> toggleDay("Mon", isChecked)
+                R.id.buttonTues -> toggleDay("Tues", isChecked)
+                R.id.buttonWed -> toggleDay("Wed", isChecked)
+                R.id.buttonThurs -> toggleDay("Thurs", isChecked)
+                R.id.buttonFri -> toggleDay("Fri", isChecked)
+                R.id.buttonSat -> toggleDay("Sat", isChecked)
+                R.id.buttonSun -> toggleDay("Sun", isChecked)
             }
         }
+    }
+
+    private fun toggleMode() {
+        mode = when (mode) {
+            Mode.STEPS -> Mode.CYCLING
+            Mode.CYCLING -> Mode.STEPS
+        }
+    }
+
+    private fun toggleType() {
+        type = when (type) {
+            Types.SINGLE -> Types.REPEATING
+            Types.REPEATING -> Types.REPEATING_WEEK
+            Types.REPEATING_WEEK -> Types.SINGLE
+        }
+    }
+
+    private fun toggleDay(dayName: String, value: Boolean) {
+        dayMap[dayName] = value
+    }
+
+    private fun isFilled(): Boolean {
+        val additional: Boolean = if (type == Types.SINGLE) date != null else true
+        return (startTime != null && endTime != null && additional)
     }
 
 }

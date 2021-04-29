@@ -272,7 +272,8 @@ class GeoTrackerService : LifecycleService() {
 
 
     private fun endTrackingAndSaveToDB() {
-        val cycling = Cycling((distance.value ?: 0F).toInt(), pathPoints.value!!, timeStarted, System.currentTimeMillis())
+        val cycling =
+            Cycling((distance.value ?: 0F).toInt(), pathPoints.value!!, timeStarted, System.currentTimeMillis())
         Log.d("Cycling", cycling.toString())
         val appScope = CoroutineScope(SupervisorJob())
         // Coroutine : IO Dispatchers because saving to db can wait ...
