@@ -39,11 +39,11 @@ class StartScheduleService(private val context: Context) : ScheduleService(conte
         super.setAlarm(alarm.timeInMillis, pendingIntent)
     }
 
-    fun setRepeatingAlarm(timeInMillis: Long, mode: Mode) {
+    fun setRepeatingAlarm(timeInMillis: Long, mode: Mode, interval: Long = 10 * 1000L) {
         Log.d("Alarm", "Setting Up start repeating alarm")
         val alarm = Calendar.getInstance()
-        alarm.add(Calendar.SECOND, 5)
-//        alarm.timeInMillis = timeInMillis
+//        alarm.add(Calendar.SECOND, 5)
+        alarm.timeInMillis = timeInMillis
         val intentAction = when (mode) {
             Mode.STEPS -> StepTrackerService.ACTION_START_OR_RESUME_SERVICE_STEP
             Mode.CYCLING -> GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO
@@ -58,10 +58,17 @@ class StartScheduleService(private val context: Context) : ScheduleService(conte
             getIntent().apply {
                 action = intentAction
                 putExtra(Constants.REPETITIVE_FLAG, true)
-                putExtra(Constants.INTERVAL_FLAG, 10 * 1000L)
+                putExtra(Constants.INTERVAL_FLAG, interval)
             },
             requestCode
         )
         super.setAlarm(alarm.timeInMillis, pendingIntent)
+    }
+
+    fun setRepeatingWeeksAlarm(listOfTime: List<Long>, mode: Mode) {
+        Log.d("Alarm", "Setting Up week repeating alarm")
+        listOfTime.forEach {
+            setRepeatingAlarm(it, mode, 7 * 10 * 1000L)
+        }
     }
 }

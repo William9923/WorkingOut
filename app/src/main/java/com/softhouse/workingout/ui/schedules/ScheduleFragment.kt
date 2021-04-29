@@ -37,6 +37,16 @@ class ScheduleFragment : Fragment() {
         "Sun" to false
     )
 
+    private val dayToInt = mutableMapOf(
+        "Mon" to 1,
+        "Tues" to 2,
+        "Wed" to 3,
+        "Thurs" to 4,
+        "Fri" to 5,
+        "Sat" to 6,
+        "Sun" to 7,
+    )
+
     var mode: Mode = Mode.STEPS
     var type: Types = Types.SINGLE
     var autoStart: Boolean = true
@@ -124,7 +134,30 @@ class ScheduleFragment : Fragment() {
                         stopScheduleService.setRepeatingAlarm(end.timeInMillis, mode)
                     }
                     Types.REPEATING_WEEK -> {
-                        // TODO :
+                        val listOfStartMillis = mutableListOf<Long>()
+                        val listOfStopMillis = mutableListOf<Long>()
+                        for ((key, value) in dayMap) {
+                            if (value) {
+                                val idx = dayToInt[key]
+                                val start = Calendar.getInstance()
+                                val end = Calendar.getInstance()
+                                start.set(Calendar.DAY_OF_WEEK, idx ?: 1)
+                                end.set(Calendar.DAY_OF_WEEK, idx ?: 1)
+
+                                start.set(Calendar.HOUR_OF_DAY, startTime!!.get(Calendar.HOUR_OF_DAY))
+                                start.set(Calendar.MINUTE, startTime!!.get(Calendar.MINUTE))
+                                start.set(Calendar.SECOND, startTime!!.get(Calendar.SECOND))
+
+                                end.set(Calendar.HOUR_OF_DAY, endTime!!.get(Calendar.HOUR_OF_DAY))
+                                end.set(Calendar.MINUTE, endTime!!.get(Calendar.MINUTE))
+                                end.set(Calendar.SECOND, endTime!!.get(Calendar.SECOND))
+
+                                listOfStartMillis.add(start.timeInMillis)
+                                listOfStopMillis.add(end.timeInMillis)
+                            }
+                        }
+                        startScheduleService.setRepeatingWeeksAlarm(listOfStartMillis, mode)
+                        stopScheduleService.setRepeatingWeeksAlarm(listOfStopMillis, mode)
                     }
                 }
             } else {
