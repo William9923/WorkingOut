@@ -22,20 +22,18 @@ class ScheduleListViewModel @ViewModelInject constructor(
     var schedules: LiveData<List<Schedule>> = _schedules
 
     // Init
-    private fun initData() {
+    fun initData() {
         mainRepository.getAllSchedule().observeForever {
-            Log.d("Database", "Schedules data : " + it.toString())
+            Log.d("Database", "Schedules data : $it")
             _schedules.postValue(it)
         }
     }
 
     // Delete
-    private fun deleteData(id: Long) {
-        val data = mainRepository.getSpecificScheduleById(id).value
+    fun deleteData(data: Schedule) {
         if (data != null) {
             viewModelScope.launch {
                 with(mainRepository) {
-                    Log.d("Database", "Delete Id : $id")
                     Log.d("Database", "Total item: ${_schedules.value?.size}")
                     deleteSchedule(data)
                     initData()
