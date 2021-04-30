@@ -1,23 +1,19 @@
 package com.softhouse.workingout.ui.schedules
 
 import android.util.Log
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.softhouse.workingout.R
-import com.softhouse.workingout.data.db.Cycling
+import androidx.recyclerview.widget.RecyclerView
 import com.softhouse.workingout.data.db.Schedule
-import com.softhouse.workingout.databinding.FragmentCyclingLogsBinding
 import com.softhouse.workingout.databinding.FragmentViewScheduleBinding
 import com.softhouse.workingout.shared.Constants
-import com.softhouse.workingout.shared.DateTimeUtility
-import com.softhouse.workingout.ui.log.dto.CyclingDTO
-import com.softhouse.workingout.ui.log.list.CyclingLogsRecyclerViewAdapter
-
-import com.softhouse.workingout.ui.schedules.dummy.DummyContent.DummyItem
+import com.softhouse.workingout.ui.schedules.dto.ScheduleDTO
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_view_schedule.view.*
+import java.text.SimpleDateFormat
 import java.util.*
+
 
 class ScheduleRecyclerViewAdapter(
     private val values: List<Schedule>, private val listener: OnScheduleItemClickListener
@@ -31,9 +27,9 @@ class ScheduleRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(values[position])
-        holder.itemView.setOnClickListener {
+        holder.itemView.deleteBtn.setOnClickListener {
             Log.d("Event", "Item clicked")
-            holder.onClick(holder.binding.deleteBtn)
+            holder.onClick(holder.itemView)
         }
     }
 
@@ -53,23 +49,45 @@ class ScheduleRecyclerViewAdapter(
         }
 
         fun bind(data: Schedule) {
-//            val startCalendar = DateTimeUtility.getCalenderFromMillis(data.startWorkout)
-//            val endCalender = DateTimeUtility.getCalenderFromMillis(data.endWorkout)
-//            binding.data = CyclingDTO(
-//                data.id ?: Constants.INVALID_ID_DB,
-//                data.distanceInMeters,
-//                "${startCalendar.get(Calendar.HOUR_OF_DAY)}:${startCalendar.get(Calendar.MINUTE)}:${
-//                    startCalendar.get(
-//                        Calendar.SECOND
-//                    )
-//                }",
-//                "${endCalender.get(Calendar.HOUR_OF_DAY)}:${endCalender.get(Calendar.MINUTE)}:${
-//                    endCalender.get(
-//                        Calendar.SECOND
-//                    )
-//                }",
-//                DateTimeUtility.getTimeMeasurementFromMillis(data.endWorkout - data.startWorkout)
-//            )
+
+            var format = SimpleDateFormat(
+                "yyyy-MM-dd", Locale.ENGLISH
+            )
+
+            val timeFormat = SimpleDateFormat(
+                "HH:mm", Locale.ENGLISH
+            )
+
+            val detail = when (data.types) {
+                Types.SINGLE -> {
+                    val calendar = Calendar.getInstance()
+                    calendar.timeInMillis = data.date!!
+                    format.format(calendar.time)
+                }
+                Types.REPEATING_WEEK -> {
+                    var weeks = ""
+                    data.weeks.forEach {
+                        weeks += it.substring(0, 1).toUpperCase() + "|"
+                    }
+                    weeks
+                }
+                Types.REPEATING -> "Repeat"
+            }
+
+            val startCalendar = Calendar.getInstance()
+            val endCalendar = Calendar.getInstance()
+
+            startCalendar.timeInMillis = data.startTime
+            endCalendar.timeInMillis = data.stopTime
+
+            binding.dto = ScheduleDTO(
+                data.id ?: Constants.INVALID_ID_DB,
+                timeFormat.format(startCalendar.time),
+                timeFormat.format(endCalendar.time),
+                data.types.toString() + " | " + data.mode.toString(),
+                detail,
+                data.autoStart
+            )
             binding.executePendingBindings()
         }
     }

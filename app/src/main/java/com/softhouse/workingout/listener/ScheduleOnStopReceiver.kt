@@ -16,8 +16,13 @@ import com.softhouse.workingout.ui.MainActivity
 import com.softhouse.workingout.ui.sensor.tracker.Mode
 import dagger.hilt.android.AndroidEntryPoint
 import io.karn.notify.Notify
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class ScheduleOnStopReceiver : BroadcastReceiver() {
@@ -39,7 +44,7 @@ class ScheduleOnStopReceiver : BroadcastReceiver() {
             return
 
         val scheduleService = ScheduleService(context!!)
-        var mode = Mode.STEPS
+        val mode = schedule!!.mode
 
 
         when (intent?.action) {
@@ -60,7 +65,6 @@ class ScheduleOnStopReceiver : BroadcastReceiver() {
                     "Workout Alarm",
                     "Stop!! You done a good job for this running workout\n Click here to see result"
                 )
-                mode = Mode.STEPS
             }
 
             GeoTrackerService.ACTION_STOP_SERVICE_GEO -> {
@@ -78,7 +82,6 @@ class ScheduleOnStopReceiver : BroadcastReceiver() {
                     "Workout Alarm",
                     "Stop!! You done a good job for this cycling workout\n Click me to see result"
                 )
-                mode = Mode.CYCLING
             }
         }
         if (isRepetitive == true) {
@@ -90,6 +93,9 @@ class ScheduleOnStopReceiver : BroadcastReceiver() {
                 isAutoStart!!,
                 id
             )
+        } else {
+            // single
+            deleteSchedule(schedule!!)
         }
     }
 
@@ -131,5 +137,16 @@ class ScheduleOnStopReceiver : BroadcastReceiver() {
             }
 
             .show()
+    }
+
+    private fun deleteSchedule(schedule: Schedule) {
+        val appScope = CoroutineScope(SupervisorJob())
+        // Coroutine : IO Dispatchers because saving to db can wait ...
+        appScope.launch(Dispatchers.IO) {
+            with(mainRepository) {
+                val id = deleteSchedule(schedule)
+                Log.d("Database", "Deleted Schedule ID : $id")
+            }
+        }
     }
 }

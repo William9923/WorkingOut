@@ -7,6 +7,7 @@ import com.softhouse.workingout.data.db.Schedule
 import com.softhouse.workingout.data.repository.MainRepository
 import com.softhouse.workingout.service.StartScheduleService
 import com.softhouse.workingout.service.StopScheduleService
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.*
 import java.util.concurrent.TimeUnit

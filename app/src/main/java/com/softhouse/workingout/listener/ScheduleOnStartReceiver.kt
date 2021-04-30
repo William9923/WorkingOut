@@ -15,6 +15,10 @@ import com.softhouse.workingout.shared.Constants
 import com.softhouse.workingout.ui.sensor.tracker.Mode
 import dagger.hilt.android.AndroidEntryPoint
 import io.karn.notify.Notify
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -38,8 +42,10 @@ class ScheduleOnStartReceiver : BroadcastReceiver() {
         if (schedule == null)
             return
 
+        Log.d("Receiver", "Before Receive context")
         val scheduleService = ScheduleService(context!!)
-        var mode = Mode.STEPS
+        Log.d("Receiver", "After Receive context")
+        val mode = schedule!!.mode
 
         when (intent?.action) {
 
@@ -53,8 +59,9 @@ class ScheduleOnStartReceiver : BroadcastReceiver() {
                         StepTrackerService.ACTION_START_OR_RESUME_SERVICE_STEP
                     )
                 }
-                buildNotification(context, "Workout Alarm", "Go Run! Current Target: ${schedule?.target} steps")
-                mode = Mode.STEPS
+                val text =
+                    if (schedule!!.target > 0L) "Go Run!! Current Target: ${schedule?.target} steps" else "Currently no target for running"
+                buildNotification(context, "Workout Alarm", text)
             }
 
             GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO -> {
@@ -66,8 +73,9 @@ class ScheduleOnStartReceiver : BroadcastReceiver() {
                         GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO
                     )
                 }
-                buildNotification(context, "Workout Alarm", "Go Cycling!! Current Target: ${schedule?.target} steps")
-                mode = Mode.CYCLING
+                val text =
+                    if (schedule!!.target > 0L) "Go Cycling!! Current Target: ${schedule?.target} km" else "Currently no target for cycling"
+                buildNotification(context, "Workout Alarm", text)
             }
         }
 
@@ -80,6 +88,9 @@ class ScheduleOnStartReceiver : BroadcastReceiver() {
                 isAutoStart ?: false,
                 id
             )
+        } else {
+            // single
+            deleteSchedule(schedule!!)
         }
     }
 
@@ -109,5 +120,16 @@ class ScheduleOnStartReceiver : BroadcastReceiver() {
                 text = message
             }
             .show()
+    }
+
+    private fun deleteSchedule(schedule: Schedule) {
+        val appScope = CoroutineScope(SupervisorJob())
+        // Coroutine : IO Dispatchers because saving to db can wait ...
+        appScope.launch(Dispatchers.IO) {
+            with(mainRepository) {
+                val id = deleteSchedule(schedule)
+                Log.d("Database", "Deleted Schedule ID : $id")
+            }
+        }
     }
 }
