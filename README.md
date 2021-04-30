@@ -19,6 +19,22 @@ Berikut beberapa screenshot aplikasi saat dijalankan :
 
 ### Home Screen / Training Tracker
 
+### Sports News
+
+### News WebView
+
+### Log Calendar
+
+### Running Logs
+
+### Running Logs Details
+
+### Cycling Logs
+
+### Cycling Logs Details
+
+### Scheduler
+
 
 ## Library
 
