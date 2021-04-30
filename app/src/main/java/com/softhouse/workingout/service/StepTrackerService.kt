@@ -172,7 +172,7 @@ class StepTrackerService : LifecycleService(), SensorEventListener {
                         Log.d("StepService", "Starting service...")
                     } else {
                         Log.d("StepService", "Resuming service...")
-                        startTimer()
+//                        startTimer()
                     }
                 }
                 ACTION_STOP_SERVICE_STEP -> {
