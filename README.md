@@ -65,23 +65,15 @@ Berikut beberapa screenshot aplikasi saat dijalankan :
 Berikut penggunaan library pada aplikasi :
 | No | Library | Fungsi |
 |----|-------------|------------|
-| 1  | Android Activity context (single activity - many fragment architecture) | Digunakan untuk mengakses API yang ada pada Activity |
-| 2  | Material Design | Digunakan untuk mengimplementasikan Material Design pada aplikasi dengan API |
-| 3  | Navigation | Digunakan untuk navigasi antara Fragments, Activities, atau komponen lainnya |
-| 4  | Recycler view | Digunakan untuk menampilkan data yang terhitung besar namun meminimalkan penggunaan memori |
-| 5  | Retrofit | Digunakan untuk membuat HTTP Request seperti pada fitur Sports News |
-| 6  | Glide | Digunakan untuk membuat load gambar menjadi lebih efisien |
-| 7  | Easy Permission | Digunakan untuk mengatur permission dari aplikasi |
-| 8  | Google Maps Location Services | Digunakan untuk mengakses maps dari Google Maps seperti pada fitur Cycling Details |
-| 9  | Room | Digunakan untuk pengaksesan database SQLite yang lebih baik |
-| 10  | Kotlin Extensions and Coroutines support for Room | Digunakan untuk pengaksesan database SQLite yang lebih baik |
-| 11  | Dagger | Digunakan untuk |
-| 12  | Dagger Android | Digunakan untuk |
-| 13  | Dagger - Hilt | Digunakan untuk |
-| 14  | Material Calendar | Digunakan untuk |
-| 15  | Two Pane Layout | Digunakan untuk pengimplementasian sliding pane untuk layout |
-| 16  | Utilities | Digunakan untuk |
-
+| 1  | Material Design | Digunakan untuk mengimplementasikan Material Design pada aplikasi dengan API |
+| 2  | Retrofit | Digunakan untuk membuat HTTP Request seperti pada fitur Sports News |
+| 3  | Glide | Digunakan untuk membuat load gambar menjadi lebih efisien |
+| 4 | Easy Permission | Digunakan untuk mengatur permission untuk mengakses privasi / sensor dari aplikasi |
+| 5  | Google Maps Location Services | Digunakan untuk mengakses maps dari Google Maps seperti pada fitur Cycling Details |
+| 6 | Room | Digunakan untuk pengaksesan database SQLite yang lebih baik |
+| 7  | Dagger  & Dagger Hilt | Digunakan untuk melakukan dependencies injection |
+| 8  | Material Calendar | Digunakan untuk membuat UI calendar untuk mencari tanggal pada log history |
+| 9  | Two Pane Layout | Digunakan untuk pengimplementasian sliding pane untuk layout |
 
 ## Pembagian Kerja
 
@@ -111,7 +103,18 @@ Berikut penggunaan library pada aplikasi :
 
 | No | Kontribusi |
 |----|------------|
-| 1  | - |
-
+| 1  | Sports News API Implementation |
+| 2  | Sports News Webview Implementation |
+| 3  | Training Tracker Running Implementation |
+| 4  | Training Tracker Cycling Implementation |
+| 5  | Training History Running Implementation |
+| 6  | Training History Cycling Implementation |
+| 7  | Training Scheduler Running Implementation notif only (single, repeating, repeating per week) |
+| 8  | Training Scheduler Cycling Implementation notif only (single, repeating, repeating per week) |
+| 9  | Training Scheduler Running Implementation auto tracker (single, repeating, repeating per week) |
+| 10  | Training Scheduler Cycling Implementation auto tracker (single, repeating, repeating per week) |
+| 11  | Training Tracker Main Page Design |
+| 12  | 2 pane layout log history Design |
+| 13  | Scheduler UI Design |
 
 

@@ -160,7 +160,7 @@ class ScheduleFragment : Fragment() {
                 Toast.makeText(requireContext(), "Data not filled", Toast.LENGTH_SHORT).show()
             }
         }
-        
+
         binding.switchModeBtn.setOnClickListener {
             toggleMode()
             binding.mode = mode
