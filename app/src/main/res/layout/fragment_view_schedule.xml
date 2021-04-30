@@ -16,28 +16,32 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:weightSum="5"
                 android:orientation="horizontal"
                 android:background="@color/lightBlueSecondary"
         >
             <LinearLayout
-                    android:layout_width="60dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="15dp"
             >
                 <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_vertical"
                         app:srcCompat="@drawable/outline_alarm_black_24dp"
                 >
                 </ImageView>
             </LinearLayout>
 
             <LinearLayout
-                    android:layout_width="280dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:weightSum="5"
+                    android:paddingLeft="20dp"
             >
                 <LinearLayout
                         android:layout_width="match_parent"
@@ -58,13 +62,13 @@
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="0.5"
+                        android:layout_weight="0.8"
                 >
                     <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:textSize="10sp"
+                            android:textSize="14sp"
                             android:text="M T W T F S S"
                     >
                     </TextView>
@@ -73,13 +77,13 @@
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="0.5"
+                        android:layout_weight="0.8"
                 >
                     <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:textSize="10sp"
+                            android:textSize="14sp"
                             android:text="Repeat"
                     >
                     </TextView>
@@ -88,13 +92,13 @@
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="0.5"
+                        android:layout_weight="0.8"
                 >
                     <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:textSize="10sp"
+                            android:textSize="14sp"
                             android:text="text3"
                     >
                     </TextView>
@@ -102,16 +106,18 @@
             </LinearLayout>
 
             <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
             >
-                <ImageView
+                <ImageButton
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
                         app:srcCompat="@drawable/outline_delete_black_24dp"
+                        style="?android:attr/borderlessButtonStyle"
                 >
-                </ImageView>
+                </ImageButton>
 
             </LinearLayout>
 
