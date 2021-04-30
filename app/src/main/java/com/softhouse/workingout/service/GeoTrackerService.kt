@@ -101,7 +101,7 @@ class GeoTrackerService : LifecycleService() {
                         Log.d("GeoService", "Starting service...")
                     } else {
                         Log.d("GeoService", "Resuming service...")
-                        startTimer()
+//                        startTimer()
                     }
                 }
                 ACTION_STOP_SERVICE_GEO -> {
@@ -189,9 +189,7 @@ class GeoTrackerService : LifecycleService() {
                     .addAction(R.drawable.ic_notifications_black_24dp, "STOP WORKOUT", pendingIntent)
                 notificationManager.notify(NOTIFICATION_ID, curNotificationBuilder.build())
             }
-
         }
-
     }
 
     /**

@@ -12,7 +12,7 @@ class StartScheduleService(private val context: Context) : ScheduleService(conte
 
     private fun getIntent() = Intent(context, ScheduleOnStartReceiver::class.java)
 
-    fun setSingleAlarm(timeInMillis: Long, mode: Mode, autoStart: Boolean = true) {
+    fun setSingleAlarm(timeInMillis: Long, mode: Mode, id: Long, autoStart: Boolean = true) {
         Log.d("Alarm", "Setting Up start alarm")
         val alarm = Calendar.getInstance()
 //        alarm.add(Calendar.SECOND, 5)
@@ -32,6 +32,7 @@ class StartScheduleService(private val context: Context) : ScheduleService(conte
                 action = intentAction
                 putExtra(Constants.REPETITIVE_FLAG, false)
                 putExtra(Constants.START_SERVICE_FLAG, autoStart)
+                putExtra(Constants.SCHEDULE_ID_FLAG, id)
             },
             requestCode
         )
@@ -41,6 +42,7 @@ class StartScheduleService(private val context: Context) : ScheduleService(conte
     fun setRepeatingAlarm(
         timeInMillis: Long,
         mode: Mode,
+        id: Long,
         autoStart: Boolean = true,
         interval: Long = 24 * 60 * 60 * 1000L,
     ) {
@@ -64,16 +66,17 @@ class StartScheduleService(private val context: Context) : ScheduleService(conte
                 putExtra(Constants.REPETITIVE_FLAG, true)
                 putExtra(Constants.INTERVAL_FLAG, interval)
                 putExtra(Constants.START_SERVICE_FLAG, autoStart)
+                putExtra(Constants.SCHEDULE_ID_FLAG, id)
             },
             requestCode
         )
         super.setAlarm(alarm.timeInMillis, pendingIntent)
     }
 
-    fun setRepeatingWeeksAlarm(listOfTime: List<Long>, mode: Mode, autoStart: Boolean = true) {
+    fun setRepeatingWeeksAlarm(listOfTime: List<Long>, mode: Mode, id: Long, autoStart: Boolean = true) {
         Log.d("Alarm", "Setting Up week repeating alarm")
         listOfTime.forEach {
-            setRepeatingAlarm(it, mode, autoStart, 7 * 24 * 60 * 60 * 1000L)
+            setRepeatingAlarm(it, mode, id, autoStart, 7 * 24 * 60 * 60 * 1000L)
         }
     }
 }
