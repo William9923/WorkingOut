@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.room.Room
+import com.softhouse.workingout.data.db.AppDatabase
 import com.softhouse.workingout.data.db.Schedule
 import com.softhouse.workingout.data.repository.MainRepository
 import com.softhouse.workingout.service.GeoTrackerService
@@ -14,6 +16,7 @@ import com.softhouse.workingout.service.StopScheduleService
 import com.softhouse.workingout.shared.Constants
 import com.softhouse.workingout.ui.MainActivity
 import com.softhouse.workingout.ui.sensor.tracker.Mode
+import dagger.android.DaggerBroadcastReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import io.karn.notify.Notify
 import kotlinx.coroutines.CoroutineScope
@@ -32,71 +35,90 @@ class ScheduleOnStopReceiver : BroadcastReceiver() {
 
     var schedule: Schedule? = null
 
-    override fun onReceive(context: Context?, intent: Intent?) {
-        val isAutoStart = intent?.getBooleanExtra(Constants.START_SERVICE_FLAG, true)
-        val isRepetitive = intent?.getBooleanExtra(Constants.REPETITIVE_FLAG, false)
-        val interval = intent?.getLongExtra(Constants.INTERVAL_FLAG, 0L)
-        val id = intent?.getLongExtra(Constants.SCHEDULE_ID_FLAG, Constants.INVALID_ID_DB) ?: Constants.INVALID_ID_DB
+    override fun onReceive(context: Context, intent: Intent) {
 
-        schedule = mainRepository.getSpecificScheduleById(id).value
+        val isAutoStart = intent.getBooleanExtra(Constants.START_SERVICE_FLAG, true)
+        val isRepetitive = intent.getBooleanExtra(Constants.REPETITIVE_FLAG, false)
+        val interval = intent.getLongExtra(Constants.INTERVAL_FLAG, 0L)
+        val id = intent.getLongExtra(Constants.SCHEDULE_ID_FLAG, Constants.INVALID_ID_DB)
 
-        if (schedule == null)
-            return
+//        schedule = mainRepository.getSpecificScheduleById(id).value
+//        Log.d("Database", mainRepository.getSpecificScheduleById(id).value.toString())
+//        Log.d("Database", mainRepository.getAllSchedule().value.toString())
+//
+//        mainRepository.getAllSchedule().observeForever { it ->
+//            it.forEach { data ->
+//                Log.d("Database", data.id.toString())
+//            }
+//        }
 
-        val scheduleService = ScheduleService(context!!)
-        val mode = schedule!!.mode
+        mainRepository.getSpecificScheduleById(id).observeForever {
+            schedule = it
+
+            if (schedule == null) {
+                Log.d("Receiver", "ID : $id")
+                Log.d("Receiver", "Schedule is null")
+
+            } else {
 
 
-        when (intent?.action) {
-
-            StepTrackerService.ACTION_STOP_SERVICE_STEP -> {
-                Log.d("OnStopReceiver", "SingleSTEPAlarmTriggered")
+                val scheduleService = ScheduleService(context)
+                val mode = schedule!!.mode
 
 
-                if (isAutoStart!!) {
-                    scheduleService.sendStepCommandToService(
-                        context,
-                        StepTrackerService.ACTION_STOP_SERVICE_STEP
-                    )
+                when (intent.action) {
+
+                    StepTrackerService.ACTION_STOP_SERVICE_STEP -> {
+                        Log.d("OnStopReceiver", "SingleSTEPAlarmTriggered")
+
+
+                        if (isAutoStart) {
+                            scheduleService.sendStepCommandToService(
+                                context,
+                                StepTrackerService.ACTION_STOP_SERVICE_STEP
+                            )
+                        }
+
+                        buildNotification(
+                            context,
+                            "Workout Alarm",
+                            "Stop!! You done a good job for this running workout\n Click here to see result"
+                        )
+                    }
+
+                    GeoTrackerService.ACTION_STOP_SERVICE_GEO -> {
+                        Log.d("OnStopReceiver", "SingleGEOAlarmTriggered")
+
+                        if (isAutoStart) {
+                            scheduleService.sendLocationCommandToService(
+                                context,
+                                GeoTrackerService.ACTION_STOP_SERVICE_GEO
+                            )
+                        }
+
+                        buildNotification(
+                            context,
+                            "Workout Alarm",
+                            "Stop!! You done a good job for this cycling workout\n Click me to see result"
+                        )
+                    }
                 }
-
-                buildNotification(
-                    context,
-                    "Workout Alarm",
-                    "Stop!! You done a good job for this running workout\n Click here to see result"
-                )
-            }
-
-            GeoTrackerService.ACTION_STOP_SERVICE_GEO -> {
-                Log.d("OnStopReceiver", "SingleGEOAlarmTriggered")
-
-                if (isAutoStart!!) {
-                    scheduleService.sendLocationCommandToService(
-                        context,
-                        GeoTrackerService.ACTION_STOP_SERVICE_GEO
+                if (isRepetitive) {
+                    Log.d("Scheduler", "Create repetitive")
+                    setRepetitiveAlarm(
+                        StopScheduleService(context),
+                        interval,
+                        mode,
+                        isAutoStart,
+                        id
                     )
+                } else {
+                    // single
+                    deleteSchedule(schedule!!)
                 }
-
-                buildNotification(
-                    context,
-                    "Workout Alarm",
-                    "Stop!! You done a good job for this cycling workout\n Click me to see result"
-                )
             }
         }
-        if (isRepetitive == true) {
-            Log.d("Scheduler", "Create repetitive")
-            setRepetitiveAlarm(
-                StopScheduleService(context),
-                interval ?: 0L,
-                mode,
-                isAutoStart!!,
-                id
-            )
-        } else {
-            // single
-            deleteSchedule(schedule!!)
-        }
+        Log.d("Receiver", "End")
     }
 
     private fun setRepetitiveAlarm(

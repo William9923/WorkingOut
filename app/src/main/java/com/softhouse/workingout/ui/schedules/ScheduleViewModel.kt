@@ -1,5 +1,6 @@
 package com.softhouse.workingout.ui.schedules
 
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -37,6 +38,7 @@ class ScheduleViewModel @ViewModelInject constructor(
     fun addSchedule(schedule: Schedule) {
         viewModelScope.launch {
             val id = mainRepository.insertSchedule(schedule)
+            Log.d("Database", "New Schedule ID : $id")
             when (schedule.types) {
                 Types.SINGLE -> {
                     startScheduleService.setSingleAlarm(schedule.startTime, schedule.mode, id, schedule.autoStart)

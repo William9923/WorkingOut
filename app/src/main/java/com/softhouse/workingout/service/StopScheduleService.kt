@@ -15,8 +15,8 @@ class StopScheduleService(private val context: Context) : ScheduleService(contex
     fun setSingleAlarm(timeInMillis: Long, mode: Mode, id: Long, autoStart: Boolean = true) {
         Log.d("Alarm", "Setting Up stop alarm")
         val alarm = Calendar.getInstance()
-        alarm.add(Calendar.SECOND, 10)
-//        alarm.timeInMillis = timeInMillis
+//        alarm.add(Calendar.SECOND, 10)
+        alarm.timeInMillis = timeInMillis
         val intentAction = when (mode) {
             Mode.STEPS -> StepTrackerService.ACTION_STOP_SERVICE_STEP
             Mode.CYCLING -> GeoTrackerService.ACTION_STOP_SERVICE_GEO

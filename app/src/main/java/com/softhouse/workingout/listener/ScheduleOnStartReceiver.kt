@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.room.Room
+import com.softhouse.workingout.data.db.AppDatabase
 import com.softhouse.workingout.data.db.Schedule
 import com.softhouse.workingout.data.repository.MainRepository
 import com.softhouse.workingout.service.GeoTrackerService
@@ -31,66 +33,71 @@ class ScheduleOnStartReceiver : BroadcastReceiver() {
 
     var schedule: Schedule? = null
 
-    override fun onReceive(context: Context?, intent: Intent?) {
-        val isAutoStart = intent?.getBooleanExtra(Constants.START_SERVICE_FLAG, true)
-        val isRepetitive = intent?.getBooleanExtra(Constants.REPETITIVE_FLAG, false)
-        val interval = intent?.getLongExtra(Constants.INTERVAL_FLAG, 0L)
-        val id = intent?.getLongExtra(Constants.SCHEDULE_ID_FLAG, Constants.INVALID_ID_DB) ?: Constants.INVALID_ID_DB
+    override fun onReceive(context: Context, intent: Intent) {
+
+        val isAutoStart = intent.getBooleanExtra(Constants.START_SERVICE_FLAG, true)
+        val isRepetitive = intent.getBooleanExtra(Constants.REPETITIVE_FLAG, false)
+        val interval = intent.getLongExtra(Constants.INTERVAL_FLAG, 0L)
+        val id = intent.getLongExtra(Constants.SCHEDULE_ID_FLAG, Constants.INVALID_ID_DB)
 
         schedule = mainRepository.getSpecificScheduleById(id).value
 
-        if (schedule == null)
-            return
+        mainRepository.getSpecificScheduleById(id).observeForever {
+            schedule = it
 
-        Log.d("Receiver", "Before Receive context")
-        val scheduleService = ScheduleService(context!!)
-        Log.d("Receiver", "After Receive context")
-        val mode = schedule!!.mode
+            if (schedule == null) {
+                Log.d("Receiver", "ID : $id")
+                Log.d("Receiver", "Schedule is null")
 
-        when (intent?.action) {
+            } else {
+                Log.d("Receiver", "Before Receive context")
+                val scheduleService = ScheduleService(context)
+                Log.d("Receiver", "After Receive context")
+                val mode = schedule!!.mode
 
-            StepTrackerService.ACTION_START_OR_RESUME_SERVICE_STEP -> {
-                Log.d("OnStartReceiver", "SingleSTEPAlarmTriggered")
+                when (intent.action) {
 
-                if (isAutoStart!!) {
-                    Log.d("Receiver", "OnStartReceiver called!")
-                    scheduleService.sendStepCommandToService(
-                        context,
-                        StepTrackerService.ACTION_START_OR_RESUME_SERVICE_STEP
+                    StepTrackerService.ACTION_START_OR_RESUME_SERVICE_STEP -> {
+                        Log.d("OnStartReceiver", "SingleSTEPAlarmTriggered")
+
+                        if (isAutoStart) {
+                            Log.d("Receiver", "OnStartReceiver called!")
+                            scheduleService.sendStepCommandToService(
+                                context,
+                                StepTrackerService.ACTION_START_OR_RESUME_SERVICE_STEP
+                            )
+                        }
+                        val text =
+                            if (schedule!!.target > 0L) "Go Run!! Current Target: ${schedule?.target} steps" else "Currently no target for running"
+                        buildNotification(context, "Workout Alarm", text)
+                    }
+
+                    GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO -> {
+                        Log.d("OnStartReceiver", "SingleGEOAlarmTriggered")
+
+                        if (isAutoStart) {
+                            scheduleService.sendLocationCommandToService(
+                                context,
+                                GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO
+                            )
+                        }
+                        val text =
+                            if (schedule!!.target > 0L) "Go Cycling!! Current Target: ${schedule?.target} km" else "Currently no target for cycling"
+                        buildNotification(context, "Workout Alarm", text)
+                    }
+                }
+
+                if (isRepetitive) {
+                    Log.d("Scheduler", "Create repetitive")
+                    setRepetitiveAlarm(
+                        StartScheduleService(context),
+                        interval,
+                        mode,
+                        isAutoStart,
+                        id
                     )
                 }
-                val text =
-                    if (schedule!!.target > 0L) "Go Run!! Current Target: ${schedule?.target} steps" else "Currently no target for running"
-                buildNotification(context, "Workout Alarm", text)
             }
-
-            GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO -> {
-                Log.d("OnStartReceiver", "SingleGEOAlarmTriggered")
-
-                if (isAutoStart!!) {
-                    scheduleService.sendLocationCommandToService(
-                        context,
-                        GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO
-                    )
-                }
-                val text =
-                    if (schedule!!.target > 0L) "Go Cycling!! Current Target: ${schedule?.target} km" else "Currently no target for cycling"
-                buildNotification(context, "Workout Alarm", text)
-            }
-        }
-
-        if (isRepetitive == true) {
-            Log.d("Scheduler", "Create repetitive")
-            setRepetitiveAlarm(
-                StartScheduleService(context),
-                interval ?: 0L,
-                mode,
-                isAutoStart ?: false,
-                id
-            )
-        } else {
-            // single
-            deleteSchedule(schedule!!)
         }
     }
 
