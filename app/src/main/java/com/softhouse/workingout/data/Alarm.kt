@@ -6,6 +6,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
@@ -14,6 +15,12 @@ import java.util.concurrent.TimeUnit
 @Keep
 @Entity(tableName = "alarms")
 data class Alarm(
+    @ColumnInfo(name = "dof")
+    var dof: Int = 0,
+    @ColumnInfo(name = "month")
+    var month: Int = 0,
+    @ColumnInfo(name = "year")
+    var year: Int = 0,
     @ColumnInfo(name = "hour")
     var hour: Int = 0,
     @ColumnInfo(name = "minute")
@@ -58,6 +65,9 @@ data class Alarm(
         const val WEEKEND = 0x60
         const val EVERYDAY = 0x7F
 
+        private const val EXTRA_DOF = "DOF"
+        private const val EXTRA_MONTH = "MONTH"
+        private const val EXTRA_YEAR = "YEAR"
         private const val EXTRA_HOUR = "HOUR"
         private const val EXTRA_MINUTE = "MINUTE"
         private const val EXTRA_ENABLED = "ENABLED"
@@ -76,6 +86,9 @@ data class Alarm(
         fun fromBundle(bundle: Bundle?): Alarm? {
             if (bundle == null) return null
             return Alarm(
+                dof = bundle.getInt(EXTRA_DOF, 0),
+                month = bundle.getInt(EXTRA_MONTH, 0),
+                year = bundle.getInt(EXTRA_YEAR, 0),
                 hour = bundle.getInt(EXTRA_HOUR, 0),
                 minute = bundle.getInt(EXTRA_MINUTE, 0),
                 enabled = bundle.getBoolean(EXTRA_ENABLED, false),
@@ -95,6 +108,8 @@ data class Alarm(
     }
 
     val alarmTime: LocalTime get() = LocalTime.of(hour, minute)
+    val alarmDate: LocalDate get() = LocalDate.of(year, month, dof)
+    val alarmSchedule: LocalDateTime get() = LocalDateTime.of(year, month, dof, hour, minute,0,0)
     val endAlarmTime: LocalTime get() = LocalTime.of(endHour, endMinute)
 
     fun nearestDateTime(localDateTime: LocalDateTime? = null): LocalDateTime? {
@@ -124,8 +139,9 @@ data class Alarm(
     }
 
     fun endTime(localDateTime: LocalDateTime? = null): LocalDateTime? {
-        return nearestDateTime()?.withHour(endHour)?.withMinute(endMinute)
+        return nearestDateTime(localDateTime)?.withHour(endHour)?.withMinute(endMinute)
     }
+
 
     private fun getNormalizedDateAndTimeDiffPair(
         first: LocalDateTime,
@@ -141,6 +157,9 @@ data class Alarm(
 
     fun toBundle(): Bundle {
         val bundle = Bundle()
+        bundle.putInt(EXTRA_DOF, dof)
+        bundle.putInt(EXTRA_MONTH, month)
+        bundle.putInt(EXTRA_YEAR, year)
         bundle.putInt(EXTRA_HOUR, hour)
         bundle.putInt(EXTRA_MINUTE, minute)
         bundle.putBoolean(EXTRA_ENABLED, enabled)

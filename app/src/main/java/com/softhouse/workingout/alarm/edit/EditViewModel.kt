@@ -1,5 +1,7 @@
 package com.softhouse.workingout.alarm.edit
 
+//import com.softhouse.workingout.music.data.Track
+//import com.softhouse.workingout.repository.MusicRepository
 import android.app.Application
 import android.os.Handler
 import android.os.Looper
@@ -13,15 +15,13 @@ import com.softhouse.androidutils.Result
 import com.softhouse.workingout.R
 import com.softhouse.workingout.alarm.calculateDurationString
 import com.softhouse.workingout.alarm.cancel
-import com.softhouse.workingout.data.Alarm
-//import com.softhouse.workingout.music.data.Track
-import com.softhouse.workingout.data.repository.AlarmRepository
-//import com.softhouse.workingout.repository.MusicRepository
 import com.softhouse.workingout.alarm.schedule
+import com.softhouse.workingout.data.Alarm
+import com.softhouse.workingout.data.repository.AlarmRepository
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinApiExtension
+import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
 
 class EditViewModel(
     private val alarmRepository: AlarmRepository,
@@ -40,6 +40,9 @@ class EditViewModel(
 
     private val _alarmDateTime = MutableLiveData<LocalDateTime?>()
     val alarmDateTime: LiveData<LocalDateTime?> = _alarmDateTime
+
+    private val _alarmDate = MutableLiveData<LocalDate?>()
+    val alarmDate: LiveData<LocalDate?> = _alarmDate
 
     private val _endDateTime = MutableLiveData<LocalDateTime?>()
     val endDateTime: LiveData<LocalDateTime?> = _endDateTime
@@ -100,6 +103,14 @@ class EditViewModel(
             this.endHour = hour
             this.endMinute = minute
             _endDateTime.value = endTime()
+        }
+    }
+    fun updateAlarmDate(year: Int, month: Int, dof: Int) {
+        selectedAlarm.value?.apply {
+            this.year = year
+            this.month = month
+            this.dof = dof
+            _alarmDate.value = LocalDate.of(year,month,dof)
         }
     }
 
@@ -168,8 +179,11 @@ class EditViewModel(
     }
 
     private fun defaultAlarm(): Alarm {
-        val now = LocalTime.now()
+        val now = LocalDateTime.now()
         return Alarm(
+            now.dayOfMonth,
+            now.monthValue,
+            now.year,
             now.hour,
             now.minute,
             false,

@@ -1,9 +1,12 @@
 package com.softhouse.workingout.alarm.edit
 
+import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.view.get
 import androidx.navigation.fragment.findNavController
@@ -20,8 +23,10 @@ import com.softhouse.workingout.shared.BaseBottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.component.KoinApiExtension
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class AlarmEditFragment : BaseBottomSheetDialogFragment() {
 
@@ -77,6 +82,7 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
     @KoinApiExtension
     private fun setupView(exists: Boolean, alarm: Alarm) {
         binding.setup(exists, alarm)
+        binding.alarmDateTextView.visibility = VISIBLE
         binding.daysToggleGroup.addOnButtonCheckedListener(daysToggleGroupListener)
         binding.deleteFab.setOnClickListener {
             editViewModel.onDeleteClicked()
@@ -97,6 +103,10 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
         binding.alarmTimeTextView2.setOnClickListener {
             endTimePicker()
         }
+
+        binding.alarmDateTextView.setOnClickListener {
+            alarmDatePicker()
+        }
         binding.weekDaysChip.setOnClickListener {
             binding.daysToggleGroup.removeOnButtonCheckedListener(daysToggleGroupListener)
             binding.daysToggleGroup.clearChecked()
@@ -105,6 +115,7 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
             }
             editViewModel.updateAlarmDay(Alarm.WEEKDAYS)
             binding.daysToggleGroup.addOnButtonCheckedListener(daysToggleGroupListener)
+            binding.alarmDateTextView.visibility = GONE
         }
         binding.weekEndsChip.setOnClickListener {
             binding.daysToggleGroup.removeOnButtonCheckedListener(daysToggleGroupListener)
@@ -114,6 +125,7 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
             }
             editViewModel.updateAlarmDay(Alarm.WEEKEND)
             binding.daysToggleGroup.addOnButtonCheckedListener(daysToggleGroupListener)
+            binding.alarmDateTextView.visibility = GONE
         }
         binding.everydayChip.setOnClickListener {
             binding.daysToggleGroup.removeOnButtonCheckedListener(daysToggleGroupListener)
@@ -123,12 +135,14 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
             }
             editViewModel.updateAlarmDay(Alarm.EVERYDAY)
             binding.daysToggleGroup.addOnButtonCheckedListener(daysToggleGroupListener)
+            binding.alarmDateTextView.visibility = GONE
         }
         binding.onceChip.setOnClickListener {
             binding.daysToggleGroup.removeOnButtonCheckedListener(daysToggleGroupListener)
             binding.daysToggleGroup.clearChecked()
             editViewModel.updateAlarmDay(Alarm.ONCE)
             binding.daysToggleGroup.addOnButtonCheckedListener(daysToggleGroupListener)
+            binding.alarmDateTextView.visibility = VISIBLE
         }
         binding.modeFab.setOnClickListener {
             if (binding.modeFab.isChecked) {
@@ -144,6 +158,7 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
 
     private fun openTimePicker() {
         val now = editViewModel.alarmDateTime.value?.toLocalTime() ?: LocalTime.now()
+        val date = editViewModel.alarmDateTime.value?.toLocalDate() ?: LocalDate.now()
         val picker = TimePickerDialog(
             requireContext(),
             R.style.TimePickerDialogTheme,
@@ -157,6 +172,7 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
                     binding.alarmTimePeriodTextView.text = context?.getString(R.string.am)
                 }
                 editViewModel.updateAlarmTime(hour, minute)
+                editViewModel.updateAlarmDate(date.year, date.monthValue, date.dayOfMonth)
             },
             now.hour,
             now.minute,
@@ -185,6 +201,31 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
             now.minute,
             false
         )
+        picker.show()
+    }
+
+    private fun alarmDatePicker() {
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+        val now = editViewModel.alarmDateTime.value?.toLocalDate() ?: LocalDate.of(year,month+1,day)
+        val time = editViewModel.alarmDateTime.value?.toLocalTime() ?: LocalTime.now()
+        val picker = DatePickerDialog(
+            requireContext(),
+            R.style.TimePickerDialogTheme,
+            { _, year, month, day ->
+                val formatter = DateTimeFormatter.ofPattern("EEE, MMM dd, yyyy")
+                val date = LocalDate.of(year, month+1, day)
+                binding.alarmDateTextView.text = date.format(formatter)
+                editViewModel.updateAlarmDate(year, month, day)
+                editViewModel.updateAlarmTime(time.hour,time.minute)
+            },
+            now.year,
+            now.monthValue-2,
+            now.dayOfMonth
+        )
+        picker.datePicker.minDate = System.currentTimeMillis()
         picker.show()
     }
 

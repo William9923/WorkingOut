@@ -10,19 +10,33 @@
     tools:context=".alarm.edit.AlarmEditFragment">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/headerBackgroundImageView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="10dp"
-        android:alpha="0.2"
-        android:contentDescription="@string/source_image"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@id/vibrationFab"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/HeaderBackgroundImageView"
-        tools:src="@tools:sample/backgrounds/scenic" />
+            android:id="@+id/headerBackgroundImageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            android:alpha="0.2"
+            android:contentDescription="@string/source_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@id/vibrationFab"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/HeaderBackgroundImageView"
+            tools:src="@tools:sample/backgrounds/scenic"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+            android:id="@+id/alarmDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="23sp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4.Custom"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toTopOf="@id/headerBackgroundImageView"
+            tools:text="Fri, Apr 30, 2021"
+            android:layout_marginTop="44dp" />
 
     <TextView
             android:id="@+id/alarmTimeTextView"
@@ -34,8 +48,7 @@
             app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toTopOf="@id/headerBackgroundImageView"
             tools:text="08:50"
-            android:layout_marginTop="92dp"
-            android:layout_marginStart="4dp" />
+            android:layout_marginTop="88dp" />
 
     <TextView
             android:id="@+id/alarmTimePeriodTextView"
@@ -100,7 +113,7 @@
     <TextView
             android:id="@+id/durationTextView"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:drawablePadding="5dp"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
@@ -108,12 +121,12 @@
             app:drawableStartCompat="@drawable/ic_round_alarm"
             app:layout_constraintStart_toEndOf="@id/alarmTimePeriodTextView"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toTopOf="@id/alarmTimeTextView"
-            app:layout_constraintBottom_toBottomOf="@id/alarmTimeTextView"
+            app:layout_constraintTop_toBottomOf="@id/modeFab"
+            app:layout_constraintBottom_toTopOf="@id/descriptionEditText"
             android:textSize="12sp"
             tools:text="in 5 days, 11 hours"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintHorizontal_bias="0.986"
+            app:layout_constraintVertical_bias="0.829" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/modeFab"
@@ -140,16 +153,17 @@
         app:layout_constraintTop_toTopOf="@id/modeFab" />
 
     <EditText
-        android:id="@+id/descriptionEditText"
-        style="@style/CustomEditTextStyle"
-        android:layout_marginTop="20dp"
-        android:hint="@string/enter_a_description"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@id/alarmTimeTextView"
-        tools:text="Description" />
+            android:id="@+id/descriptionEditText"
+            style="@style/CustomEditTextStyle"
+            android:layout_marginTop="56dp"
+            android:hint="@string/enter_a_description"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/alarmTimeTextView"
+            tools:text="Description"
+            app:layout_constraintHorizontal_bias="0.0" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/snoozeFab"

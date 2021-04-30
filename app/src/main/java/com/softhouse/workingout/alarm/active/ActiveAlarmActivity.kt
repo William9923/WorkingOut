@@ -6,19 +6,25 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.Fragment
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import com.softhouse.workingout.alarm.bind
+import com.softhouse.workingout.R
+import com.softhouse.workingout.alarm.*
 import com.softhouse.workingout.listener.AlarmReceiver
 import com.softhouse.workingout.data.Alarm
 import com.softhouse.workingout.databinding.ActivityActiveAlarmBinding
 import com.softhouse.workingout.preferences.Preferences
 import com.softhouse.workingout.data.repository.AlarmRepository
 import com.softhouse.workingout.service.AlarmService
-import com.softhouse.workingout.alarm.snooze
-import com.softhouse.workingout.alarm.turnScreenOffAndKeyguardOn
-import com.softhouse.workingout.alarm.turnScreenOnAndKeyguardOff
+import com.softhouse.workingout.service.GeoTrackerService
+import com.softhouse.workingout.service.StepTrackerService
+import com.softhouse.workingout.ui.sensor.tracker.Mode
+import com.softhouse.workingout.ui.sensor.tracker.TrackingFragment
+import kotlinx.android.synthetic.main.fragment_alarm_edit.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -64,6 +70,15 @@ class ActiveAlarmActivity : AppCompatActivity() {
         binding.turnOffFab.setOnClickListener {
             stopForegroundService()
             turnOffAlarm(alarm)
+            if (!isTrackingStarted()) {
+                val text = "halloo"
+                Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+                when (modeTextView.text!!) {
+                    getString(R.string.cycling) -> sendLocationCommandToService(GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO)
+                    getString(R.string.mode) -> sendStepCommandToService(StepTrackerService.ACTION_START_OR_RESUME_SERVICE_STEP)
+
+                }
+            }
         }
 
         binding.snoozeFab.setOnClickListener {
@@ -118,10 +133,40 @@ class ActiveAlarmActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Intent Command
+     */
+
+    fun sendStepCommandToService(action: String) =
+        Intent(this, StepTrackerService::class.java).also {
+            it.action = action
+            this.startService(it)
+        }
+
+    fun sendLocationCommandToService(action: String) =
+        Intent(this, GeoTrackerService::class.java).also {
+            it.action = action
+            this.startService(it)
+        }
+    private fun isTrackingStarted(): Boolean {
+        val isGeoTracking = GeoTrackerService.isTracking.value ?: false
+        val isStepTracking = StepTrackerService.isTracking.value ?: false
+        return (isGeoTracking || isStepTracking)
+    }
+
     @KoinApiExtension
     private fun stopForegroundService() {
         val intent = Intent(this, AlarmService::class.java)
         stopService(intent)
+        if (!isTrackingStarted()) {
+            val text = "halloo"
+            Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+            when (modeTextView.text!!) {
+                getString(R.string.cycling) -> sendLocationCommandToService(GeoTrackerService.ACTION_START_OR_RESUME_SERVICE_GEO)
+                getString(R.string.mode) -> sendStepCommandToService(StepTrackerService.ACTION_START_OR_RESUME_SERVICE_STEP)
+
+            }
+        }
     }
 
     override fun onDestroy() {

@@ -10,6 +10,7 @@ import com.softhouse.workingout.databinding.ActivityActiveAlarmBinding
 import com.softhouse.workingout.databinding.AlarmViewBinding
 import com.softhouse.workingout.databinding.FragmentAlarmEditBinding
 import com.softhouse.workingout.databinding.FragmentAlarmBinding
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 fun AlarmViewBinding.bind(alarm: Alarm) {
@@ -40,6 +41,8 @@ fun FragmentAlarmEditBinding.setup(exists: Boolean, alarm: Alarm) {
     val formatter = DateTimeFormatter.ofPattern("hh:mm")
     alarmTimeTextView.text = alarm.alarmTime.format(formatter)
     alarmTimeTextView2.text = alarm.endAlarmTime.format(formatter)
+    val forma = DateTimeFormatter.ofPattern("EEE, MMM dd, yyyy")
+    alarmDateTextView.text = alarm.alarmDate.format(forma)
     if (alarm.hour >= Utils.NOON) {
         alarmTimePeriodTextView.text = context.getString(R.string.pm)
     } else {

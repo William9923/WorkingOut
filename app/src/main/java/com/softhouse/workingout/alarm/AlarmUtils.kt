@@ -120,6 +120,9 @@ fun Alarm.snooze(context: Context) {
     var future = alarmTime
     future = future.plusMinutes(Preferences.snoozeDuration.toLong())
     val snoozed = Alarm(
+        dof,
+        month,
+        year,
         future.hour,
         future.minute,
         true,
