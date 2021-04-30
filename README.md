@@ -57,22 +57,25 @@ Berikut beberapa screenshot aplikasi saat dijalankan :
 ## Library
 
 Berikut penggunaan library pada aplikasi :
-- Android Activity context (single activity - many fragment architecture): Digunakan untuk
-- Material Design: Digunakan untuk
-- Navigation: Digunakan untuk
-- Recycler view: Digunakan untuk
-- Retrofit: Digunakan untuk
-- Glide: Digunakan untuk
-- Easy Permission: Digunakan untuk
-- Google Maps Location Services: Digunakan untuk
-- Room: Digunakan untuk
-- Kotlin Extensions and Coroutines support for Room: Digunakan untuk
-- Dagger: Digunakan untuk
-- Dagger Android: Digunakan untuk
-- Dagger - Hilt: Digunakan untuk
-- Material Calender: Digunakan untuk
-- Two Pane Layout: Digunakan untuk
-- Utilities: Digunakan untuk
+| No | Library | Fungsi |
+|----|-------------|------------|
+| 1  | Android Activity context (single activity - many fragment architecture) | Digunakan untuk mengakses API yang ada pada Activity |
+| 2  | Material Design | Digunakan untuk mengimplementasikan Material Design pada aplikasi dengan API |
+| 3  | Navigation | Digunakan untuk navigasi antara Fragments, Activities, atau komponen lainnya |
+| 4  | Recycler view | Digunakan untuk menampilkan data yang terhitung besar namun meminimalkan penggunaan memori |
+| 5  | Retrofit | Digunakan untuk membuat HTTP Request seperti pada fitur Sports News |
+| 6  | Glide | Digunakan untuk membuat load gambar menjadi lebih efisien |
+| 7  | Easy Permission | Digunakan untuk mengatur permission dari aplikasi |
+| 8  | Google Maps Location Services | Digunakan untuk mengakses maps dari Google Maps seperti pada fitur Cycling Details |
+| 9  | Room | Digunakan untuk pengaksesan database SQLite yang lebih baik |
+| 10  | Kotlin Extensions and Coroutines support for Room | Digunakan untuk pengaksesan database SQLite yang lebih baik |
+| 11  | Dagger | Digunakan untuk |
+| 12  | Dagger Android | Digunakan untuk |
+| 13  | Dagger - Hilt | Digunakan untuk |
+| 14  | Material Calendar | Digunakan untuk |
+| 15  | Two Pane Layout | Digunakan untuk pengimplementasian sliding pane untuk layout |
+| 16  | Utilities | Digunakan untuk |
+
 
 ## Pembagian Kerja
 
@@ -80,14 +83,22 @@ Berikut penggunaan library pada aplikasi :
 
 | No | Kontribusi |
 |----|------------|
-| 1  | - | 
+| 1  | Sports News UI Design | 
+| 2  | Running Logs UI Design | 
+| 3  | Cycling Logs UI Design | 
+| 4  | Scheduler UI Design |
+| 5  | Tester | 
 
 
 * 13518006 - Ahadi Ihsan Rasyidin
 
 | No | Kontribusi |
 |----|------------|
-| 1  | - |
+| 1  | Single Alarm Without Date |
+| 2  | Repeating Alarm |
+| 3  | Layout Scheduler |
+| 4  | Auto Tracker |
+| 5  | Tester |
 
 
 * 13518138 - William
