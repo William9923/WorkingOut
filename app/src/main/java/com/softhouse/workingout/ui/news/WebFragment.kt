@@ -1,8 +1,8 @@
 package com.softhouse.workingout.ui.news
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
@@ -11,17 +11,18 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.softhouse.workingout.R
 
-private const val ARG_PARAM1 = "param1"
+
 
 class WebFragment : Fragment() {
-    private var url: String? = null
 
+    private val param1 = "param1"
+    private var url: String? = null
     private val args: WebFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            url = it.getString(ARG_PARAM1)
+            url = it.getString(param1)
         }
 
         // Invoke trigger for appbar menu
@@ -30,18 +31,6 @@ class WebFragment : Fragment() {
         // Setup url for webview
         url = args.url
     }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            // Overriding back button -> return to previous stack
-            android.R.id.home -> {
-                activity?.onBackPressed()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,24 +42,14 @@ class WebFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val webView: WebView = view.findViewById(R.id.webview)
-
         webView.loadUrl(url)
         webView.webViewClient = WebViewClient()
         with(webView.settings) {
             javaScriptEnabled = true
         }
-
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String) =
-            WebFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                }
-            }
-    }
+    companion object
 }

@@ -3,8 +3,173 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/mobile_navigation"
-            app:startDestination="@+id/navigation_home">
+            app:startDestination="@id/navigation_tracking">
 
+    <action
+            android:id="@+id/action_global_trackingFragment"
+            app:destination="@id/navigation_tracking"
+            app:launchSingleTop="true"/>
+
+    <!--Tracking Main Menu Navigation-->
+    <fragment
+            android:id="@+id/navigation_tracking"
+            android:name="com.softhouse.workingout.ui.sensor.tracker.TrackingFragment"
+            android:label="Track"
+            tools:layout="@layout/fragment_tracking">
+        <action
+                android:id="@+id/action_navigation_tracking_to_navigation_cycling_detail"
+                app:destination="@id/navigation_cycling_detail"
+                app:popUpTo="@+id/navigation_tracking"
+                app:popUpToInclusive="false">
+            <argument
+                    android:name="record_id"
+                    android:defaultValue="-1L"/>
+        </action>
+        <action
+                android:id="@+id/action_navigation_tracking_to_navigation_running_detail"
+                app:destination="@id/navigation_running_detail"
+                app:popUpTo="@+id/navigation_tracking"
+                app:popUpToInclusive="true">
+            <argument
+                    android:name="record_id"
+                    android:defaultValue="-1L"/>
+        </action>
+    </fragment>
+
+    <!--    Logs History Navigation-->
+    <fragment
+            android:id="@+id/navigation_calender"
+            android:name="com.softhouse.workingout.ui.log.calender.CalenderFragment"
+            android:label="Log Calender"
+            tools:layout="@layout/fragment_calender">
+        <action
+                android:id="@+id/action_navigation_calender_to_navigation_logs_cycling"
+                app:destination="@id/navigation_logs_cycling"
+                app:popUpTo="@id/navigation_calender"
+                app:popUpToInclusive="false"/>
+        <action
+                android:id="@+id/action_navigation_calender_to_navigation_logs_running"
+                app:destination="@id/navigation_logs_running"
+                app:popUpTo="@id/navigation_calender"
+                app:popUpToInclusive="false"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/navigation_logs_running"
+            android:name="com.softhouse.workingout.ui.log.list.RunningLogsFragment"
+            android:label="Running Logs"
+            tools:layout="@layout/fragment_running_logs">
+        <argument
+                android:name="day"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+        <argument
+                android:name="month"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+        <argument
+                android:name="year"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+        <action
+                android:id="@+id/action_navigation_logs_running_to_navigation_running_detail"
+                app:destination="@id/navigation_running_detail"
+                app:popUpToInclusive="false"
+                app:popUpTo="@id/navigation_logs_running"/>
+        <action
+                android:id="@+id/action_navigation_logs_running_to_navigation_two_pane_running_logs"
+                app:destination="@id/navigation_two_pane_running_logs"
+                app:popUpToInclusive="false"
+                app:popUpTo="@id/navigation_calender">
+            <argument
+                    android:name="day"
+                    android:defaultValue="-1"/>
+            <argument
+                    android:name="month"
+                    android:defaultValue="-1"/>
+            <argument
+                    android:name="year"
+                    android:defaultValue="-1"/>
+        </action>
+    </fragment>
+
+    <fragment
+            android:id="@+id/navigation_two_pane_running_logs"
+            android:name="com.softhouse.workingout.ui.log.list.TwoPaneRunningLogsFragment"
+            android:label="Running Logs"
+            tools:layout="@layout/fragment_two_pane_running_logs">
+        <action
+                android:id="@+id/action_navigation_two_pane_running_logs_to_navigation_logs_running"
+                app:destination="@id/navigation_logs_running"
+                app:popUpTo="@id/navigation_calender"
+                app:popUpToInclusive="false"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/navigation_two_pane_cycling_logs"
+            android:name="com.softhouse.workingout.ui.log.list.TwoPaneCyclingLogsFragment"
+            android:label="Cycling Logs"
+            tools:layout="@layout/fragment_two_pane_cycling_logs">
+        <action
+                android:id="@+id/action_navigation_two_pane_cycling_logs_to_navigation_logs_cycling"
+                app:destination="@id/navigation_logs_cycling"
+                app:popUpTo="@id/navigation_calender"
+                app:popUpToInclusive="false"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/navigation_logs_cycling"
+            android:name="com.softhouse.workingout.ui.log.list.CyclingLogsFragment"
+            android:label="Cycling Logs"
+            tools:layout="@layout/fragment_cycling_logs">
+        <argument
+                android:name="day"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+        <argument
+                android:name="month"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+        <argument
+                android:name="year"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+        <action
+                android:id="@+id/action_navigation_logs_cycling_to_navigation_cycling_detail"
+                app:destination="@id/navigation_cycling_detail"
+                app:popUpToInclusive="false"
+                app:popUpTo="@id/navigation_logs_cycling"/>
+        <action
+                android:id="@+id/action_navigation_logs_cycling_to_navigation_two_pane_cycling_logs"
+                app:destination="@id/navigation_two_pane_cycling_logs"
+                app:popUpTo="@id/navigation_calender"
+                app:popUpToInclusive="false"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/navigation_running_detail"
+            android:name="com.softhouse.workingout.ui.log.DetailRunningFragment"
+            android:label="Run Result Details"
+            tools:layout="@layout/fragment_detail_running">
+        <argument
+                android:name="record_id"
+                app:argType="long"
+                android:defaultValue="-1L"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/navigation_cycling_detail"
+            android:name="com.softhouse.workingout.ui.log.DetailCyclingFragment"
+            android:label="Cycling Result Details"
+            tools:layout="@layout/fragment_detail_cycling">
+        <argument
+                android:name="record_id"
+                app:argType="long"
+                android:defaultValue="-1L"
+                />
+    </fragment>
+
+    <!--    News Navigation-->
     <fragment
             android:id="@+id/navigation_news"
             android:name="com.softhouse.workingout.ui.news.NewsList"
@@ -17,6 +182,8 @@
                 app:exitAnim="@anim/fragment_fade_exit"
                 app:popEnterAnim="@anim/nav_default_pop_enter_anim"
                 app:popExitAnim="@animator/nav_default_pop_exit_anim"
+                app:popUpTo="@+id/navigation_news"
+                app:popUpToInclusive="false"
                 >
             <argument
                     android:name="url"
@@ -24,23 +191,6 @@
         </action>
     </fragment>
 
-    <fragment
-            android:id="@+id/navigation_home"
-            android:name="com.softhouse.workingout.ui.home.HomeFragment"
-            android:label="@string/title_home"
-            tools:layout="@layout/fragment_home"/>
-
-    <fragment
-            android:id="@+id/navigation_dashboard"
-            android:name="com.softhouse.workingout.ui.dashboard.DashboardFragment"
-            android:label="@string/title_dashboard"
-            tools:layout="@layout/fragment_dashboard"/>
-
-    <fragment
-            android:id="@+id/navigation_notifications"
-            android:name="com.softhouse.workingout.ui.notifications.NotificationsFragment"
-            android:label="@string/title_notifications"
-            tools:layout="@layout/fragment_notifications"/>
     <fragment
             android:id="@+id/webFragment"
             android:name="com.softhouse.workingout.ui.news.WebFragment"
@@ -51,5 +201,19 @@
                 app:argType="string"/>
     </fragment>
 
+    <!--    Scheduler Navigation-->
+    <fragment
+            android:id="@+id/navigation_scheduler"
+            android:name="com.softhouse.workingout.ui.schedules.ScheduleFragment"
+            android:label="New Schedule"
+            tools:layout="@layout/fragment_schedule"/>
 
+    <fragment
+            android:id="@+id/navigation_schedule_list"
+            android:name="com.softhouse.workingout.ui.schedules.ViewScheduleFragment"
+            android:label="Schedule Plan"
+            tools:layout="@layout/fragment_view_schedule_list">
+        <action android:id="@+id/action_navigation_schedule_list_to_navigation_scheduler"
+                app:destination="@id/navigation_scheduler"/>
+    </fragment>
 </navigation>

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.softhouse.workingout.ui.sensor.tracker.Mode"/>
+        <import type="com.softhouse.workingout.ui.schedules.Types"/>
+
+
+        <variable
+                name="types"
+                type="Types"/>
+
+        <variable
+                name="mode"
+                type="Mode"/>
+
+        <import type="android.view.View"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.sensor.tracker.TrackingFragment">
+
+        <Button
+                android:id="@+id/switch_mode_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{(mode == Mode.STEPS) ? "Running" : "Cycling"}'
+                android:tooltipText="Click me to change mode!"
+                app:icon="@drawable/baseline_touch_app_24"
+                android:theme="@style/Secondary.Button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintVertical_bias="0.042"
+        />
+        <Button
+                android:id="@+id/start_time_btn"
+                android:layout_width="129dp"
+                android:layout_height="77dp"
+                app:icon="@drawable/outline_event_24"
+                android:text="Start"
+                android:theme="@style/Secondary.Button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.229"
+                app:layout_constraintHorizontal_bias="0.216"/>
+
+
+        <TextView
+                android:id="@+id/start_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:textAlignment="center"
+                android:textSize="48sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.385"
+                android:textStyle="bold"
+                android:text=''
+                app:layout_constraintHorizontal_bias="0.113"/>
+        <TextView
+                android:id="@+id/end_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:textAlignment="center"
+                android:textSize="48sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.385"
+                android:textStyle="bold"
+                android:text=''
+                app:layout_constraintHorizontal_bias="0.886"/>
+        <Button
+                android:id="@+id/end_time_btn"
+                android:layout_width="129dp"
+                android:layout_height="77dp"
+                app:icon="@drawable/outline_event_24"
+                android:text="End"
+                android:theme="@style/Secondary.Button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.229"
+                app:layout_constraintHorizontal_bias="0.812"/>
+
+        <Button
+                android:id="@+id/switch_types_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{types.toString()}'
+                android:tooltipText="Click me to change types!"
+                app:icon="@drawable/baseline_touch_app_24"
+                android:theme="@style/Secondary.Button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintVertical_bias="0.127"
+        />
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textField"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:hint="Target">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+            />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.65"
+                android:visibility="@{(types == Types.REPEATING_WEEK) ? View.VISIBLE : View.GONE}"
+        >
+            <Button
+                    android:id="@+id/buttonSun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S"
+                    style="@style/OutlineToggleButton"
+
+            />
+            <Button
+                    android:id="@+id/buttonMon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="M"
+                    style="@style/OutlineToggleButton"
+            />
+            <Button
+                    android:id="@+id/buttonTues"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="T"
+                    style="@style/OutlineToggleButton"
+            />
+            <Button
+                    android:id="@+id/buttonWed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="W"
+                    style="@style/OutlineToggleButton"
+            />
+            <Button
+                    android:id="@+id/buttonThurs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="T"
+                    style="@style/OutlineToggleButton"
+            />
+            <Button
+                    android:id="@+id/buttonFri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="F"
+                    style="@style/OutlineToggleButton"
+            />
+            <Button
+                    android:id="@+id/buttonSat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S"
+                    style="@style/OutlineToggleButton"
+            />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <Button
+                android:id="@+id/date_btn"
+                android:layout_width="129dp"
+                android:layout_height="77dp"
+                app:icon="@drawable/outline_event_24"
+                android:text="Date"
+                android:theme="@style/Secondary.Button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.65"
+                android:visibility="@{(types == Types.SINGLE) ? View.VISIBLE : View.GONE}"
+        />
+        <CheckBox
+                android:id="@+id/chk_box_auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Auto Start"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.732"
+                app:layout_constraintHorizontal_bias="0.898" android:textAlignment="viewStart"/>
+        <Button
+                android:id="@+id/action_btn"
+                android:layout_width="305dp"
+                android:layout_height="89dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.838"
+                android:textSize="24sp"
+                android:text="Save"
+                android:theme="@style/Main.Button"
+        />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

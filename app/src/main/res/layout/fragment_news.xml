@@ -11,6 +11,8 @@
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
         tools:context=".ui.news.NewsList"
-        tools:listitem="@layout/fragment_news_list"
+        tools:listitem="@layout/fragment_news_item"
         android:background="#FFFFFF"
-        tools:actionBarNavMode="standard"/>
+        tools:actionBarNavMode="standard"
+        android:paddingTop="8dp"
+        />
