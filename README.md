@@ -30,6 +30,12 @@ Berikut beberapa screenshot aplikasi saat dijalankan :
 ![Cycling Tracker](docs/tracker_cycling_1.jpg)
 ![Cycling Tracker](docs/tracker_cycling_2.jpg)
 
+### Notification While App is Running
+![Notification](docs/notification_1.jpg)
+
+### Notification After App is Closed While Tracking
+![Notification](docs/notification_2.jpg)
+
 ### Log Calendar
 ![Running Calendar](docs/running_calendar.jpg)
 ![Cycling Calendar](docs/cycling_calendar.jpg)
