@@ -17,8 +17,8 @@
             android:title="History"/>
 
     <item
-            android:id="@+id/navigation_scheduler"
+            android:id="@+id/navigation_schedule_list"
             android:icon="@drawable/outline_event_24"
-            android:title="Full"/>
+            android:title="Schedule"/>
 
 </menu>

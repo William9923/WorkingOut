@@ -14,18 +14,29 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.softhouse.workingout.R
+import com.softhouse.workingout.data.db.Schedule
+import com.softhouse.workingout.data.repository.MainRepository
 import com.softhouse.workingout.databinding.FragmentScheduleBinding
+import com.softhouse.workingout.service.GeoTrackerService
 import com.softhouse.workingout.service.ScheduleService
 import com.softhouse.workingout.service.StartScheduleService
 import com.softhouse.workingout.service.StopScheduleService
 import com.softhouse.workingout.ui.sensor.tracker.Mode
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import okhttp3.internal.immutableListOf
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ScheduleFragment : Fragment() {
 
     lateinit var binding: FragmentScheduleBinding
+
+    val viewModel: ScheduleViewModel by viewModels()
 
     private val dayMap = mutableMapOf(
         "Mon" to false,
@@ -71,6 +82,10 @@ class ScheduleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentScheduleBinding.inflate(inflater, container, false)
+
+        viewModel.resetSchedule()
+        viewModel.initService(startScheduleService, stopScheduleService)
+
         // Make screen orientation always portrait
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         return binding.root
@@ -105,9 +120,10 @@ class ScheduleFragment : Fragment() {
                             endTime!!.get(Calendar.MINUTE),
                             endTime!!.get(Calendar.SECOND)
                         )
-
+//                        addSingleSchedule()
                         startScheduleService.setSingleAlarm(start.timeInMillis, mode, autoStart)
                         stopScheduleService.setSingleAlarm(end.timeInMillis, mode, autoStart)
+
                     }
                     Types.REPEATING -> {
                         val date = Calendar.getInstance()
@@ -136,6 +152,7 @@ class ScheduleFragment : Fragment() {
                     Types.REPEATING_WEEK -> {
                         val listOfStartMillis = mutableListOf<Long>()
                         val listOfStopMillis = mutableListOf<Long>()
+                        val listOfActiveDays = mutableListOf<String>()
                         for ((key, value) in dayMap) {
                             if (value) {
                                 val idx = dayToInt[key]
@@ -154,6 +171,7 @@ class ScheduleFragment : Fragment() {
 
                                 listOfStartMillis.add(start.timeInMillis)
                                 listOfStopMillis.add(end.timeInMillis)
+                                listOfActiveDays.add(key)
                             }
                         }
                         startScheduleService.setRepeatingWeeksAlarm(listOfStartMillis, mode, autoStart)
@@ -276,6 +294,55 @@ class ScheduleFragment : Fragment() {
     private fun isFilled(): Boolean {
         val additional: Boolean = if (type == Types.SINGLE) date != null else true
         return (startTime != null && endTime != null && additional)
+    }
+
+    /**
+     * Database Handler
+     */
+
+    private fun addSingleSchedule(start: Long, stop: Long, date: Long) {
+        val data = Schedule(
+            start,
+            stop,
+            Types.SINGLE,
+            mode,
+            date,
+            immutableListOf(),
+            target,
+            this.autoStart
+        )
+
+        viewModel.addSchedule(data)
+    }
+
+    private fun addRepeatedSchedule(start: Long, stop: Long) {
+        val data = Schedule(
+            start,
+            stop,
+            Types.REPEATING,
+            mode,
+            null,
+            immutableListOf(),
+            target,
+            this.autoStart
+        )
+
+        viewModel.addSchedule(data)
+
+    }
+
+    private fun addRepeatedWeekSchedule(start: Long, stop: Long, days: List<String>) {
+        val data = Schedule(
+            start,
+            stop,
+            Types.REPEATING,
+            mode,
+            null,
+            days,
+            target,
+            this.autoStart
+        )
+        viewModel.addSchedule(data)
     }
 
 }
