@@ -61,9 +61,9 @@ class NewsList : Fragment(), NewsRecyclerViewAdapter.OnNewsItemClickListener {
         // Observe data change
         viewModel.items.observe(viewLifecycleOwner, {
             if (view is RecyclerView) {
-                if (view?.adapter != null)
+                if (view.adapter != null)
                     view.adapter = viewModel.items.value?.let { NewsRecyclerViewAdapter(it, this) }
-                view?.adapter?.notifyDataSetChanged()
+                view.adapter?.notifyDataSetChanged()
             }
         })
     }

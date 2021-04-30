@@ -18,6 +18,7 @@ import com.softhouse.workingout.data.Alarm
 import com.softhouse.workingout.databinding.FragmentAlarmEditBinding
 import com.softhouse.workingout.shared.BaseBottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.core.component.KoinApiExtension
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -39,6 +40,7 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
         return binding.root
     }
 
+    @KoinApiExtension
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
@@ -57,33 +59,12 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
             }
         }
 
-//        editViewModel.track.observe(viewLifecycleOwner) {
-//            if (it != null) {
-//                binding.musicGroup.isInvisible = false
-//                binding.addMusicTextView.isVisible = false
-//                binding.headerBackgroundImageView.setImageUrl(it.getImageUrl())
-//                binding.imageView.setImageUrl(it.getImageUrl())
-//                binding.songNameTextView.text = it.getTitle()
-//                binding.singerNameTextView.text = it.getSubTitle()
-//            } else {
-//                binding.musicGroup.isInvisible = true
-//                binding.addMusicTextView.isVisible = true
-//            }
-//        }
-
         editViewModel.goToMainPageEvent.observe(
             viewLifecycleOwner,
             EventObserver {
                 navigateToMainFragment()
             }
         )
-
-//        editViewModel.goToMusicPageEvent.observe(
-//            viewLifecycleOwner,
-//            EventObserver {
-//                navigateToOptionsFragment()
-//            }
-//        )
     }
 
     private val daysToggleGroupListener =
@@ -93,6 +74,7 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
             editViewModel.updateAlarmDay(index, isChecked)
         }
 
+    @KoinApiExtension
     private fun setupView(exists: Boolean, alarm: Alarm) {
         binding.setup(exists, alarm)
         binding.daysToggleGroup.addOnButtonCheckedListener(daysToggleGroupListener)
@@ -103,10 +85,17 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
             val description = binding.descriptionEditText.text.toString()
             val vibrate = binding.vibrationFab.isChecked
             val snooze = binding.snoozeFab.isChecked
-            editViewModel.onSaveClicked(description, vibrate, snooze)
+            val target = binding.targetEditText.text.toString().toIntOrNull() ?: 0
+            val cycling = binding.modeFab.isChecked
+            val autoTrack = binding.autoFab.isChecked
+            editViewModel.onSaveClicked(description, vibrate, snooze, target, cycling, autoTrack)
         }
         binding.alarmTimeTextView.setOnClickListener {
             openTimePicker()
+        }
+
+        binding.alarmTimeTextView2.setOnClickListener {
+            endTimePicker()
         }
         binding.weekDaysChip.setOnClickListener {
             binding.daysToggleGroup.removeOnButtonCheckedListener(daysToggleGroupListener)
@@ -141,8 +130,15 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
             editViewModel.updateAlarmDay(Alarm.ONCE)
             binding.daysToggleGroup.addOnButtonCheckedListener(daysToggleGroupListener)
         }
-        binding.musicFab.setOnClickListener {
-            editViewModel.onMusicFabClicked()
+        binding.modeFab.setOnClickListener {
+            if (binding.modeFab.isChecked) {
+                binding.targetTextView.text = getString(R.string.distance)
+                binding.modeTextView.text = getString(R.string.cycling)
+            }
+            else {
+                binding.targetTextView.text = getString(R.string.step)
+                binding.modeTextView.text = getString(R.string.mode)
+            }
         }
     }
 
@@ -169,15 +165,33 @@ class AlarmEditFragment : BaseBottomSheetDialogFragment() {
         picker.show()
     }
 
+    private fun endTimePicker() {
+        val now = editViewModel.endDateTime.value?.toLocalTime() ?: LocalTime.now()
+        val picker = TimePickerDialog(
+            requireContext(),
+            R.style.TimePickerDialogTheme,
+            { _, hour, minute ->
+                val formatter = DateTimeFormatter.ofPattern("hh:mm")
+                val time = LocalTime.of(hour, minute)
+                binding.alarmTimeTextView2.text = time.format(formatter)
+                if (hour >= Utils.NOON) {
+                    binding.alarmTimePeriodTextView2.text = context?.getString(R.string.pm)
+                } else {
+                    binding.alarmTimePeriodTextView2.text = context?.getString(R.string.am)
+                }
+                editViewModel.updateEndTime(hour, minute)
+            },
+            now.hour,
+            now.minute,
+            false
+        )
+        picker.show()
+    }
+
     private fun navigateToMainFragment() {
         val direction = AlarmEditFragmentDirections.actionAlarmEditFragmentToAlarmFragment()
         findNavController().navigate(direction)
     }
-
-//    private fun navigateToOptionsFragment() {
-//        val direction = AlarmEditFragmentDirections.actionAlarmEditFragmentToOptionsFragment()
-//        findNavController().navigate(direction)
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

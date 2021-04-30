@@ -19,6 +19,7 @@ import com.softhouse.workingout.data.repository.AlarmRepository
 //import com.softhouse.workingout.repository.MusicRepository
 import com.softhouse.workingout.alarm.schedule
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinApiExtension
 import java.time.LocalDateTime
 import java.time.LocalTime
 
@@ -40,19 +41,22 @@ class EditViewModel(
     private val _alarmDateTime = MutableLiveData<LocalDateTime?>()
     val alarmDateTime: LiveData<LocalDateTime?> = _alarmDateTime
 
+    private val _endDateTime = MutableLiveData<LocalDateTime?>()
+    val endDateTime: LiveData<LocalDateTime?> = _endDateTime
+
+
     private val _selectedAlarm = MutableLiveData<Alarm>()
     val selectedAlarm: LiveData<Alarm> = _selectedAlarm
     var newAlarm = false
         private set
 
-//    private val _track = MutableLiveData<Track?>()
-//    val track: LiveData<Track?> = _track
 
     private val handler = Handler(Looper.getMainLooper())
 
     private val tickRunnable = object : Runnable {
         override fun run() {
             _alarmDateTime.value = _selectedAlarm.value?.nearestDateTime()
+            _endDateTime.value = _selectedAlarm.value?.endTime()
             handler.postDelayed(this, TIME_INTERVAL)
         }
     }
@@ -79,12 +83,7 @@ class EditViewModel(
             }
             _selectedAlarm.value = alarm.apply { enabled = true }
             _alarmDateTime.value = alarm.nearestDateTime()
-//            if (alarm.trackId == "") {
-//                _track.value = null
-//            } else {
-//                val result = musicRepository.getTrack(alarm.trackId)
-//                _track.value = (result as? Result.Success)?.data
-//            }
+            _endDateTime.value = alarm.endTime()
         }
     }
 
@@ -93,6 +92,14 @@ class EditViewModel(
             this.hour = hour
             this.minute = minute
             _alarmDateTime.value = nearestDateTime()
+        }
+    }
+
+    fun updateEndTime(hour: Int, minute: Int) {
+        selectedAlarm.value?.apply {
+            this.endHour = hour
+            this.endMinute = minute
+            _endDateTime.value = endTime()
         }
     }
 
@@ -114,6 +121,7 @@ class EditViewModel(
         }
     }
 
+    @KoinApiExtension
     fun onDeleteClicked() {
         viewModelScope.launch {
             selectedAlarm.value?.let {
@@ -124,12 +132,16 @@ class EditViewModel(
         }
     }
 
-    fun onSaveClicked(description: String, vibrate: Boolean, snooze: Boolean) {
+    @KoinApiExtension
+    fun onSaveClicked(description: String, vibrate: Boolean, snooze: Boolean, target: Int, cycling: Boolean, autoTrack: Boolean) {
         val alarm = selectedAlarm.value
         if (alarm == null) {
             _goToMainPageEvent.value = Event(Unit)
             return
         }
+        alarm.target = target
+        alarm.cycling = cycling
+        alarm.autotrack = autoTrack
         alarm.description = description
         alarm.vibrate = vibrate
         alarm.snooze = snooze
@@ -150,24 +162,6 @@ class EditViewModel(
         }
     }
 
-    fun onMusicFabClicked() {
-//        _goToMusicPageEvent.value = Event(Unit)
-    }
-
-    fun onTrackUpdated(trackId: String) {
-        viewModelScope.launch {
-//            if (trackId == "") {
-//                _track.value = null
-//            } else {
-//                val result = musicRepository.getTrack(trackId)
-//                _track.value = (result as? Result.Success)?.data
-//                _selectedAlarm.value?.trackId = trackId
-//                _selectedAlarm.value?.trackUrl = _track.value?.previewURL ?: ""
-//                _selectedAlarm.value?.albumId = _track.value?.albumId ?: ""
-//            }
-        }
-    }
-
     override fun onCleared() {
         super.onCleared()
         handler.removeCallbacks(tickRunnable)
@@ -181,7 +175,9 @@ class EditViewModel(
             false,
             Alarm.ONCE,
             vibrate = false,
-            snooze = true
+            snooze = true,
+            endHour = now.hour,
+            endMinute = now.minute
         )
     }
 }

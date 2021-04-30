@@ -20,6 +20,7 @@ import com.softhouse.workingout.alarm.setNearestAlarm
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.component.KoinApiExtension
 
+@KoinApiExtension
 class SchedulerFragment : Fragment(), AlarmListener {
 
     private lateinit var alarmAdapter: AlarmAdapter
@@ -39,7 +40,7 @@ class SchedulerFragment : Fragment(), AlarmListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAlarmBinding.inflate(inflater)
         requireActivity().registerReceiver(receiver, IntentFilter(AlarmReceiver.ACTION_FINISH))
         return binding.root

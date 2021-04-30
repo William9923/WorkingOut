@@ -24,103 +24,120 @@
         app:shapeAppearanceOverlay="@style/HeaderBackgroundImageView"
         tools:src="@tools:sample/backgrounds/scenic" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="20dp"
-        android:contentDescription="@string/alarm_image"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/RoundedImageView"
-        tools:src="@tools:sample/avatars" />
+    <TextView
+            android:id="@+id/alarmTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="23sp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4.Custom"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toTopOf="@id/headerBackgroundImageView"
+            tools:text="08:50"
+            android:layout_marginTop="92dp"
+            android:layout_marginStart="4dp" />
 
     <TextView
-        android:id="@+id/songNameTextView"
-        style="@style/MusicTitleTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginBottom="5dp"
-        app:layout_constraintBottom_toTopOf="@id/singerNameTextView"
-        app:layout_constraintEnd_toStartOf="@id/musicFab"
-        app:layout_constraintStart_toEndOf="@id/imageView"
-        app:layout_constraintTop_toTopOf="@id/imageView"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:text="Song Name" />
+            android:id="@+id/alarmTimePeriodTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="4dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/alarmTimeTextView"
+            app:layout_constraintStart_toEndOf="@id/alarmTimeTextView"
+            app:layout_constraintTop_toTopOf="@id/alarmTimeTextView"
+            tools:text="AM"
+            android:textSize="14sp"
+            app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/singerNameTextView"
-        style="@style/MusicSubTitleTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        app:layout_constraintBottom_toBottomOf="@id/imageView"
-        app:layout_constraintEnd_toStartOf="@id/musicFab"
-        app:layout_constraintStart_toEndOf="@id/imageView"
-        app:layout_constraintTop_toBottomOf="@id/songNameTextView"
-        tools:text="Singer Name" />
+            android:id="@+id/PeriodTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="4dp"
+            android:gravity="center"
+            style="@style/SubtitleTextView"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/alarmTimePeriodTextView"
+            app:layout_constraintStart_toEndOf="@id/alarmTimePeriodTextView"
+            app:layout_constraintTop_toTopOf="@id/alarmTimePeriodTextView"
+            android:text="@string/dash"
+            android:textSize="20sp"
+            app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/alarmTimeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4.Custom"
-        android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@id/imageView"
-        tools:text="08:50" />
+            android:id="@+id/alarmTimeTextView2"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4.Custom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            tools:text="08:50"
+            android:textColor="@color/white"
+            android:textSize="23sp"
+            app:layout_constraintTop_toTopOf="@id/alarmTimeTextView"
+            app:layout_constraintStart_toEndOf="@id/PeriodTextView"
+            app:layout_constraintBottom_toBottomOf="@id/alarmTimeTextView"
+            android:layout_marginStart="5dp"
+            app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/alarmTimePeriodTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="5dp"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@id/alarmTimeTextView"
-        app:layout_constraintStart_toEndOf="@id/alarmTimeTextView"
-        app:layout_constraintTop_toTopOf="@id/alarmTimeTextView"
-        tools:text="AM" />
+            android:id="@+id/alarmTimePeriodTextView2"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="4dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textColor="@color/white"
+
+            app:layout_constraintBottom_toBottomOf="@id/alarmTimeTextView2"
+            app:layout_constraintStart_toEndOf="@id/alarmTimeTextView2"
+            app:layout_constraintTop_toTopOf="@id/alarmTimeTextView2"
+            tools:text="AM"
+            app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/durationTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:drawablePadding="5dp"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-        android:textColor="@color/grayLight"
-        app:drawableStartCompat="@drawable/ic_round_alarm"
-        app:layout_constraintBottom_toBottomOf="@id/alarmTimeTextView"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toTopOf="@id/alarmTimeTextView"
-        tools:text="in 5 days, 11 hours" />
+            android:id="@+id/durationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textColor="@color/grayLight"
+            app:drawableStartCompat="@drawable/ic_round_alarm"
+            app:layout_constraintStart_toEndOf="@id/alarmTimePeriodTextView"
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintTop_toTopOf="@id/alarmTimeTextView"
+            app:layout_constraintBottom_toBottomOf="@id/alarmTimeTextView"
+            android:textSize="12sp"
+            tools:text="in 5 days, 11 hours"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintVertical_bias="0.0" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/musicFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:contentDescription="@string/add_music"
-        android:src="@drawable/ic_music"
-        app:layout_constraintBottom_toBottomOf="@id/imageView"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toTopOf="@id/imageView" />
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/modeFab"
+            style="@style/CheckableCustomExtendedFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:contentDescription="@string/mode"
+            app:layout_constraintTop_toTopOf="@id/headerBackgroundImageView"
+            app:icon="@drawable/bike"
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            android:layout_marginTop="28dp" />
 
     <TextView
-        android:id="@+id/addMusicTextView"
+        android:id="@+id/modeTextView"
         style="@style/SubtitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:gravity="center"
-        android:text="@string/add_music"
-        app:layout_constraintBottom_toBottomOf="@id/musicFab"
-        app:layout_constraintEnd_toStartOf="@id/musicFab"
-        app:layout_constraintTop_toTopOf="@id/musicFab" />
+        android:text="@string/mode"
+        app:layout_constraintBottom_toBottomOf="@id/modeFab"
+        app:layout_constraintEnd_toStartOf="@id/modeFab"
+        app:layout_constraintTop_toTopOf="@id/modeFab" />
 
     <EditText
         android:id="@+id/descriptionEditText"
@@ -257,6 +274,48 @@
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
+    <EditText
+            android:id="@+id/targetEditText"
+            style="@style/CustomEditTextStyle"
+            android:layout_marginTop="96dp"
+            android:hint="@string/enter_target"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            tools:text="Target"
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/weekDaysChip"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_height="45dp"
+            android:layout_width="217dp"/>
+
+    <TextView
+            android:id="@+id/targetTextView"
+            style="@style/SubtitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/step"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/targetEditText"
+            app:layout_constraintStart_toEndOf="@id/targetEditText"
+            app:layout_constraintTop_toTopOf="@id/targetEditText"
+            android:layout_marginStart="20dp" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/autoFab"
+            style="@style/CheckableCustomExtendedFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:contentDescription="@string/auto"
+            app:icon="@drawable/outline_moving_24"
+            app:layout_constraintBottom_toBottomOf="@id/targetEditText"
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintStart_toEndOf="@id/targetEditText"
+            app:layout_constraintTop_toTopOf="@id/targetEditText"
+            app:layout_constraintHorizontal_bias="0.988" />
+
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/deleteFab"
         style="@style/CustomExtendedFab"
@@ -301,12 +360,13 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="20dp" />
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/musicGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:constraint_referenced_ids="imageView, singerNameTextView, songNameTextView,
-        headerBackgroundImageView" />
+<!--    <androidx.constraintlayout.widget.Group-->
+<!--            android:id="@+id/musicGroup"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:visibility="visible"-->
+<!--&lt;!&ndash;            app:constraint_referenced_ids=" singerNameTextView, songNameTextView,&ndash;&gt;-->
+<!--&lt;!&ndash;        headerBackgroundImageView"&ndash;&gt;-->
+<!--    />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

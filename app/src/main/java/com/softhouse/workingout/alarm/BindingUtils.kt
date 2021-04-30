@@ -10,8 +10,6 @@ import com.softhouse.workingout.databinding.ActivityActiveAlarmBinding
 import com.softhouse.workingout.databinding.AlarmViewBinding
 import com.softhouse.workingout.databinding.FragmentAlarmEditBinding
 import com.softhouse.workingout.databinding.FragmentAlarmBinding
-//import com.softhouse.workingout.music.api.AlbumImageSize
-//import com.softhouse.workingout.music.api.NapsterService
 import java.time.format.DateTimeFormatter
 
 fun AlarmViewBinding.bind(alarm: Alarm) {
@@ -24,20 +22,7 @@ fun AlarmViewBinding.bind(alarm: Alarm) {
     } else {
         alarmTimePeriodTextView.text = context.getString(R.string.am)
     }
-    if (alarm.albumId == "") {
-        imageView.isVisible = true
-        trackImageView.isVisible = false
-    } else {
-        imageView.isInvisible = true
-        trackImageView.isVisible = true
-        trackImageView.setImageUrl(
-//            NapsterService.createAlbumImageUrl(
-//                alarm.albumId,
-//                AlbumImageSize.SIZE_200X200
-//            )
-            ""
-        )
-    }
+
     val days = alarm.days
     mondayTextView.isEnabled = (days and Alarm.MONDAY) > 0
     tuesdayTextView.isEnabled = (days and Alarm.TUESDAY) > 0
@@ -54,10 +39,16 @@ fun FragmentAlarmEditBinding.setup(exists: Boolean, alarm: Alarm) {
     alarm.enabled = true
     val formatter = DateTimeFormatter.ofPattern("hh:mm")
     alarmTimeTextView.text = alarm.alarmTime.format(formatter)
+    alarmTimeTextView2.text = alarm.endAlarmTime.format(formatter)
     if (alarm.hour >= Utils.NOON) {
         alarmTimePeriodTextView.text = context.getString(R.string.pm)
     } else {
         alarmTimePeriodTextView.text = context.getString(R.string.am)
+    }
+    if (alarm.endHour >= Utils.NOON) {
+        alarmTimePeriodTextView2.text = context.getString(R.string.pm)
+    } else {
+        alarmTimePeriodTextView2.text = context.getString(R.string.am)
     }
     val days = alarm.days
     for (i in 0 until daysToggleGroup.size) {
@@ -66,9 +57,12 @@ fun FragmentAlarmEditBinding.setup(exists: Boolean, alarm: Alarm) {
             daysToggleGroup.check(view.id)
         }
     }
+    modeFab.isChecked = alarm.cycling
     vibrationFab.isChecked = alarm.vibrate
     snoozeFab.isChecked = alarm.snooze
+    autoFab.isChecked = alarm.autotrack
     descriptionEditText.setText(alarm.description)
+    targetEditText.setText(alarm.target.toString())
     deleteFab.isVisible = exists
 }
 

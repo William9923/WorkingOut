@@ -28,12 +28,18 @@ data class Alarm(
     var snooze: Boolean = true,
     @ColumnInfo(name = "description")
     var description: String = "",
+    @ColumnInfo(name = "cycling")
+    var cycling: Boolean = false,
+    @ColumnInfo(name = "target")
+    var target: Int = 0,
+    @ColumnInfo(name = "auto_track")
+    var autotrack: Boolean = false,
+    @ColumnInfo(name = "end_hour")
+    var endHour: Int = 0,
+    @ColumnInfo(name = "end+minute")
+    var endMinute: Int = 0,
     @ColumnInfo(name = "track_url")
     var trackUrl: String = "",
-    @ColumnInfo(name = "track_id")
-    var trackId: String = "",
-    @ColumnInfo(name = "album_id")
-    var albumId: String = "",
     @PrimaryKey
     @ColumnInfo(name = "alarmId")
     val alarmId: Int = (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())).toInt()
@@ -59,9 +65,12 @@ data class Alarm(
         private const val EXTRA_VIBRATE = "VIBRATE"
         private const val EXTRA_SNOOZE = "SNOOZE"
         private const val EXTRA_DESCRIPTION = "DESCRIPTION"
+        private const val EXTRA_CYCLING = "CYCLING"
+        private const val EXTRA_TARGET = "TARGET"
+        private const val EXTRA_AUTO_TRACK = "AUTO_TRACK"
+        private const val EXTRA_END_HOUR = "END_HOUR"
+        private const val EXTRA_END_MINUTE = "END_MINUTE"
         private const val EXTRA_TRACK_URL = "TRACK_URL"
-        private const val EXTRA_TRACK_ID = "TRACK_ID"
-        private const val EXTRA_ALBUM_ID = "ALBUM_ID"
         private const val EXTRA_ALARM_ID = "ALARM_ID"
 
         fun fromBundle(bundle: Bundle?): Alarm? {
@@ -74,15 +83,19 @@ data class Alarm(
                 vibrate = bundle.getBoolean(EXTRA_VIBRATE, false),
                 snooze = bundle.getBoolean(EXTRA_SNOOZE, true),
                 description = bundle.getString(EXTRA_DESCRIPTION, ""),
+                cycling = bundle.getBoolean(EXTRA_CYCLING, false),
+                target = bundle.getInt(EXTRA_TARGET, 0),
+                autotrack = bundle.getBoolean(EXTRA_AUTO_TRACK, false),
+                endHour = bundle.getInt(EXTRA_END_HOUR, 0),
+                endMinute = bundle.getInt(EXTRA_END_MINUTE, 0),
                 trackUrl = bundle.getString(EXTRA_TRACK_URL, ""),
-                trackId = bundle.getString(EXTRA_TRACK_ID, ""),
-                albumId = bundle.getString(EXTRA_ALBUM_ID, ""),
                 alarmId = bundle.getInt(EXTRA_ALARM_ID, 0)
             )
         }
     }
 
     val alarmTime: LocalTime get() = LocalTime.of(hour, minute)
+    val endAlarmTime: LocalTime get() = LocalTime.of(endHour, endMinute)
 
     fun nearestDateTime(localDateTime: LocalDateTime? = null): LocalDateTime? {
         if (!enabled) return null
@@ -110,6 +123,10 @@ data class Alarm(
         return nearestDate
     }
 
+    fun endTime(localDateTime: LocalDateTime? = null): LocalDateTime? {
+        return nearestDateTime()?.withHour(endHour)?.withMinute(endMinute)
+    }
+
     private fun getNormalizedDateAndTimeDiffPair(
         first: LocalDateTime,
         second: LocalDateTime
@@ -131,9 +148,12 @@ data class Alarm(
         bundle.putBoolean(EXTRA_VIBRATE, vibrate)
         bundle.putBoolean(EXTRA_SNOOZE, snooze)
         bundle.putString(EXTRA_DESCRIPTION, description)
+        bundle.putBoolean(EXTRA_CYCLING, cycling)
+        bundle.putInt(EXTRA_TARGET, target)
+        bundle.putBoolean(EXTRA_AUTO_TRACK, autotrack)
+        bundle.putInt(EXTRA_END_HOUR, endHour)
+        bundle.putInt(EXTRA_END_MINUTE, endMinute)
         bundle.putString(EXTRA_TRACK_URL, trackUrl)
-        bundle.putString(EXTRA_TRACK_ID, trackId)
-        bundle.putString(EXTRA_ALBUM_ID, albumId)
         bundle.putInt(EXTRA_ALARM_ID, alarmId)
         return bundle
     }

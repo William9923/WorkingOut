@@ -18,6 +18,7 @@ import com.softhouse.workingout.data.repository.AlarmRepository
 import com.softhouse.workingout.alarm.schedule
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinApiExtension
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
@@ -56,12 +57,14 @@ class SchedulerViewModel(private val repository: AlarmRepository, private val ap
         handler.postDelayed(tickRunnable, TIME_INTERVAL)
     }
 
+    @KoinApiExtension
     fun refreshData() {
         viewModelScope.launch {
             refreshDataInternal()
         }
     }
 
+    @KoinApiExtension
     private suspend fun refreshDataInternal() {
         val result = repository.getAlarms()
         val list = if (result is Result.Success) {
@@ -97,6 +100,7 @@ class SchedulerViewModel(private val repository: AlarmRepository, private val ap
         return nearestAlarm
     }
 
+    @KoinApiExtension
     fun onAlarmEnableStatusChanged(alarmId: Int, enabled: Boolean) {
         val alarm = _alarms.value?.find { it.alarmId == alarmId } ?: return
         alarm.enabled = enabled

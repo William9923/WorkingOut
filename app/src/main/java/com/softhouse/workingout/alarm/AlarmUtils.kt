@@ -127,9 +127,12 @@ fun Alarm.snooze(context: Context) {
         vibrate,
         snooze,
         description,
+        cycling,
+        target,
+        autotrack,
+        endHour,
+        endMinute,
         trackUrl,
-        trackId,
-        albumId,
         alarmId
     )
     val date = snoozed.schedule(context, true)

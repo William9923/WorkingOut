@@ -39,11 +39,17 @@
     <string name="now">Now</string>
     <string name="add_music">Add Music</string>
     <string name="enter_a_description">Enter a description</string>
+    <string name="enter_target">Enter your target</string>
     <string name="vibrate">Vibrate</string>
+    <string name="mode">Running</string>
+    <string name="cycling">Cycling</string>
+    <string name="step">Step</string>
+    <string name="distance">KM</string>
     <string name="snooze">Snooze</string>
     <string name="days">Days</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
+    <string name="auto">Tracker</string>
     <string name="no_alarm_available">No alarm available</string>
     <string name="click_below_to_add_new_alarm">Click below to add new alarm.</string>
     <string name="alarm_go_off">Alarm will go off</string>
@@ -128,4 +134,5 @@
     <string name="upcoming">Upcoming</string>
     <string name="listen_offline">Listen Offline</string>
     <string name="dummy_button">Dummy Button</string>
+    <string name="dash">-</string>
 </resources>
