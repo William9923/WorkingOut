@@ -17,21 +17,33 @@ Berikut penjelasan dari beberapa fungsionalitas dalam aplikasi :
 ## Screenshot Aplikasi
 Berikut beberapa screenshot aplikasi saat dijalankan :
 
-### Home Screen / Training Tracker
-
 ### Sports News
+![Sports News Portrait](docs/sports_news_1.jpg)
+![Sports News Landscape](docs/sports_news_2.jpg)
 
 ### News WebView
+![Sports News Webview](docs/sports_news_webview.jpg)
+
+### Training Tracker
+![Running Tracker](docs/tracker_running1.jpg)
+![Running Tracker](docs/tracker_running_2.jpg)
+![Cycling Tracker](docs/tracker_cycling_1.jpg)
+![Cycling Tracker](docs/tracker_cycling_2.jpg)
 
 ### Log Calendar
+![Running Calendar](docs/running_calendar.jpg)
+![Cycling Calendar](docs/cycling_calendar.jpg)
 
 ### Running Logs
-
-### Running Logs Details
+![Running Logs Portrait](docs/running_history_1.jpg)
+![Running Logs Details Portrait](docs/running_details.jpg)
+![Running Logs Landscape](docs/running_history_2.jpg)
 
 ### Cycling Logs
+![Cycling Logs Portrait](docs/cycling_history_1.jpg)
+![Cycling Logs Details Portrait](docs/cycling_details.jpg)
+![Cycling Logs Landscape](docs/cycling_history_2.jpg)
 
-### Cycling Logs Details
 
 ### Scheduler
 
