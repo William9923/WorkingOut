@@ -18,37 +18,37 @@ Berikut penjelasan dari beberapa fungsionalitas dalam aplikasi :
 Berikut beberapa screenshot aplikasi saat dijalankan :
 
 ### Sports News
-![Sports News Portrait](docs/sports_news_1.jpg)
-![Sports News Landscape](docs/sports_news_2.jpg)
+<img src="docs/sports_news_1.jpg" alt="Sports News Portrait" width="200"/>
+<img src="docs/sports_news_2.jpg" alt="Sports News Landscape" width="400"/>
 
 ### News WebView
-![Sports News Webview](docs/sports_news_webview.jpg)
+<img src="docs/sports_news_webview.jpg" alt="Sports News Webview" width="200"/>
 
 ### Training Tracker
-![Running Tracker](docs/tracker_running1.jpg)
-![Running Tracker](docs/tracker_running_2.jpg)
-![Cycling Tracker](docs/tracker_cycling_1.jpg)
-![Cycling Tracker](docs/tracker_cycling_2.jpg)
+<img src="docs/tracker_running1.jpg" alt="Running Tracker" width="200"/>
+<img src="docs/tracker_running_2.jpg" alt="Running Tracker" width="200"/>
+<img src="docs/tracker_cycling_1.jpg" alt="Cycling Tracker" width="200"/>
+<img src="docs/tracker_cycling_2.jpg" alt="Cycling Tracker" width="200"/>
 
 ### Notification While App is Running
-![Notification](docs/notification_1.jpg)
+<img src="docs/notification_1.jpg" alt="Notification Running App" width="200"/>
 
 ### Notification After App is Closed While Tracking
-![Notification](docs/notification_2.jpg)
+<img src="docs/notification_2.jpg" alt="Notification App Closed" width="200"/>
 
 ### Log Calendar
-![Running Calendar](docs/running_calendar.jpg)
-![Cycling Calendar](docs/cycling_calendar.jpg)
+<img src="docs/running_calendar.jpg" alt="Running Calendar" width="200"/>
+<img src="docs/cycling_calendar.jpg" alt="Cycling Calendar" width="200"/>
 
 ### Running Logs
-![Running Logs Portrait](docs/running_history_1.jpg)
-![Running Logs Details Portrait](docs/running_details.jpg)
-![Running Logs Landscape](docs/running_history_2.jpg)
+<img src="docs/running_history_1.jpg" alt="Running Logs Portrait" width="200"/>
+<img src="docs/running_details.jpg" alt="Running Logs Details Portrait" width="200"/>
+<img src="docs/running_history_2.jpg" alt="Running Logs Landscape" width="400"/>
 
 ### Cycling Logs
-![Cycling Logs Portrait](docs/cycling_history_1.jpg)
-![Cycling Logs Details Portrait](docs/cycling_details.jpg)
-![Cycling Logs Landscape](docs/cycling_history_2.jpg)
+<img src="docs/cycling_history_1.jpg" alt="Cycling Logs Portrait" width="200"/>
+<img src="docs/cycling_details.jpg" alt="Cycling Logs Details Portrait" width="200"/>
+<img src="docs/cycling_history_2.jpg" alt="Cycling Logs Landscape" width="400"/>
 
 
 ### Scheduler
