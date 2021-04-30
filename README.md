@@ -52,6 +52,12 @@ Berikut beberapa screenshot aplikasi saat dijalankan :
 
 
 ### Scheduler
+<img src="docs/scheduler.jpg" alt="Scheduler" width="200"/>
+<img src="docs/scheduler1.jpg" alt="Scheduler" width="200"/>
+<img src="docs/scheduler2.jpg" alt="Scheduler" width="200"/>
+<img src="docs/scheduler3.jpg" alt="Scheduler" width="200"/>
+<img src="docs/scheduler4.jpg" alt="Scheduler" width="200"/>
+<img src="docs/scheduler5.jpg" alt="Scheduler" width="200"/>
 
 
 ## Library
