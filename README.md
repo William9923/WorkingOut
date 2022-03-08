@@ -96,31 +96,86 @@ Because you need motivation and the news sport is the best motivation source :D.
 
 **Calendar Logs**
 
-<img src="docs/running_calendar.jpg" alt="Running Calendar" width="200"/>
-<img src="docs/cycling_calendar.jpg" alt="Cycling Calendar" width="200"/>
+<table>
+  <tr>
+    <td valign="mid">
+        <img src="docs/running_calendar.jpg" alt="Running Calendar" width="200"/>
+    </td> 
+    <td valign="mid">
+        <img src="docs/cycling_calendar.jpg" alt="Cycling Calendar" width="200"/>
+    </td>
+  </tr>
+  <tr>
+    <td><p align="center">Running Calendar</p></td>
+    <td><p align="center">Cycling Calendar</p></td>
+  </tr>
+</table>
 
 **History Details (running)**
 
-<img src="docs/running_history_1.jpg" alt="Running Logs Portrait" width="200"/>
-<img src="docs/running_details.jpg" alt="Running Logs Details Portrait" width="200"/>
+
+<table>
+  <tr>
+    <td valign="mid">
+       <img src="docs/running_history_1.jpg" alt="Running Logs Portrait" width="200"/>
+    </td> 
+    <td valign="mid">
+        <img src="docs/running_details.jpg" alt="Running Logs Details Portrait" width="200"/>
+    </td>
+  <tr>
+    <td><p align="center">Logs</p></td>
+    <td><p align="center">Details</p></td>
+  </tr>
+</table>
+
+**Landscape version..**
+
 <img src="docs/running_history_2.jpg" alt="Running Logs Landscape" width="400"/>
 
 **History Details (cycling)**
 
-<img src="docs/cycling_history_1.jpg" alt="Cycling Logs Portrait" width="200"/>
-<img src="docs/cycling_details.jpg" alt="Cycling Logs Details Portrait" width="200"/>
+<table>
+  <tr>
+    <td valign="mid">
+    <img src="docs/cycling_history_1.jpg" alt="Cycling Logs Portrait" width="200"/>
+    </td> 
+    <td valign="mid">
+        <img src="docs/cycling_details.jpg" alt="Cycling Logs Details Portrait" width="200"/>
+    </td>
+  <tr>
+    <td><p align="center">Logs</p></td>
+    <td><p align="center">Details</p></td>
+  </tr>
+</table>
+
+**Landscape version..**
+
 <img src="docs/cycling_history_2.jpg" alt="Cycling Logs Landscape" width="400"/>
 
 
-
 ### Training Scheduler
-<img src="docs/scheduler.jpg" alt="Scheduler" width="200"/>
-<img src="docs/scheduler1.jpg" alt="Scheduler" width="200"/>
-<img src="docs/scheduler2.jpg" alt="Scheduler" width="200"/>
-<img src="docs/scheduler3.jpg" alt="Scheduler" width="200"/>
-<img src="docs/scheduler4.jpg" alt="Scheduler" width="200"/>
-<img src="docs/scheduler5.jpg" alt="Scheduler" width="200"/>
 
+<table>
+  <tr>
+    <td valign="mid">
+   <img src="docs/scheduler.jpg" alt="Scheduler" width="200"/>
+    </td> 
+    <td valign="mid">
+    <img src="docs/scheduler1.jpg" alt="Scheduler" width="200"/>
+    </td> 
+    <td valign="mid">
+   <img src="docs/scheduler3.jpg" alt="Scheduler" width="200"/>
+    </td> 
+    <td valign="mid">
+        <img src="docs/scheduler4.jpg" alt="Scheduler" width="200"/>
+    </td>
+  <tr>
+    <td><p align="center">List</p></td>
+    <td><p align="center">Planner Form</p></td>
+      <td><p align="center">Repeating</p></td>
+    <td><p align="center">Repeating per Week</p></td>
+  </tr>
+</table>
 
 
 ## 📚 Tech Stack
