@@ -1,57 +1,119 @@
-# IF3210 2021 K03 Android Project
+<p align="center">
+    <img src="docs/workout.gif" width="360" alt="Working Out">
+    <h2 align="center">Workout</h2>
+</p> 
+<p align="center">An android application to make your life healtier</b></p>
 
-## Deskripsi
-Dalam tugas besar kali ini, kami membangun sebuah aplikasi pada platform Android untuk menunjang kegiatan workout. Fitur-fitur yang ada di dalam aplikasi kami adalah Sports News, Training Tracker, Training History, dan Training Scheduler.
+> Have you ever started a fitness program and then quit? If you answered yes, you're not alone. Many people start fitness programs, but they may stop when they get bored.
 
-Pada fitur Sports News, kami menggunakan RecyclerView untuk menampilkan list berita. Fitur Sports News juga akan menampilkan halaman yang responsive, apabila pada orientasi portrait akan menampilkan 1 kolom list berita, sedangkan pada orientasi landscape akan menampilkan 2 kolom list berita. Kami juga menyimpan history dan schedule ke dalam SQLite. Penggunaan Fragment digunakan untuk fitur Training History, dimana halaman log list dan halaman log detail dapat ditampilkan pada halaman berbeda ketika orientasi portrait dan halaman yang sama ketika orientasi landscape.
+**Introducing**...
 
-## Fungsionalitas Aplikasi & Screenshot
-Berikut penjelasan dari beberapa fungsionalitas dalam aplikasi : 
-| No | Spesifikasi | Penjelasan |
-|----|-------------|------------|
-| 1  | Sports News | Pengguna dapat melihat berita olahraga yang diperoleh melalui Indonesia Sports News API. Terdapat halaman untuk menampilkan list berita dan setiap item dapat dibuka untuk menampilkan WebView dengan konten sesuai URL berita. |
-| 2  | Training Tracker | Pengguna dapat melakukan “mulai” dan “selesai” mengenai pelacakan latihan yang memiliki dua jenis, yaitu Cycling dan Running. Pada mode Cycling, aplikasi akan melacak jarak tempuh dan rute yang dilalui oleh sepeda menggunakan GPS. Hasil pelacakan dapat dilihat berupa angka (km jarak tempuh) dan peta (garis rute sepeda). Pada mode Running, aplikasi akan melacak jumlah step yang dilakukan oleh pengguna. Sistem pelacakan berjalan pada background sehingga masih dapat berjalan meskipun aplikasi ditutup jika statusnya sedang aktif. Selain itu, pada halaman ini juga ditampilkan kompas yang selalu menunjuk ke arah utara, yang diimplementasikan dengan memanfaatkan sensor.|
-| 3  | Training History | Terdapat halaman history yang menyimpan seluruh kegiatan latihan pengguna yang dilacak, ditampilkan dalam bentuk kalender. Setiap hari pada kalender dapat dibuka untuk menampilkan list log latihan, dengan setiap log dapat dibuka untuk menampilkan informasi detail seperti pada spesifikasi Training Tracker|
-| 4  | Training Scheduler | Pengguna dapat menentukan jadwal latihan yang dapat dikustomisasi untuk berjalan secara suatu waktu spesifik, rutin per hari, ataupun rutin per hari tertentu. Selain itu, setiap jadwal latihan dapat dikaitkan pada jenis latihan tertentu (cycling, walking) dengan target sesuai masukan pengguna (misalnya 5 km atau 10000 langkah). Saat waktu mulai jadwal, aplikasi akan menampilkan notifikasi sesuai tipe dan target latihan. Pengguna juga dapat mengatur agar pelacakan dapat berjalan secara otomatis saat waktu mulai jadwal latihan. Saat waktu selesai jadwal, aplikasi akan menampilkan notifikasi. Jika opsi pelacakan otomatis dinyalakan, pada waktu selesai jadwal juga ditampilkan pencapaian pengguna yang disimpan pada history, lalu pelacakan dimatikan.|
+An application that can motivate you to workout (running/cycling). The application have a lot of feature that will keep you to workout during pandemic!
 
-## Screenshot Aplikasi
-Berikut beberapa screenshot aplikasi saat dijalankan :
+## ✨ Features
+
+- Workout Tracker (running/cycling)
+- Workout History (running/cycling)
+- Workout Scheduler (running/cycling)
+- Workout Reminder
+- Sports News
 
 ### Sports News
-<img src="docs/sports_news_1.jpg" alt="Sports News Portrait" width="200"/>
-<img src="docs/sports_news_2.jpg" alt="Sports News Landscape" width="400"/>
+Because you need motivation and the news sport is the best motivation source :D.
 
-### News WebView
-<img src="docs/sports_news_webview.jpg" alt="Sports News Webview" width="200"/>
+<table>
+  <tr>
+    <td valign="mid">
+        <img src="docs/sports_news_1.jpg" alt="Sports News Portrait" width="200"/>
+    </td>
+    <td valign="mid">
+       <img src="docs/sports_news_2.jpg" alt="Sports News Landscape" width="400"/>
+    </td>
+    <td valign="mid">
+       <img src="docs/sports_news_webview.jpg" alt="Sports News Webview" width="200"/>
+    </td>
+  </tr>
+  <tr>
+    <td><p align="center">Portrait</p></td>
+    <td><p align="center">Landscape</p></td>
+    <td><p align="center">Open the website..</p></td>
+  </tr>
+</table>
+
 
 ### Training Tracker
-<img src="docs/tracker_running1.jpg" alt="Running Tracker" width="200"/>
-<img src="docs/tracker_running_2.jpg" alt="Running Tracker" width="200"/>
-<img src="docs/tracker_cycling_1.jpg" alt="Cycling Tracker" width="200"/>
-<img src="docs/tracker_cycling_2.jpg" alt="Cycling Tracker" width="200"/>
 
-### Notification While App is Running
-<img src="docs/notification_1.jpg" alt="Notification Running App" width="200"/>
+**As Main App**
 
-### Notification After App is Closed While Tracking
-<img src="docs/notification_2.jpg" alt="Notification App Closed" width="200"/>
+<table>
+  <tr>
+    <td valign="mid">
+        <img src="docs/tracker_running1.jpg" alt="Running (Standby)" width="200"/>
+    </td> 
+    <td valign="mid">
+        <img src="docs/tracker_running_2.jpg" alt="Running..." width="200"/>
+    </td>
+  </tr>
+  <tr>
+    <td><p align="center">Standby (Running Mode)</p></td>
+    <td><p align="center">Working Out</p></td>
+  </tr>
+</table>
 
-### Log Calendar
+<table>
+  <tr>
+    <td valign="mid">
+        <img src="docs/tracker_cycling_1.jpg" alt="Cycling (Standby)" width="200"/>
+    </td> 
+    <td valign="mid">
+        <img src="docs/tracker_cycling_2.jpg" alt="Cycling..." width="200"/>
+    </td>
+  </tr>
+  <tr>
+    <td><p align="center">Standby (Cycling Mode)</p></td>
+    <td><p align="center">Working Out</p></td>
+  </tr>
+</table>
+
+**As Background App**
+
+<table>
+  <tr>
+    <td valign="mid">
+        <img src="docs/notification_1.jpg" alt="Still running..." width="200"/>
+    </td> 
+    <td valign="mid">
+        <img src="docs/notification_2.jpg" alt="Stop" width="200"/>
+    </td>
+  </tr>
+  <tr>
+    <td><p align="center">Still workout...</p></td>
+    <td><p align="center">Finish</p></td>
+  </tr>
+</table>
+
+### Training Tracker
+
+**Calendar Logs**
+
 <img src="docs/running_calendar.jpg" alt="Running Calendar" width="200"/>
 <img src="docs/cycling_calendar.jpg" alt="Cycling Calendar" width="200"/>
 
-### Running Logs
+**History Details (running)**
+
 <img src="docs/running_history_1.jpg" alt="Running Logs Portrait" width="200"/>
 <img src="docs/running_details.jpg" alt="Running Logs Details Portrait" width="200"/>
 <img src="docs/running_history_2.jpg" alt="Running Logs Landscape" width="400"/>
 
-### Cycling Logs
+**History Details (cycling)**
+
 <img src="docs/cycling_history_1.jpg" alt="Cycling Logs Portrait" width="200"/>
 <img src="docs/cycling_details.jpg" alt="Cycling Logs Details Portrait" width="200"/>
 <img src="docs/cycling_history_2.jpg" alt="Cycling Logs Landscape" width="400"/>
 
 
-### Scheduler
+
+### Training Scheduler
 <img src="docs/scheduler.jpg" alt="Scheduler" width="200"/>
 <img src="docs/scheduler1.jpg" alt="Scheduler" width="200"/>
 <img src="docs/scheduler2.jpg" alt="Scheduler" width="200"/>
@@ -60,61 +122,52 @@ Berikut beberapa screenshot aplikasi saat dijalankan :
 <img src="docs/scheduler5.jpg" alt="Scheduler" width="200"/>
 
 
-## Library
 
-Berikut penggunaan library pada aplikasi :
-| No | Library | Fungsi |
+## 📚 Tech Stack
+To apps is built using Kotlin (Android) as base. Then we also use various library to integrate with the apps feature:
+| No | Library | Functionality |
 |----|-------------|------------|
-| 1  | Material Design | Digunakan untuk mengimplementasikan Material Design pada aplikasi dengan API |
-| 2  | Retrofit | Digunakan untuk membuat HTTP Request seperti pada fitur Sports News |
-| 3  | Glide | Digunakan untuk membuat load gambar menjadi lebih efisien |
-| 4 | Easy Permission | Digunakan untuk mengatur permission untuk mengakses privasi / sensor dari aplikasi |
-| 5  | Google Maps Location Services | Digunakan untuk mengakses maps dari Google Maps seperti pada fitur Cycling Details |
-| 6 | Room | Digunakan untuk pengaksesan database SQLite yang lebih baik |
-| 7  | Dagger  & Dagger Hilt | Digunakan untuk melakukan dependencies injection |
-| 8  | Material Calendar | Digunakan untuk membuat UI calendar untuk mencari tanggal pada log history |
-| 9  | Two Pane Layout | Digunakan untuk pengimplementasian sliding pane untuk layout |
+| 1  | Material Design | Designing Application |
+| 2  | Retrofit | Calling HTTP Request |
+| 3  | Glide | Loading Image |
+| 4 | Easy Permission | To make accessing (requesting) permission on android phone easier |
+| 5  | Google Maps Location Services | Maps service to track user during workout |
+| 6 | Room | Sqlite driver for android |
+| 7  | Dagger  & Dagger Hilt | Dependencies injection library |
+| 8  | Material Calendar | UI Library for calender logs |
+| 9  | Two Pane Layout | UI Library for two pane system in workout history |
 
-## Pembagian Kerja
+## 🚀 Quick start
 
-* 13518003 - Dimas Lucky Mahendra
+We use <code>gradle</code> to build the android project
 
-| No | Kontribusi |
-|----|------------|
-| 1  | Sports News UI Design | 
-| 2  | Running Logs UI Design | 
-| 3  | Cycling Logs UI Design | 
-| 4  | Scheduler UI Design |
-| 5  | Tester | 
+**Build and run the apps locally**
 
+### Step 1: Clone The Repo
 
-* 13518006 - Ahadi Ihsan Rasyidin
+Fork the repository. then clone the repo locally by doing -
 
-| No | Kontribusi |
-|----|------------|
-| 1  | Single Alarm Without Date |
-| 2  | Repeating Alarm |
-| 3  | Layout Scheduler |
-| 4  | Auto Tracker |
-| 5  | Tester |
+```bash
+git clone https://github.com/William9923/WorkingOut
+```
 
+### Step 2: Run the Gradle task
 
-* 13518138 - William
+cd into the directory
+```bash
+cd WorkingOut
+```
 
-| No | Kontribusi |
-|----|------------|
-| 1  | Sports News API Implementation |
-| 2  | Sports News Webview Implementation |
-| 3  | Training Tracker Running Implementation |
-| 4  | Training Tracker Cycling Implementation |
-| 5  | Training History Running Implementation |
-| 6  | Training History Cycling Implementation |
-| 7  | Training Scheduler Running Implementation notif only (single, repeating, repeating per week) |
-| 8  | Training Scheduler Cycling Implementation notif only (single, repeating, repeating per week) |
-| 9  | Training Scheduler Running Implementation auto tracker (single, repeating, repeating per week) |
-| 10  | Training Scheduler Cycling Implementation auto tracker (single, repeating, repeating per week) |
-| 11  | Training Tracker Main Page Design |
-| 12  | 2 pane layout log history Design |
-| 13  | Scheduler UI Design |
+install all the dependencies
+```bash
+gradle
+```
 
+### Step 3: Run in AVD or Android Phone
 
+The apk is in `app\build\outputs\apk`.
+
+Other alternative would be building the project inside an IDEA (like Intellij). 
+
+## ❤️ Support
+If you feel that this repo have helped you provide more example on learning software engineering, then it is enough for me! Wanna contribute more? Please ⭐ this repo so other can see it too!
